@@ -1,5 +1,18 @@
 defmodule Xlsxir.Unzip do
 
+  @spec validate_path(String.t) :: {:ok | :error, String.t}
+  def validate_path(path) do
+    path
+    |> String.downcase
+    |> String.split(".", trim: true)
+    |> List.last
+    |> case do
+      "xlsx" -> {:ok, path}
+      _      -> {:error, "Invalid path. Currently only .xlsx is supported."}
+    end  
+  end
+
+  @spec extract_xml(String.t, [char]) :: {:ok | :error, String.t}
   def extract_xml(path, inner_path) do
     path
     |> to_char_list

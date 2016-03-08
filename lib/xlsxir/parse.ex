@@ -6,7 +6,6 @@ defmodule Xlsxir.Parse do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
     strings
     |> xpath(~x"//t/text()"sl)
-    |> Enum.with_index
   end
 
   def worksheet(path, index) do

@@ -24,15 +24,19 @@ defmodule Xlsxir.Format do
     on the option chosen. 
   """
 
-  def do_format(worksheet, shared_strings, option) do
-    
+  def do_format(worksheet, shared_strings, option \\ 'rows') do
+    case option do
+      'rows'  -> row_list(worksheet, shared_strings)
+      'cells' -> cell_map(worksheet, shared_strings)
+      _       -> raise ArgumentError, message: "Invalid option."
+    end
   end
 
   @doc """
     Formats parsed excel worksheet into a list of lists containing cell values by 
     row (i.e. [[row_1_values], [row_2_values], ...]).
   """
-  def row_list do
+  def row_list(sheet, strings) do
     
   end
 
@@ -40,16 +44,29 @@ defmodule Xlsxir.Format do
     Formats parsed excel worksheet into a map of cell/value pairs (i.e. %{"A1" => 
     value_of_cell, ...}).
   """
-  def cell_map do
+  def cell_map(sheet, strings) do
     
   end
 
+  @doc """
+    Formats the value of the string based upon its content.
+  """
   @spec format_cell_value(list, list) :: String.t | integer
   def format_cell_value(list, strings) do
     case list do
-      ['s', _, _, n] -> Enum.at(strings, n)
-      _              -> "Error"
+      ['s', nil, nil, n]           -> Enum.at(strings, List.to_integer(n))
+      [nil, nil, nil, n]           -> List.to_integer(n)
+      [nil, nil, _, value]         -> List.to_string(value)
+      [nil, '1', nil, date_serial] -> Xlsxir.ConvertDate.from_excel(date_serial)
+      _                            -> raise "Data corrupt. Unable to process."
     end
   end
 
+  
+
 end
+
+
+
+
+

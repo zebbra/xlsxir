@@ -23,7 +23,7 @@ defmodule Xlsxir.Unzip do
         inner_path
         |> :zip.zip_get(zip_directory)
         |> case do
-          {:error, cause} -> {:error, cause}
+          {:error, cause}          -> {:error, cause}
           {:ok, {_, file_content}} ->
             case :zip.zip_close(zip_directory) do
               {:error, cause} -> {:error, cause}

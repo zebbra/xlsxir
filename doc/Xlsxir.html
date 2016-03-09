@@ -1,0 +1,208 @@
+    <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.11.4">
+    <title>Xlsxir – Xlsxir v0.0.1</title>
+    <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
+    <script src="dist/sidebar_items.js"></script>
+  </head>
+  <body data-type="modules">
+
+    <div class="main">
+<button class="sidebar-toggle">
+  <i class="icon-menu"></i>
+</button>
+<section class="sidebar">
+  <button class="sidebar-toggle">
+    <i class="icon-menu"></i>
+  </button>
+
+  
+  <a href="api-reference.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        Xlsxir
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.0.1
+      </h2>
+    </div>
+    
+  </a>
+
+  <div class="sidebar-search">
+    <i class="icon-search"></i>
+    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+
+  <ul id="full-list" class="sidebar-fullList"></ul>
+  <div class="sidebar-noResults"></div>
+</section>
+
+<section class="content">
+  <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">Xlsxir v0.0.1</small>
+        Xlsxir
+        
+        
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L1" title="View Source" class="view-source" rel="help">
+            <i class="icon-code"></i>
+          </a>
+        
+      </h1>
+
+      
+        <section id="moduledoc" class="docstring">
+          <p>Parses and extracts data from a Microsoft Excel workbook.</p>
+
+        </section>
+      
+
+      
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <i class="icon-link"></i>
+            </a>
+            Summary
+          </h1>
+          
+
+          
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#extract/3">extract(path, index, option \\ :rows)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Provides a list of row value lists -or- a map of cell/value pairs from a Microsoft Excel workbook
+given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
+is requested, and an option</p>
+</div>
+  
+</div>
+
+  </div>
+
+
+          
+
+          
+
+        </section>
+      
+
+      
+
+      
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <i class="icon-link"></i>
+            </a>
+            Functions
+          </h1>
+          <div class="detail" id="extract/3">
+  <div class="detail-header">
+    <a href="#extract/3" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">extract(path, index, option \\ :rows)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L43" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Provides a list of row value lists -or- a map of cell/value pairs from a Microsoft Excel workbook
+given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
+is requested, and an option.</p>
+<p>Cells containing formulas return a <code class="inline">string</code> of the resulting value. Cells containing Excel date format return
+a date in Erlang <code class="inline">date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+<li><code class="inline">index</code> - index of worksheet from within the Excel workbook to be parsed, starting with <code class="inline">0</code>
+</li>
+<li><code class="inline">option</code> - one of two available options
+</li>
+</ul>
+<h2>Options</h2>
+<ul>
+<li><code class="inline">:rows</code> - a list of row value lists (default) - i.e. [[row_1_values], [row_2_values], ...] 
+</li>
+<li><code class="inline">:cells</code> - a map of cell/value pairs - i.e. %{ A1: value_of_cell, B1: value_of_cell, …}
+</li>
+</ul>
+<h2>Example</h2>
+<p>  An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
+<ul>
+<li>cell ‘A1’ -&gt; “string one”
+</li>
+<li>cell ‘B1’ -&gt; “string two”
+</li>
+<li>cell ‘C1’ -&gt; integer of 10
+</li>
+<li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
+</li>
+<li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
+<p>iex&gt;Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
+[["string one", "string two", 10.0, "20", {2016, 1, 1}]]
+iex&gt;Xlsxir.extract(“./test/test_data/test.xlsx”, 0, :cells)
+%{ A1: “string one”, B1: }</p>
+</li>
+</ul>
+
+  </section>
+</div>
+
+        </section>
+      
+
+      
+
+      
+        <footer class="footer">
+      <p>
+        <span class="line">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.4),
+        </span>
+        <span class="line">
+          designed by
+          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+      </p>
+      <button class="night-mode-toggle" />
+    </footer>
+  </div>
+</section>
+</div>
+  <script src="dist/app-6d2e071366.js"></script>
+  </body>
+</html>
+

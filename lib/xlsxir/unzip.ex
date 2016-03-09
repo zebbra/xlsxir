@@ -14,13 +14,13 @@ defmodule Xlsxir.Unzip do
 
   ## Example
 
-    iex> path = "Good_Example.xlsx"
-    iex> Xlsxir.Unzip.validate_path(path)
-    {:ok, "Good_Example.xlsx"}
+      iex> path = "Good_Example.xlsx"
+      iex> Xlsxir.Unzip.validate_path(path)
+      {:ok, "Good_Example.xlsx"}
 
-    iex> path = "bad_path.xml"
-    iex> Xlsxir.Unzip.validate_path(path)
-    {:error, "Invalid path. Currently only .xlsx file types are supported."}
+      iex> path = "bad_path.xml"
+      iex> Xlsxir.Unzip.validate_path(path)
+      {:error, "Invalid path. Currently only .xlsx file types are supported."}
   """
   def validate_path(path) do
     path
@@ -46,10 +46,10 @@ defmodule Xlsxir.Unzip do
     An example file named `test.zip` located in "./test_data/test" containing a single file named `test.txt`
     containing a single string of "test_successful":
 
-      iex> path = "./test/test_data/test.zip"
-      iex> inner_path = 'test.txt'
-      iex> Xlsxir.Unzip.extract_xml(path, inner_path)
-      {:ok, "test_successful"}
+        iex> path = "./test/test_data/test.zip"
+        iex> inner_path = 'test.txt'
+        iex> Xlsxir.Unzip.extract_xml(path, inner_path)
+        {:ok, "test_successful"}
   """
   def extract_xml(path, inner_path) do
     path

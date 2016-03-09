@@ -4,6 +4,8 @@ defmodule Xlsxir.Mixfile do
   def project do
     [app: :xlsxir,
      version: "0.0.1",
+     name: "Xlsxir",
+     source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -27,6 +29,10 @@ defmodule Xlsxir.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [ {:sweet_xml, "~> 0.6.1"} ]
+    [ 
+      { :sweet_xml, "~> 0.6.1" },
+      { :ex_doc,    "~> 0.11.4" },
+      { :earmark,   "~> 0.2.1" }
+    ]
   end
 end

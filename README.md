@@ -5,7 +5,7 @@ Xlsxir is an Elixir library that parses Microsoft Excel worksheets (currently on
 
 ## Installation
 
-You can add Xlsxir as a dependancy to your Elixir project by adding the following toyour `mix.exs` file: 
+You can add Xlsxir as a dependancy to your Elixir project by adding the following to your `mix.exs` file: 
 
 ```elixir
 def deps do
@@ -24,9 +24,9 @@ Xlsxir.extract(path, index, option \\ :rows)
 ```
 
 Argument descriptions:
-- `path` requires the path of the file to be parsed in `string` format.
+- `path` the path of the file to be parsed in `string` format
 - `index` is the position of the worksheet you wish to parse, starting with `0`
-- `option` is the method in which you want the data returned. 
+- `option` is the method in which you want the data returned
 
 Options:
   - `:rows` - a list of row value lists (default) - i.e. `[[row_1_values], [row_2_values], ...] `
@@ -36,7 +36,7 @@ Refer to Xlsxir library documentation for more detailed examples.
 
 ## Considerations
 
-Strings and resulting values for functions from within Excel are returned as `strings`, Data formatted as a number in Excel will be returned as a `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` format (i.e. `{year, month, day}`). 
+Strings and resulting values for functions from within Excel are returned as `strings`, data formatted as a number in Excel will be returned as a `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` format (i.e. `{year, month, day}`). 
 
 ## Contributing
 

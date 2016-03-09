@@ -9,13 +9,13 @@ defmodule Xlsxir.Format do
     Main call of `Format` module. Receives the parsed excel worksheet data, the parsed excel string
     data and the chosen format via `option` which defaults to `rows`.
   """
-  def do_format(worksheet, shared_strings, option \\ 'rows') do
+  def prepare_output(worksheet, shared_strings, option) do
     case option do
-      'rows'  -> row_list(worksheet, shared_strings)
-      'cells' -> cell_map(worksheet, shared_strings)
-      _       -> raise ArgumentError, message: "Invalid option."
+      :rows  -> row_list(worksheet, shared_strings)
+      :cells -> cell_map(worksheet, shared_strings)
+      _      -> raise ArgumentError, message: "Invalid option."
     end
-  end
+  end 
 
   @doc """
     Formats parsed excel worksheet into a list of lists containing cell values by 
@@ -43,16 +43,6 @@ defmodule Xlsxir.Format do
   @doc """
     Formats the value of the string based upon its content.
   """
-  @spec format_cell_value(list, list) :: String.t | integer
-  # def format_cell_value(list, strings) do
-  #   cond do  
-  #     ['s', nil, nil, n] = list           -> Enum.at(strings, List.to_integer(n))
-  #     [nil, nil, nil, i] = list           -> List.to_integer(i)
-  #     [nil, nil, _, value] = list         -> List.to_string(value)
-  #     [nil, '1', nil, date_serial] = list -> "date" #Xlsxir.ConvertDate.from_excel(date_serial)
-  #     true                                -> raise "Data corrupt. Unable to process."
-  #   end
-  # end
 
   # type string
   def format_cell_value(list = ['s', nil, nil, _], strings) do

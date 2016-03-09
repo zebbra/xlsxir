@@ -1,6 +1,15 @@
 defmodule Xlsxir do
 
-  #def extract(file, index, option \\ list_of_row_values) do
+  alias Xlsxir.Unzip
+  alias Xlsxir.Parse
+  alias Xlsxir.Format
 
-  #end
+  def extract(path, index, option \\ :rows) do
+    strings = Parse.shared_strings(path)
+
+    path
+    |> Unzip.validate_path
+    |> Parse.worksheet
+    |> Format.prepare_output(strings, option)
+  end
 end

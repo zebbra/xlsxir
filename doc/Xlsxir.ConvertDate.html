@@ -70,6 +70,12 @@
       </h1>
 
       
+        <section id="moduledoc" class="docstring">
+          <p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
+Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>).</p>
+
+        </section>
+      
 
       
         <section id="summary" class="details-list">
@@ -90,6 +96,10 @@
   <div class="summary-signature">
     <a href="#from_excel/1">from_excel(serial)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
+type format</p>
+</div>
   
 </div>
 
@@ -120,14 +130,24 @@
     </a>
     <span class="signature">from_excel(serial)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L21" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
+type format.</p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">serial</code> - Excel date serial in <code class="inline">char_list</code> format (i.e. 4/30/75 as ‘27514’)
+</li>
+</ul>
+<h2>Example</h2>
+<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDate.from_excel(&#39;27514&#39;)
+{1975, 4, 30}</code></pre>
+
   </section>
 </div>
 

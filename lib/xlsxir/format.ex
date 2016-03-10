@@ -42,8 +42,8 @@ defmodule Xlsxir.Format do
      
   ## Parameters
 
-  - `sheet` - map of xml worksheet data from Excel file that was parsed via Xlsxir.Parse.worksheet/2
-  - `strings` - list of sharedStrings.xml from Excel file that was parsed via Xlsxir.Parse.shared_strings/1
+  - `sheet` - map of xml worksheet data from Excel file that was parsed via `Xlsxir.Parse.worksheet/2`
+  - `strings` - list of sharedStrings.xml data from Excel file that was parsed via `Xlsxir.Parse.shared_strings/1`
 
   ## Example
      
@@ -68,7 +68,7 @@ defmodule Xlsxir.Format do
   # type date
   defp format_cell_value(list = [nil, '1', nil, _], _) do
     [_, _, _, date_serial] = list
-    "date" #Xlsxir.ConvertDate.from_excel(date_serial)
+    Xlsxir.ConvertDate.from_excel(date_serial)
   end
 
   # type formula

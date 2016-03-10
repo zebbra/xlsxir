@@ -24,7 +24,7 @@ defmodule Xlsxir.Parse do
         iex> Xlsxir.Parse.shared_strings("./test/test_data/test.xlsx")
         ["string one", "string two"]
   """
-  def shared_strings(path) do
+  def shared_strings({:ok, path}) do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
     strings
     |> xpath(~x"//t/text()"sl)
@@ -54,7 +54,7 @@ defmodule Xlsxir.Parse do
         %{'1' => %{'A1' => ['s', nil, nil, '0'], 'B1' => ['s', nil, nil, '1'], 'C1' => [nil, nil, nil, '10'], 
           'D1' => [nil, nil, '4*5', '20'], 'E1' => [nil, '1', nil, '42370']}}
   """
-  def worksheet(path, index) do
+  def worksheet({:ok, path}, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     sheet

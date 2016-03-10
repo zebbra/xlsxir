@@ -36,7 +36,7 @@ Refer to Xlsxir library documentation for more detailed examples.
 
 ## Considerations
 
-Strings and resulting values for functions from within Excel are returned as `strings`, data formatted as a number in Excel will be returned as a `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` format (i.e. `{year, month, day}`). 
+Strings will be returned as type `string`, resulting values for functions from within Excel are returned as type `string`, `integer` or `float` depending on the type of theresulting value, data formatted as a number in Excel will be returned as type `integer` or `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). 
 
 ## Contributing
 

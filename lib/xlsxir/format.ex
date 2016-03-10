@@ -30,8 +30,8 @@ defmodule Xlsxir.Format do
   """
   def row_list(sheet, strings) do
     sheet
-    |> Enum.map(fn{k,v} -> 
-        Enum.map(v, fn{k2, v2} -> 
+    |> Enum.map(fn{_, v} -> 
+        Enum.map(v, fn{_, v2} -> 
           format_cell_value(v2, strings) 
         end) 
       end)
@@ -50,36 +50,35 @@ defmodule Xlsxir.Format do
       %{ A1: value_of_cell, B1: value_of_cell, ...}
   """
   def cell_map(sheet, strings) do
-    
+    Map.values(sheet)
+    |> Enum.map(fn row -> 
+        Enum.map(row, fn{k, v} -> 
+          {List.to_atom(k), format_cell_value(v, strings)} 
+        end) 
+      end)
+    |> List.flatten
+    |> Enum.reduce(%{}, &(Enum.into [&1], &2))
   end
 
-  # type string
-  defp format_cell_value(list = ['s', nil, nil, _], strings) do
-    [_, _, _, n] = list
-    Enum.at(strings, List.to_integer(n))
+  defp format_cell_value(list, strings) do
+    case list do
+      ['s', nil, nil, i]   -> Enum.at(strings, List.to_integer(i))       # Excel type string
+      [nil, nil, nil, n]   -> convert_char_number(n)                     # Excel type number
+      [nil, '1', nil, d]   -> Xlsxir.ConvertDate.from_excel(d)           # Excel type date
+      [nil, nil,   _, f_n] -> convert_char_number(f_n)                   # Excel type formula w/ number
+      ['str', nil, _, f_s] -> List.to_string(f_s)                        # Excel type Formula w/ string
+      _                    -> raise "Data corrupt. Unable to process"    # invalid Excel type
+    end
   end
 
-  # type integer
-  defp format_cell_value(list = [nil, nil, nil, _], _) do
-    [_, _, _, i] = list
-    List.to_float(i)
-  end
-
-  # type date
-  defp format_cell_value(list = [nil, '1', nil, _], _) do
-    [_, _, _, date_serial] = list
-    Xlsxir.ConvertDate.from_excel(date_serial)
-  end
-
-  # type formula
-  defp format_cell_value(list = [nil, nil, _, _], _) do
-    [_, _, _, value] = list
-    List.to_string(value)
-  end
-  
-  # no match
-  defp format_cell_value(_, _) do
-    raise "Data corrupt. Unable to process."
+  defp convert_char_number(number) do
+    number
+    |> List.to_string
+    |> String.match?(~r/[.]/)
+    |> case do
+        false -> List.to_integer(number)
+        true  -> List.to_float(number)
+       end
   end
 
 end

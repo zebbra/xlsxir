@@ -4,7 +4,7 @@ defmodule UnzipTest do
 
   import Xlsxir.Unzip
 
-  @path "./test/test.zip"
+  @path "./test/test_data/test.zip"
   @inner_path 'test.txt'
   @incorrect_path "./bad/path.zip"
   @incorrect_inner_path 'bad_inner_path.txt'
@@ -14,7 +14,7 @@ defmodule UnzipTest do
   end
 
   test "path has incorrect extension" do
-    assert validate_path("incorrect_path.xml") == {:error, "Invalid path. Currently only .xlsx is supported."}
+    assert validate_path("incorrect_path.xml") == {:error, "Invalid path. Currently only .xlsx file types are supported."}
   end
 
   # test.zip includes a sigle text file 'test.txt' which includes a single string "test_successful"

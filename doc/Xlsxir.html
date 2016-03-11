@@ -170,10 +170,10 @@ a date in Erlang <code class="inline">date()</code> format (i.e. <code class="in
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>iex&gt;Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-[["string one", "string two", 10.0, "20", {2016, 1, 1}]]
-iex&gt;Xlsxir.extract(“./test/test_data/test.xlsx”, 0, :cells)
-%{ A1: “string one”, B1: }</p>
+<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
+  [["string one", "string two", 10, 20, {2016, 1, 1}]]</p>
+<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0, :cells)
+  %{ A1: “string one”, B1: “string two”, C1: 10, D1: 20, E1: {2016,1,1}}</p>
 </li>
 </ul>
 

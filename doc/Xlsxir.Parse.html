@@ -163,7 +163,7 @@ required elements in the form of a <code class="inline">map</code> of <code clas
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.Parse.shared_strings(“./test/test_data/test.xlsx”)
+<p>  iex&gt; Xlsxir.Parse.shared_strings({:ok, “./test/test_data/test.xlsx”})
   ["string one", "string two"]</p>
 </li>
 </ul>
@@ -207,7 +207,7 @@ required elements in the form of a <code class="inline">map</code> of <code clas
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.Parse.worksheet(“./test/test_data/test.xlsx”, 0)
+<p>  iex&gt; Xlsxir.Parse.worksheet({:ok, “./test/test_data/test.xlsx”}, 0)
   %{‘1’ =&gt; %{‘A1’ =&gt; ['s', nil, nil, '0'], ‘B1’ =&gt; ['s', nil, nil, '1'], ‘C1’ =&gt; [nil, nil, nil, '10'], </p>
 <pre><code class="elixir">&#39;D1&#39; =&gt; [nil, nil, &#39;4*5&#39;, &#39;20&#39;], &#39;E1&#39; =&gt; [nil, &#39;1&#39;, nil, &#39;42370&#39;]}}</code></pre>
 </li>

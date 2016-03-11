@@ -21,7 +21,7 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.Parse.shared_strings("./test/test_data/test.xlsx")
+        iex> Xlsxir.Parse.shared_strings({:ok, "./test/test_data/test.xlsx"})
         ["string one", "string two"]
   """
   def shared_strings({:ok, path}) do
@@ -50,7 +50,7 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.Parse.worksheet("./test/test_data/test.xlsx", 0)
+        iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
         %{'1' => %{'A1' => ['s', nil, nil, '0'], 'B1' => ['s', nil, nil, '1'], 'C1' => [nil, nil, nil, '10'], 
           'D1' => [nil, nil, '4*5', '20'], 'E1' => [nil, '1', nil, '42370']}}
   """

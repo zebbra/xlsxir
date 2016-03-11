@@ -34,11 +34,11 @@ defmodule Xlsxir do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-      iex>Xlsxir.extract("./test/test_data/test.xlsx", 0)
-      [["string one", "string two", 10.0, "20", {2016, 1, 1}]]
-      iex>Xlsxir.extract("./test/test_data/test.xlsx", 0, :cells)
-      %{ A1: "string one", B1: }
+        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+        [["string one", "string two", 10, 20, {2016, 1, 1}]]
 
+        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0, :cells)
+        %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
   """
   def extract(path, index, option \\ :rows) do
     strings = path

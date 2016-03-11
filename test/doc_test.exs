@@ -3,4 +3,6 @@ defmodule DocTest do
   doctest Xlsxir.Unzip
   doctest Xlsxir.Parse
   doctest Xlsxir.ConvertDate
+  doctest Xlsxir.Format
+  doctest Xlsxir
 end

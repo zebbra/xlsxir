@@ -49,8 +49,7 @@ defmodule Xlsxir.Mixfile do
     [
       maintainers: ["Jason Kennell", "Bryan Weatherly"],
       licenses: ["MIT License"],
-      links: %{"Github" => "https://github.com/kennellroxco/xlsxir",
-                "Docs" => "https://kennellroxco.github.io/api-reference.html"}
+      links: %{"Github" => "https://github.com/kennellroxco/xlsxir"}
     ]
   end
 end

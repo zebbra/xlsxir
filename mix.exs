@@ -9,6 +9,8 @@ defmodule Xlsxir.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description,
+     package: package,
      deps: deps]
   end
 
@@ -33,6 +35,22 @@ defmodule Xlsxir.Mixfile do
       { :sweet_xml, "~> 0.6.1" },
       { :ex_doc,    "~> 0.11.4" },
       { :earmark,   "~> 0.2.1" }
+    ]
+  end
+
+  defp description do
+    """
+    Xlsxir is an Elixir library that parses Microsoft Excel worksheets (currently only .xlsx format) 
+    and returns the data in either a `list` or a `map`.
+    """
+  end
+
+  defp package do
+    [
+      maintainers: ["Jason Kennell", "Bryan Weatherly"],
+      licenses: ["MIT License"],
+      links: %{"Github" => "https://github.com/kennellroxco/xlsxir",
+                "Docs" => "https://kennellroxco.github.io/api-reference.html"}
     ]
   end
 end

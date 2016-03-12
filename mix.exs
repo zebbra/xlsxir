@@ -40,7 +40,7 @@ defmodule Xlsxir.Mixfile do
 
   defp description do
     """
-    Parses Microsoft Excel worksheets (currently only .xlsx format) and returns the data in either a `list` or a `map`.
+    Parses Microsoft Excel worksheets (currently only .xlsx format) and returns the data in either a list or a map.
     """
   end
 

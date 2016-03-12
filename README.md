@@ -5,15 +5,21 @@ Xlsxir is an Elixir library that parses Microsoft Excel worksheets (currently on
 
 ## Installation
 
-You can add Xlsxir as a dependancy to your Elixir project by adding the following to your `mix.exs` file: 
+You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your `mix.exs` file: 
+
+```elixir
+def deps do
+  [ {:xlsxir, "~> 0.0.1"} ]
+end
+```
+
+Or, you can directly reference the GitHub repo:
 
 ```elixir
 def deps do
   [ { :xlsxir, github: "kennellroxco/xlsxir" } ]
 end
 ```
-
-Xlsxir will be added to [Hex](https://hex.pm) soon.
 
 ## Basic Usage
 

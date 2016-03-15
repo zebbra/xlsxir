@@ -62,7 +62,7 @@ defmodule Xlsxir.Parse do
     |> Enum.chunk_by(fn cell -> Map.keys(cell)
                                 |> List.first
                                 |> Atom.to_string
-                                |> reg_scan
+                                |> regx_scan
                               end)
     |> Enum.map(fn cells -> 
         Enum.reduce(cells, %{}, fn cell, acc -> 
@@ -100,7 +100,7 @@ defmodule Xlsxir.Parse do
     end
   end
 
-  defp reg_scan(cell) do
+  defp regx_scan(cell) do
     ~r/[0-9]/
     |> Regex.scan(cell)
     |> List.to_string

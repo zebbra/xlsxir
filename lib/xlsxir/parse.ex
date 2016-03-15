@@ -58,22 +58,49 @@ defmodule Xlsxir.Parse do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     sheet
-    |> xpath(~x"//row/@r"l)
-    |> Enum.reduce(%{}, fn(row, acc) -> Map.put(acc, row,
-      sheet
-      |> xpath(~x"//row[contains(@r, '#{row}')]/c/@r"l)
-      |> Enum.reduce(%{}, fn(cell, acc) -> Map.put(acc, cell,
-          [      
-            col_data(sheet, cell, "@t"),
-            col_data(sheet, cell, "@s"),
-            col_data(sheet, cell, "f/text()", "o"),
-            col_data(sheet, cell, "v/text()")
-          ])
-        end)
-      )end)
+    |> xpath(~x"//worksheet/sheetData/row/c"l) 
+    |> Stream.map(&process_column/1)
+    |> Enum.chunk_by(fn cell -> Map.keys(cell)
+                                |> List.first
+                                |> Atom.to_string
+                                |> reg_scan
+                              end)
+    |> Enum.map(fn cells -> 
+        Enum.reduce(cells, %{}, fn cell, acc -> 
+          Map.merge(acc, cell) 
+        end) 
+      end)
   end
 
-  defp col_data(xml, cell, data, opt \\ "") do
-    xpath(xml, ~x"//c[contains(@r, '#{cell}')]/#{data}"opt)
-  end  
+  defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}) do
+    val = extract_value(xml_elem)
+    {cell, attr} = extract_attribute(xml_attr)
+    %{List.to_atom(cell) => [attr, val]}
+  end
+
+  defp extract_attribute(xml_attr) do
+    {:xmlAttribute, _,_,_,_,_,_,_,cell,_} = List.first(xml_attr)
+
+    if Enum.count(xml_attr) == 2 do 
+      {:xmlAttribute, _,_,_,_,_,_,_,attr,_} = List.last(xml_attr)
+    else
+      attr = nil
+    end
+
+    {cell, attr}
+  end
+
+  defp extract_value(xml_elem) do
+    case xml_elem do
+      [{:xmlElement,_,_,_,{_,_,[{_,_},{_,_},{_,_}]},[_,_,_,_],_,_,[{_,_,_,_,val,_}],_,_,_}] -> val
+      [_,{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,funct_val,_}],_,_,_}] -> funct_val
+    end
+  end
+
+  defp reg_scan(cell) do
+    ~r/[0-9]/
+    |> Regex.scan(cell)
+    |> List.to_string
+  end
+  
 end

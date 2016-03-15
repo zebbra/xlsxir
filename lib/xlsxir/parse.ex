@@ -51,8 +51,7 @@ defmodule Xlsxir.Parse do
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
         iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
-        %{'1' => %{'A1' => ['s', nil, nil, '0'], 'B1' => ['s', nil, nil, '1'], 'C1' => [nil, nil, nil, '10'], 
-          'D1' => [nil, nil, '4*5', '20'], 'E1' => [nil, '1', nil, '42370']}}
+        [%{A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']}]
   """
   def worksheet({:ok, path}, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
@@ -73,21 +72,25 @@ defmodule Xlsxir.Parse do
   end
 
   defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}) do
-    val = extract_value(xml_elem)
-    {cell, attr} = extract_attribute(xml_attr)
-    %{List.to_atom(cell) => [attr, val]}
+    value = extract_value(xml_elem)
+    {cell_ref, attribute} = extract_attribute(xml_attr)
+    %{List.to_atom(cell_ref) => [attribute, value]}
   end
 
   defp extract_attribute(xml_attr) do
-    {:xmlAttribute, _,_,_,_,_,_,_,cell,_} = List.first(xml_attr)
+    n = Enum.count(xml_attr)
 
-    if Enum.count(xml_attr) == 2 do 
-      {:xmlAttribute, _,_,_,_,_,_,_,attr,_} = List.last(xml_attr)
-    else
-      attr = nil
-    end
+    cell_ref = case List.first(xml_attr) do
+                 {:xmlAttribute, _,_,_,_,_,_,_,cell,_} -> cell
+                 _                                     -> raise "Unassigned cell reference."
+               end
 
-    {cell, attr}
+    attribute = case List.last(xml_attr) do
+                  {:xmlAttribute, _,_,_,_,_,_,_,attr,_} when n == 2 -> attr 
+                  _                                                 -> nil
+                end
+
+    {cell_ref, attribute}
   end
 
   defp extract_value(xml_elem) do

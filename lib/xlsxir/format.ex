@@ -81,6 +81,25 @@ defmodule Xlsxir.Format do
        end
   end
 
+  def col_letter(i), do: do_col_letter(i, [])
+
+  def do_col_letter(i, ltrs) when i/26 >= 1 do
+    ltr = rem(i, 26) + 65
+
+    i/26 - 1
+    |> Float.floor
+    |> round
+    |> do_col_letter([ltr|ltrs])
+  end
+
+  def do_col_letter(i, ltrs) do
+    ltr = rem(i, 26) + 65
+
+    [ltr|ltrs]
+    |> Enum.map(fn(x) -> <<x>> end)
+    |> List.to_string
+  end
+
 end
 
 

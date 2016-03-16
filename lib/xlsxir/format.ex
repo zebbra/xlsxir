@@ -12,7 +12,7 @@ defmodule Xlsxir.Format do
   def prepare_output(worksheet, shared_strings, option) do
     case option do
       :rows  -> row_list(worksheet, shared_strings)
-      #:cells -> cell_map(worksheet, shared_strings)
+      :cells -> cell_map(worksheet, shared_strings)
       _      -> raise ArgumentError, message: "Invalid option."
     end
   end 
@@ -31,12 +31,7 @@ defmodule Xlsxir.Format do
   def row_list(sheet, strings) do
     sheet
     |> Enum.map(fn row -> 
-        n = Enum.find_index(sheet, fn x -> x == row end)
-        Enum.map(row_reference_list(n-1), fn ref -> 
-          if row[ref] do
-            format_cell_value(row[ref], strings)
-          end
-        end)
+        Enum.map(row, fn {_k, v} -> format_cell_value(v, strings) end)
       end)
   end
 
@@ -52,24 +47,24 @@ defmodule Xlsxir.Format do
      
       %{ A1: value_of_cell, B1: value_of_cell, ...}
   """
-  # def cell_map(sheet, strings) do
-  #   Map.values(sheet)
-  #   |> Enum.map(fn row -> 
-  #       Enum.map(row, fn{k, v} -> 
-  #         {List.to_atom(k), format_cell_value(v, strings)} 
-  #       end) 
-  #     end)
-  #   |> List.flatten
-  #   |> Enum.reduce(%{}, &(Enum.into [&1], &2))
-  # end
+  def cell_map(sheet, strings) do
+    sheet
+    |> Enum.map(fn row -> 
+        Enum.map(row, fn{k, v} -> 
+          {k, format_cell_value(v, strings)} 
+        end) 
+      end)
+    |> List.flatten
+    |> Enum.reduce(%{}, &(Enum.into [&1], &2))
+  end
 
   def format_cell_value(list, strings) do
     case list do
-      ['s', i]     -> Enum.at(strings, List.to_integer(i))       # Excel type string
-      [nil, n]     -> convert_char_number(n)                     # Excel type number
-      ['1', d]     -> Xlsxir.ConvertDate.from_excel(d)           # Excel type date
-      ['str', f_s] -> List.to_string(f_s)                        # Excel type Formula w/ string
-      _            -> raise "Data corrupt. Unable to process"    # invalid Excel type
+      ['s', i]     -> Enum.at(strings, List.to_integer(i))                    # Excel type string
+      [nil, n]     -> convert_char_number(n)                                  # Excel type number
+      ['1', d]     -> Xlsxir.ConvertDate.from_excel(d)                        # Excel type date
+      ['str', f_s] -> List.to_string(f_s)                                     # Excel type Formula w/ string
+      _            -> raise "Invalid attribute #{list}. Unable to process"    # invalid Excel type
     end
   end
 
@@ -85,13 +80,13 @@ defmodule Xlsxir.Format do
   end
 
   # generate reference list for all cells
-  def cell_reference_list do
+  defp cell_reference_list do
     Stream.flat_map(1..1048576, fn n -> 
       Stream.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
     end)
   end
 
-  def row_reference_list(n) do
+  defp row_reference_list(n) do
     Enum.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
   end
 

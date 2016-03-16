@@ -59,22 +59,17 @@ defmodule Xlsxir.Parse do
     sheet
     |> xpath(~x"//worksheet/sheetData/row/c"l) 
     |> Stream.map(&process_column/1)
-    |> Enum.chunk_by(fn cell -> Map.keys(cell)
+    |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
                                 |> List.first
                                 |> Atom.to_string
                                 |> regx_scan
                               end)
-    |> Enum.map(fn cells -> 
-        Enum.reduce(cells, %{}, fn cell, acc -> 
-          Map.merge(acc, cell) 
-        end) 
-      end)
   end
 
   defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}) do
     value = extract_value(xml_elem)
     {cell_ref, attribute} = extract_attribute(xml_attr)
-    %{List.to_atom(cell_ref) => [attribute, value]}
+    {List.to_atom(cell_ref), [attribute, value]}
   end
 
   defp extract_attribute(xml_attr) do

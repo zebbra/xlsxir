@@ -30,18 +30,14 @@ defmodule Xlsxir.Format do
   """
   def row_list(sheet, strings) do
     sheet
-    |> Enum.map(fn{_, v} -> 
-        Enum.map(v, fn{_, v2} -> 
-          format_cell_value(v2, strings) 
-        end) 
+    |> Enum.map(fn row -> 
+        n = Enum.find_index(sheet, fn x -> x == row end)
+        Enum.map(row_reference_list(n-1), fn ref -> 
+          if row[ref] do
+            format_cell_value(row[ref], strings)
+          end
+        end)
       end)
-  end
-
-  def row_list(sheet, strings) do
-    cell_reference_list
-    |> Enum.map(fn cell -> 
-          
-      )
   end
 
   @doc """
@@ -67,7 +63,7 @@ defmodule Xlsxir.Format do
   #   |> Enum.reduce(%{}, &(Enum.into [&1], &2))
   # end
 
-  defp format_cell_value(list, strings) do
+  def format_cell_value(list, strings) do
     case list do
       ['s', i]     -> Enum.at(strings, List.to_integer(i))       # Excel type string
       [nil, n]     -> convert_char_number(n)                     # Excel type number
@@ -78,7 +74,7 @@ defmodule Xlsxir.Format do
   end
 
   # convert Excel number to either integer or float
-  defp convert_char_number(number) do
+  def convert_char_number(number) do
     number
     |> List.to_string
     |> String.match?(~r/[.]/)
@@ -93,6 +89,10 @@ defmodule Xlsxir.Format do
     Stream.flat_map(1..1048576, fn n -> 
       Stream.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
     end)
+  end
+
+  def row_reference_list(n) do
+    Enum.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
   end
 
   # given index, return Excel column letter (i.e. 0 -> "A", 26 -> "AA")

@@ -1,4 +1,5 @@
 defmodule Xlsxir.ConvertDate do
+  import Xlsxir.Format, only: [convert_char_number: 1]
 
   @moduledoc """
   Converts an Excel date serial number, in `char_list` format, to a date formatted in 
@@ -19,8 +20,17 @@ defmodule Xlsxir.ConvertDate do
       {1975, 4, 30}
   """
   def from_excel(serial) do
-    serial
-    |> List.to_integer
+    f_serial = serial
+               |> convert_char_number
+               |> is_float
+               |> case do
+                 false -> List.to_integer(serial)
+                 true  -> List.to_float(serial)
+                          |> Float.floor
+                          |> round
+               end
+               
+    f_serial
     |> process_serial_int
     |> determine_year
     |> determine_month_and_day

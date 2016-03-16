@@ -51,29 +51,54 @@ defmodule Xlsxir.Parse do
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
         iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
-        %{'1' => %{'A1' => ['s', nil, nil, '0'], 'B1' => ['s', nil, nil, '1'], 'C1' => [nil, nil, nil, '10'], 
-          'D1' => [nil, nil, '4*5', '20'], 'E1' => [nil, '1', nil, '42370']}}
+        [%{A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']}]
   """
   def worksheet({:ok, path}, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     sheet
-    |> xpath(~x"//row/@r"l)
-    |> Enum.reduce(%{}, fn(row, acc) -> Map.put(acc, row,
-      sheet
-      |> xpath(~x"//row[contains(@r, '#{row}')]/c/@r"l)
-      |> Enum.reduce(%{}, fn(cell, acc) -> Map.put(acc, cell,
-          [      
-            col_data(sheet, cell, "@t"),
-            col_data(sheet, cell, "@s"),
-            col_data(sheet, cell, "f/text()", "o"),
-            col_data(sheet, cell, "v/text()")
-          ])
-        end)
-      )end)
+    |> xpath(~x"//worksheet/sheetData/row/c"l) 
+    |> Stream.map(&process_column/1)
+    |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
+                                |> List.first
+                                |> Atom.to_string
+                                |> regx_scan
+                              end)
   end
 
-  defp col_data(xml, cell, data, opt \\ "") do
-    xpath(xml, ~x"//c[contains(@r, '#{cell}')]/#{data}"opt)
-  end  
+  defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}) do
+    value = extract_value(xml_elem)
+    {cell_ref, attribute} = extract_attribute(xml_attr)
+    {List.to_atom(cell_ref), [attribute, value]}
+  end
+
+  defp extract_attribute(xml_attr) do
+    n = Enum.count(xml_attr)
+
+    cell_ref = case List.first(xml_attr) do
+                 {:xmlAttribute, _,_,_,_,_,_,_,cell,_} -> cell
+                 _                                     -> raise "Unassigned cell reference."
+               end
+
+    attribute = case List.last(xml_attr) do
+                  {:xmlAttribute, _,_,_,_,_,_,_,attr,_} when n == 2 -> attr 
+                  _                                                 -> nil
+                end
+
+    {cell_ref, attribute}
+  end
+
+  defp extract_value(xml_elem) do
+    case xml_elem do
+      [{:xmlElement,_,_,_,{_,_,[{_,_},{_,_},{_,_}]},[_,_,_,_],_,_,[{_,_,_,_,val,_}],_,_,_}] -> val
+      [_,{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,funct_val,_}],_,_,_}] -> funct_val
+    end
+  end
+
+  defp regx_scan(cell) do
+    ~r/[0-9]/
+    |> Regex.scan(cell)
+    |> List.to_string
+  end
+  
 end

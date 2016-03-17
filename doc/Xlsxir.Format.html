@@ -103,6 +103,21 @@ list or a map depending on the option chosen. </p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#convert_char_number/1">convert_char_number(number)</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#format_cell_value/2">format_cell_value(list, strings)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Uses attributes from xml to format cell value</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#prepare_output/3">prepare_output(worksheet, shared_strings, option)</a>
   </div>
   
@@ -148,7 +163,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
     </a>
     <span class="signature">cell_map(sheet, strings)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L52" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L50" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -165,6 +180,53 @@ data and the chosen format via <code class="inline">option</code> which defaults
 </ul>
 <h2>Example</h2>
 <pre><code class="elixir">%{ A1: value_of_cell, B1: value_of_cell, ...}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="convert_char_number/1">
+  <div class="detail-header">
+    <a href="#convert_char_number/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">convert_char_number(number)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L87" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="format_cell_value/2">
+  <div class="detail-header">
+    <a href="#format_cell_value/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">format_cell_value(list, strings)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L76" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Uses attributes from xml to format cell value.</p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">list</code> - list containing attribute and value of column from xml file
+</li>
+<li><code class="inline">strings</code> - list of strings from sharedStrings.xml file
+</li>
+</ul>
+<h2>Example</h2>
+<pre><code class="iex elixir">iex&gt; Xlsxir.Format.format_cell_value([nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
+1
+iex&gt; Xlsxir.Format.format_cell_value([&#39;s&#39;, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
+&quot;B&quot;</code></pre>
 
   </section>
 </div>

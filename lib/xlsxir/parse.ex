@@ -51,7 +51,7 @@ defmodule Xlsxir.Parse do
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
         iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
-        [%{A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']}]
+        [[A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']]]
   """
   def worksheet({:ok, path}, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')

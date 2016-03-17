@@ -21,8 +21,8 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.Parse.shared_strings({:ok, "./test/test_data/test.xlsx"})
-        ["string one", "string two"]
+          iex> Xlsxir.Parse.shared_strings({:ok, "./test/test_data/test.xlsx"})
+          ["string one", "string two"]
   """
   def shared_strings({:ok, path}) do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
@@ -32,10 +32,9 @@ defmodule Xlsxir.Parse do
 
   @doc """
   Receives the xlsx worksheet at position `index` in xml format, parses the data and returns
-  required elements in the form of a `map` of `char_lists`:
+  required elements in the form of a `keyword list`:
 
-      %{ 'row_num' => %{ 'cell' => [ 's' for string or nil, '1' for date or nil,
-        Excel function or nil, value or reference to sharedStrings ] }, ...}
+      [[row_1_cell_1: ['attribute', 'value'], ...], [row_2_cell_1: ['attribute', 'value'], ...], ...]
 
   ## Parameters
 
@@ -50,8 +49,8 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
-        [[A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']]]
+          iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
+          [[A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']]]
   """
   def worksheet({:ok, path}, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')

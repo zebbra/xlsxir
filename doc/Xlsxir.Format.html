@@ -106,6 +106,9 @@ list or a map depending on the option chosen. </p>
     <a href="#convert_char_number/1">convert_char_number(number)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Converts Excel number to either integer or float</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -190,14 +193,15 @@ data and the chosen format via <code class="inline">option</code> which defaults
     </a>
     <span class="signature">convert_char_number(number)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L87" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L89" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Converts Excel number to either integer or float.</p>
+
   </section>
 </div>
 <div class="detail" id="format_cell_value/2">
@@ -219,7 +223,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
 <ul>
 <li><code class="inline">list</code> - list containing attribute and value of column from xml file
 </li>
-<li><code class="inline">strings</code> - list of strings from sharedStrings.xml file
+<li><code class="inline">strings</code> - list of strings from the sharedStrings.xml file
 </li>
 </ul>
 <h2>Example</h2>
@@ -263,7 +267,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
   </div>
   
   <section class="docstring">
-    <p>Formats parsed excel worksheet into a list of lists containing cell values by row. </p>
+    <p>Formats parsed excel worksheet into a list of lists containing cell values by row.  </p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via Xlsxir.Parse.worksheet/2

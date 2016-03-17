@@ -18,7 +18,7 @@ defmodule Xlsxir.Format do
   end 
 
   @doc """
-  Formats parsed excel worksheet into a list of lists containing cell values by row. 
+  Formats parsed excel worksheet into a list of lists containing cell values by row.  
   
   ## Parameters
 
@@ -64,7 +64,7 @@ defmodule Xlsxir.Format do
   ## Parameters
 
   - `list` - list containing attribute and value of column from xml file
-  - `strings` - list of strings from sharedStrings.xml file
+  - `strings` - list of strings from the sharedStrings.xml file
 
   ## Example
 
@@ -83,7 +83,9 @@ defmodule Xlsxir.Format do
     end
   end
 
-  # convert Excel number to either integer or float
+  @doc """
+  Converts Excel number to either integer or float.
+  """
   def convert_char_number(number) do
     number
     |> List.to_string

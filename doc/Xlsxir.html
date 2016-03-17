@@ -71,7 +71,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Parses and extracts data from a Microsoft Excel workbook.</p>
+          <p>Extracts and parses data from a Microsoft Excel workbook, returning either a list or a map.</p>
 
         </section>
       
@@ -96,7 +96,7 @@
     <a href="#extract/3">extract(path, index, option \\ :rows)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Provides a list of row value lists -or- a map of cell/value pairs from a Microsoft Excel workbook
+    <div class="summary-synopsis"><p>Provides a list of row value lists or a map of cell/value pairs from a Microsoft Excel workbook
 given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
 is requested, and an option</p>
 </div>
@@ -137,11 +137,11 @@ is requested, and an option</p>
   </div>
   
   <section class="docstring">
-    <p>Provides a list of row value lists -or- a map of cell/value pairs from a Microsoft Excel workbook
+    <p>Provides a list of row value lists or a map of cell/value pairs from a Microsoft Excel workbook
 given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
 is requested, and an option.</p>
-<p>Cells containing formulas return a <code class="inline">string</code> of the resulting value. Cells containing Excel date format return
-a date in Erlang <code class="inline">date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
+<p>Cells containing formulas return either a <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> of the resulting value. Cells containing Excel date format return
+a date in Erlang <code class="inline">:calendar.date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
@@ -167,13 +167,14 @@ a date in Erlang <code class="inline">date()</code> format (i.e. <code class="in
 </li>
 <li>cell ‘C1’ -&gt; integer of 10
 </li>
-<li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
+<li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  [["string one", "string two", 10, 20, {2016, 1, 1}]]</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0, :cells)
-  %{ A1: “string one”, B1: “string two”, C1: 10, D1: 20, E1: {2016,1,1}}</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+[[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]]
+
+iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0, :cells)
+  %{ A1: &quot;string one&quot;, B1: &quot;string two&quot;, C1: 10, D1: 20, E1: {2016,1,1}}</code></pre>
 </li>
 </ul>
 

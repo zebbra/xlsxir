@@ -36,7 +36,7 @@ defmodule Xlsxir do
           [["string one", "string two", 10, 20, {2016, 1, 1}]]
 
           iex> Xlsxir.extract("./test/test_data/test.xlsx", 0, :cells)
-            %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
+          %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
   """
   def extract(path, index, option \\ :rows) do
     strings = path

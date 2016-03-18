@@ -18,4 +18,8 @@ defmodule ParseTest do
     assert List.last(sheet4)[:A1048576] == [nil, '1048576']
   end
 
+  test "able to parse cells with errors" do
+    assert worksheet({:ok, "./test/test_data/test.xlsx"}, 4) == [[A1: ['e', '#DIV/0!'], B1: ['e', '#REF!'], C1: ['e', '#NUM!'], D1: ['e', '#VALUE!']]]
+  end
+
 end

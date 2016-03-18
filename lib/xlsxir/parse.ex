@@ -89,8 +89,10 @@ defmodule Xlsxir.Parse do
 
   defp extract_value(xml_elem) do
     case xml_elem do
-      [{:xmlElement,_,_,_,{_,_,[{_,_},{_,_},{_,_}]},[_,_,_,_],_,_,[{_,_,_,_,val,_}],_,_,_}] -> val
+      [{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,val,_}],_,_,_}]         -> val
       [_,{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,funct_val,_}],_,_,_}] -> funct_val
+      []                                                            -> ""
+      _                                                             -> raise "Invalid xmlElement."
     end
   end
 

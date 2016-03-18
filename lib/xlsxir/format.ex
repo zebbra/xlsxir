@@ -75,10 +75,12 @@ defmodule Xlsxir.Format do
   """
   def format_cell_value(list, strings) do
     case list do
+      [ _, ""]     -> ""                                                      # Empty cell with assigned attribute
       ['s', i]     -> Enum.at(strings, List.to_integer(i))                    # Excel type string
       [nil, n]     -> convert_char_number(n)                                  # Excel type number
       ['1', d]     -> Xlsxir.ConvertDate.from_excel(d)                        # Excel type date
-      ['str', f_s] -> List.to_string(f_s)                                     # Excel type Formula w/ string
+      ['str', f_s] -> List.to_string(f_s)                                     # Excel type formula w/ string
+      ['e', e]     -> List.to_string(e)                                       # Excel type error
       _            -> raise "Invalid attribute #{list}. Unable to process"    # invalid Excel type
     end
   end

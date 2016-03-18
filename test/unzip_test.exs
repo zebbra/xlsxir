@@ -10,7 +10,7 @@ defmodule UnzipTest do
   @incorrect_inner_path 'bad_inner_path.txt'
 
   test "path has the correct extension" do
-    assert validate_path("correct_path.xlsx") == {:ok, "correct_path.xlsx"}
+    assert validate_path("correct_path.xlsx") == {:ok, 'correct_path.xlsx'}
   end
 
   test "path has incorrect extension" do

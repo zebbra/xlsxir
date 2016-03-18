@@ -42,7 +42,7 @@ Refer to [Xlsxir library](https://kennellroxco.github.io) documentation for more
 
 ## Considerations
 
-Strings will be returned as type `string`, resulting values for functions from within Excel are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in Excel will be returned as type `integer` or `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). 
+Strings will be returned as type `string`, resulting values for functions from within Excel are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in Excel will be returned as type `integer` or `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Excel does not support dates prior to 1/1/1900.
 
 ## Contributing
 

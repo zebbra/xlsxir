@@ -21,10 +21,10 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-          iex> Xlsxir.Parse.shared_strings({:ok, "./test/test_data/test.xlsx"})
+          iex> Xlsxir.Parse.shared_strings("./test/test_data/test.xlsx")
           ["string one", "string two"]
   """
-  def shared_strings({:ok, path}) do
+  def shared_strings(path) do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
     strings
     |> xpath(~x"//t/text()"sl)
@@ -49,14 +49,14 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-          iex> Xlsxir.Parse.worksheet({:ok, "./test/test_data/test.xlsx"}, 0)
+          iex> Xlsxir.Parse.worksheet("./test/test_data/test.xlsx", 0)
           [[A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']]]
   """
-  def worksheet({:ok, path}, index) do
+  def worksheet(path, index) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     sheet
-    |> xpath(~x"//worksheet/sheetData/row/c"l) 
+    |> xpath(~x"//worksheet/sheetData/row/c"l)
     |> Stream.map(&process_column/1)
     |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
                                 |> List.first
@@ -80,7 +80,7 @@ defmodule Xlsxir.Parse do
                end
 
     attribute = case List.last(xml_attr) do
-                  {:xmlAttribute, _,_,_,_,_,_,_,attr,_} when n == 2 -> attr 
+                  {:xmlAttribute, _,_,_,_,_,_,_,attr,_} when n == 2 -> attr
                   _                                                 -> nil
                 end
 
@@ -91,7 +91,7 @@ defmodule Xlsxir.Parse do
     case xml_elem do
       [{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,val,_}],_,_,_}]         -> val
       [_,{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,funct_val,_}],_,_,_}] -> funct_val
-      []                                                            -> ""
+      []                                                            -> nil
       _                                                             -> raise "Invalid xmlElement."
     end
   end
@@ -101,5 +101,5 @@ defmodule Xlsxir.Parse do
     |> Regex.scan(cell)
     |> List.to_string
   end
-  
+
 end

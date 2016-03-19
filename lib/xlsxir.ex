@@ -8,7 +8,7 @@ defmodule Xlsxir do
 
   @doc """
   Provides a list of row value lists or a map of cell/value pairs from a Microsoft Excel workbook
-  given the path to a file of extension type `.xlsx`, the index of the worksheet in which the information 
+  given the path to a file of extension type `.xlsx`, the index of the worksheet in which the information
   is requested, and an option.
 
   Cells containing formulas return either a `string`, `integer` or `float` of the resulting value. Cells containing Excel date format return
@@ -21,7 +21,7 @@ defmodule Xlsxir do
 
   ## Options
 
-  - `:rows` - a list of row value lists (default) - i.e. [[row_1_values], [row_2_values], ...] 
+  - `:rows` - a list of row value lists (default) - i.e. [[row_1_values], [row_2_values], ...]
   - `:cells` - a map of cell/value pairs - i.e. %{ A1: value_of_cell, B1: value_of_cell, ...}
 
   ## Example
@@ -39,12 +39,10 @@ defmodule Xlsxir do
           %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
   """
   def extract(path, index, option \\ :rows) do
-    strings = path
-              |> Unzip.validate_path
-              |> Parse.shared_strings
+    {:ok, file} = Unzip.validate_path(path)
+    strings = Parse.shared_strings(file)
 
-    path
-    |> Unzip.validate_path
+    file
     |> Parse.worksheet(index)
     |> Format.prepare_output(strings, option)
   end

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.Parse – Xlsxir v0.0.1</title>
+    <title>Xlsxir.Parse – Xlsxir v0.0.2</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.1
+        v0.0.2
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v0.0.1</small>
+        <small class="visible-xs">Xlsxir v0.0.2</small>
         Xlsxir.Parse
         
         
@@ -93,7 +93,17 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#shared_strings/1">shared_strings(arg)</a>
+    <a href="#num_style/1">num_style(path)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Receives Excel style data in xml format, parses it and returns the numFmtId attributes in a list which is then processed
+into a list of style types</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#shared_strings/1">shared_strings(path)</a>
   </div>
   
     <div class="summary-synopsis"><p>Receives Excel string data in xml format, parses it and returns the strings in the form of a list</p>
@@ -102,7 +112,7 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#worksheet/2">worksheet(arg, index)</a>
+    <a href="#worksheet/3">worksheet(path, index, styles)</a>
   </div>
   
     <div class="summary-synopsis"><p>Receives the xlsx worksheet at position <code class="inline">index</code> in xml format, parses the data and returns
@@ -131,12 +141,46 @@ required elements in the form of a <code class="inline">keyword list</code></p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="shared_strings/1">
+          <div class="detail" id="num_style/1">
+  <div class="detail-header">
+    <a href="#num_style/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">num_style(path)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L49" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Receives Excel style data in xml format, parses it and returns the numFmtId attributes in a list which is then processed
+into a list of style types.</p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+</ul>
+<h2>Example</h2>
+<p>  The example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> contains the following <code class="inline">numFmtId</code> attributes:</p>
+<ul>
+<li>1 at index 0 which is the standard format for Excel numbers
+</li>
+<li><p>14 at index 1 which is the Excel date format of <code class="inline">mm-dd-yy</code></p>
+<p>  iex&gt; Xlsxir.Parse.num_style(“./test/test_data/test.xlsx”)
+  [nil, 'd']</p>
+</li>
+</ul>
+
+  </section>
+</div>
+<div class="detail" id="shared_strings/1">
   <div class="detail-header">
     <a href="#shared_strings/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">shared_strings(arg)</span>
+    <span class="signature">shared_strings(path)</span>
       
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L27" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -163,21 +207,21 @@ required elements in the form of a <code class="inline">keyword list</code></p>
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.Parse.shared_strings({:ok, &quot;./test/test_data/test.xlsx&quot;})
+<pre><code class="iex elixir">iex&gt; Xlsxir.Parse.shared_strings(&quot;./test/test_data/test.xlsx&quot;)
 [&quot;string one&quot;, &quot;string two&quot;]</code></pre>
 </li>
 </ul>
 
   </section>
 </div>
-<div class="detail" id="worksheet/2">
+<div class="detail" id="worksheet/3">
   <div class="detail-header">
-    <a href="#worksheet/2" class="detail-link" title="Link to this function">
+    <a href="#worksheet/3" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">worksheet(arg, index)</span>
+    <span class="signature">worksheet(path, index, styles)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L55" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L86" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -206,8 +250,8 @@ required elements in the form of a <code class="inline">keyword list</code>:</p>
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.Parse.worksheet({:ok, &quot;./test/test_data/test.xlsx&quot;}, 0)
-[[A1: [&#39;s&#39;, &#39;0&#39;], B1: [&#39;s&#39;, &#39;1&#39;], C1: [nil, &#39;10&#39;], D1: [nil, &#39;20&#39;], E1: [&#39;1&#39;, &#39;42370&#39;]]]</code></pre>
+<pre><code class="iex elixir">iex&gt; Xlsxir.Parse.worksheet(&quot;./test/test_data/test.xlsx&quot;, 0, [nil,&#39;d&#39;])
+[[A1: [&#39;s&#39;, nil, &#39;0&#39;], B1: [&#39;s&#39;, nil, &#39;1&#39;], C1: [nil, nil, &#39;10&#39;], D1: [nil, nil, &#39;20&#39;], E1: [nil, &#39;d&#39;, &#39;42370&#39;]]]</code></pre>
 </li>
 </ul>
 

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir – Xlsxir v0.0.1</title>
+    <title>Xlsxir – Xlsxir v0.0.2</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.1
+        v0.0.2
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v0.0.1</small>
+        <small class="visible-xs">Xlsxir v0.0.2</small>
         Xlsxir
         
         
@@ -97,7 +97,7 @@
   </div>
   
     <div class="summary-synopsis"><p>Provides a list of row value lists or a map of cell/value pairs from a Microsoft Excel workbook
-given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
+given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information
 is requested, and an option</p>
 </div>
   
@@ -130,7 +130,7 @@ is requested, and an option</p>
     </a>
     <span class="signature">extract(path, index, option \\ :rows)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L43" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L41" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -138,7 +138,7 @@ is requested, and an option</p>
   
   <section class="docstring">
     <p>Provides a list of row value lists or a map of cell/value pairs from a Microsoft Excel workbook
-given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information 
+given the path to a file of extension type <code class="inline">.xlsx</code>, the index of the worksheet in which the information
 is requested, and an option.</p>
 <p>Cells containing formulas return either a <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> of the resulting value. Cells containing Excel date format return
 a date in Erlang <code class="inline">:calendar.date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
@@ -153,7 +153,7 @@ a date in Erlang <code class="inline">:calendar.date()</code> format (i.e. <code
 </ul>
 <h2>Options</h2>
 <ul>
-<li><code class="inline">:rows</code> - a list of row value lists (default) - i.e. [[row_1_values], [row_2_values], ...] 
+<li><code class="inline">:rows</code> - a list of row value lists (default) - i.e. [[row_1_values], [row_2_values], ...]
 </li>
 <li><code class="inline">:cells</code> - a map of cell/value pairs - i.e. %{ A1: value_of_cell, B1: value_of_cell, …}
 </li>
@@ -174,7 +174,7 @@ a date in Erlang <code class="inline">:calendar.date()</code> format (i.e. <code
 [[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]]
 
 iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0, :cells)
-  %{ A1: &quot;string one&quot;, B1: &quot;string two&quot;, C1: 10, D1: 20, E1: {2016,1,1}}</code></pre>
+%{ A1: &quot;string one&quot;, B1: &quot;string two&quot;, C1: 10, D1: 20, E1: {2016,1,1}}</code></pre>
 </li>
 </ul>
 

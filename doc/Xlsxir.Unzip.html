@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.Unzip – Xlsxir v0.0.1</title>
+    <title>Xlsxir.Unzip – Xlsxir v0.0.2</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.1
+        v0.0.2
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v0.0.1</small>
+        <small class="visible-xs">Xlsxir v0.0.2</small>
         Xlsxir.Unzip
         
         
@@ -72,7 +72,7 @@
       
         <section id="moduledoc" class="docstring">
           <p>Provides validation of accepted file extension types for file path and extracts requested inner files
-from a <code class="inline">.zip</code> file type. </p>
+from a <code class="inline">.zip</code> file type.</p>
 
         </section>
       
@@ -138,7 +138,7 @@ from a <code class="inline">.zip</code> file type. </p>
     </a>
     <span class="signature">extract_xml(path, inner_path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L54" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L52" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -177,7 +177,7 @@ from a <code class="inline">.zip</code> file type. </p>
   </div>
   
   <section class="docstring">
-    <p>Validates given path is of extension type <code class="inline">.xlsx</code> and returns a tuple. </p>
+    <p>Validates given path is of extension type <code class="inline">.xlsx</code> and returns a tuple.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
@@ -186,7 +186,7 @@ from a <code class="inline">.zip</code> file type. </p>
 <h2>Example</h2>
 <pre><code class="iex elixir">iex&gt; path = &quot;Good_Example.xlsx&quot;
 iex&gt; Xlsxir.Unzip.validate_path(path)
-{:ok, &quot;Good_Example.xlsx&quot;}
+{:ok, &#39;Good_Example.xlsx&#39;}
 
 iex&gt; path = &quot;bad_path.xml&quot;
 iex&gt; Xlsxir.Unzip.validate_path(path)

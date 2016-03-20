@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.Format – Xlsxir v0.0.1</title>
+    <title>Xlsxir.Format – Xlsxir v0.0.2</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.1
+        v0.0.2
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v0.0.1</small>
+        <small class="visible-xs">Xlsxir v0.0.2</small>
         Xlsxir.Format
         
         
@@ -72,7 +72,7 @@
       
         <section id="moduledoc" class="docstring">
           <p>Receives parsed excel worksheet data, formats the cell values and returns the data in either a
-list or a map depending on the option chosen. </p>
+list or a map depending on the option chosen.</p>
 
         </section>
       
@@ -176,7 +176,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
     <p>Formats parsed excel worksheet into a map of cell/value pairs.</p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via <a href="Xlsxir.Parse.html#worksheet/2"><code class="inline">Xlsxir.Parse.worksheet/2</code></a>
+<li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via <code class="inline">Xlsxir.Parse.worksheet/2</code>
 </li>
 <li><code class="inline">strings</code> - list of sharedStrings.xml data from Excel file that was parsed via <a href="Xlsxir.Parse.html#shared_strings/1"><code class="inline">Xlsxir.Parse.shared_strings/1</code></a>
 </li>
@@ -193,7 +193,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
     </a>
     <span class="signature">convert_char_number(number)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L89" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L91" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -221,15 +221,15 @@ data and the chosen format via <code class="inline">option</code> which defaults
     <p>Uses attributes from xml to format cell value.</p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">list</code> - list containing attribute and value of column from xml file
+<li><code class="inline">list</code> - list containing attribute, style and value of column from xml file
 </li>
 <li><code class="inline">strings</code> - list of strings from the sharedStrings.xml file
 </li>
 </ul>
 <h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.Format.format_cell_value([nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
+<pre><code class="iex elixir">iex&gt; Xlsxir.Format.format_cell_value([nil, nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
 1
-iex&gt; Xlsxir.Format.format_cell_value([&#39;s&#39;, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
+iex&gt; Xlsxir.Format.format_cell_value([&#39;s&#39;, nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
 &quot;B&quot;</code></pre>
 
   </section>
@@ -267,7 +267,7 @@ data and the chosen format via <code class="inline">option</code> which defaults
   </div>
   
   <section class="docstring">
-    <p>Formats parsed excel worksheet into a list of lists containing cell values by row.  </p>
+    <p>Formats parsed excel worksheet into a list of lists containing cell values by row.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via Xlsxir.Parse.worksheet/2

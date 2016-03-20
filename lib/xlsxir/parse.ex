@@ -31,6 +31,37 @@ defmodule Xlsxir.Parse do
   end
 
   @doc """
+  Receives Excel style data in xml format, parses it and returns the numFmtId attributes in a list which is then processed
+  into a list of style types.
+
+  ## Parameters
+
+  - `path` - file path of a `.xlsx` file type in `string` format
+
+  ## Example
+    The example file named `test.xlsx` located in `./test/test_data` contains the following `numFmtId` attributes:
+    - 1 at index 0 which is the standard format for Excel numbers
+    - 14 at index 1 which is the Excel date format of `mm-dd-yy`
+
+        iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
+        [nil, 'd']
+  """
+  def num_style(path) do
+    {:ok, styles} = extract_xml(path, 'xl/styles.xml')
+
+    styles
+    |> xpath(~x"//cellXfs/xf/@numFmtId"l)
+    |> Enum.map(fn style_type -> 
+        case List.to_integer(style_type) do
+          i when i in 0..3   -> nil
+          i when i in 14..22 -> 'd'
+          i when i in 45..47 -> 'd'
+          _                  -> raise "Unknown style type: #{style_type}."
+        end                          
+      end)
+  end
+
+  @doc """
   Receives the xlsx worksheet at position `index` in xml format, parses the data and returns
   required elements in the form of a `keyword list`:
 
@@ -49,15 +80,15 @@ defmodule Xlsxir.Parse do
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-          iex> Xlsxir.Parse.worksheet("./test/test_data/test.xlsx", 0)
-          [[A1: ['s', '0'], B1: ['s', '1'], C1: [nil, '10'], D1: [nil, '20'], E1: ['1', '42370']]]
+          iex> Xlsxir.Parse.worksheet("./test/test_data/test.xlsx", 0, [nil,'d'])
+          [[A1: ['s', nil, '0'], B1: ['s', nil, '1'], C1: [nil, nil, '10'], D1: [nil, nil, '20'], E1: [nil, 'd', '42370']]]
   """
-  def worksheet(path, index) do
+  def worksheet(path, index, styles) do
     {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     sheet
     |> xpath(~x"//worksheet/sheetData/row/c"l)
-    |> Stream.map(&process_column/1)
+    |> Stream.map(&(process_column(&1, styles)))
     |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
                                 |> List.first
                                 |> Atom.to_string
@@ -65,26 +96,29 @@ defmodule Xlsxir.Parse do
                               end)
   end
 
-  defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}) do
-    value = extract_value(xml_elem)
-    {cell_ref, attribute} = extract_attribute(xml_attr)
-    {List.to_atom(cell_ref), [attribute, value]}
+  defp process_column({:xmlElement,:c,:c,_,_,_,_,xml_attr,xml_elem,_,_,_}, styles) do
+    {cell_ref, num_style, data_type} = extract_attribute(xml_attr, styles)
+    {List.to_atom(cell_ref), [data_type, num_style, extract_value(xml_elem)]}
   end
 
-  defp extract_attribute(xml_attr) do
-    n = Enum.count(xml_attr)
+  defp extract_attribute(xml_attr, styles) do
+    a = Enum.map(xml_attr, fn(attr) -> 
+      case attr do
+        {:xmlAttribute,:r,_,_,_,_,_,_,ref,_}   -> {:r, ref}
+        {:xmlAttribute,:s,_,_,_,_,_,_,style,_} -> {:s, Enum.at(styles, List.to_integer(style))}
+        {:xmlAttribute,:t,_,_,_,_,_,_,type,_}  -> {:t, type}
+        _                                      -> raise "Unknown cell attribute"
+      end
+    end)
 
-    cell_ref = case List.first(xml_attr) do
-                 {:xmlAttribute, _,_,_,_,_,_,_,cell,_} -> cell
-                 _                                     -> raise "Unassigned cell reference."
-               end
-
-    attribute = case List.last(xml_attr) do
-                  {:xmlAttribute, _,_,_,_,_,_,_,attr,_} when n == 2 -> attr
-                  _                                                 -> nil
-                end
-
-    {cell_ref, attribute}
+    {cell_ref, num_style, data_type} = case Keyword.keys(a) do
+                                        [:r]         -> {a[:r],   nil,   nil}
+                                        [:r, :s]     -> {a[:r], a[:s],   nil}
+                                        [:r, :t]     -> {a[:r],   nil, a[:t]}
+                                        [:r, :s, :t] -> {a[:r], a[:s], a[:t]}
+                                        _            -> raise "Invalid attributes: #{a}"
+                                       end
+    {cell_ref, num_style, data_type}
   end
 
   defp extract_value(xml_elem) do

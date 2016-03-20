@@ -41,9 +41,10 @@ defmodule Xlsxir do
   def extract(path, index, option \\ :rows) do
     {:ok, file} = Unzip.validate_path(path)
     strings = Parse.shared_strings(file)
+    styles = Parse.num_style(file)
 
     file
-    |> Parse.worksheet(index)
+    |> Parse.worksheet(index, styles)
     |> Format.prepare_output(strings, option)
   end
 end

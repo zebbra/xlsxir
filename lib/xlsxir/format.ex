@@ -63,26 +63,25 @@ defmodule Xlsxir.Format do
 
   ## Parameters
 
-  - `list` - list containing attribute and value of column from xml file
+  - `list` - list containing attribute, style and value of column from xml file
   - `strings` - list of strings from the sharedStrings.xml file
 
   ## Example
 
-      iex> Xlsxir.Format.format_cell_value([nil, '1'], ["A", "B"])
+      iex> Xlsxir.Format.format_cell_value([nil, nil, '1'], ["A", "B"])
       1
-      iex> Xlsxir.Format.format_cell_value(['s', '1'], ["A", "B"])
+      iex> Xlsxir.Format.format_cell_value(['s', nil, '1'], ["A", "B"])
       "B"
   """
   def format_cell_value(list, strings) do
     case list do
-      [ _, ""]     -> ""                                                      # Empty cell with assigned attribute
-      ['s', i]     -> Enum.at(strings, List.to_integer(i))                    # Excel type string
-      [nil, n]     -> convert_char_number(n)                                  # Excel type number
-      ['1', d]     -> Xlsxir.ConvertDate.from_excel(d)                        # Excel type date
-      ['str', f_s] -> List.to_string(f_s)                                     # Excel type formula w/ string
-      ['e', e]     -> List.to_string(e)                                       # Excel type error
-      ['2', d]     -> Xlsxir.ConvertDate.from_excel(d)                        # Excel type date
-      _            -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped Excel type
+      [   _,    _, ""]  -> ""                                                                  # Empty cell with assigned attribute
+      [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Excel type error
+      [ 's',    _,  i]  -> Enum.at(strings, List.to_integer(i))                                # Excel type string
+      [ nil,  nil,  n]  -> convert_char_number(n)                                              # Excel type number
+      [ nil,  'd',  d]  -> Xlsxir.ConvertDate.from_excel(d)                                    # Excel type date
+      ['str', nil,  s]  -> List.to_string(s)                                                   # Excel type formula w/ string 
+      _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped Excel type
     end
   end
 

@@ -3,7 +3,7 @@ defmodule Xlsxir.Mixfile do
 
   def project do
     [app: :xlsxir,
-     version: "0.0.2",
+     version: "0.0.3",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
@@ -11,7 +11,8 @@ defmodule Xlsxir.Mixfile do
      start_permanent: Mix.env == :prod,
      description: description,
      package: package,
-     deps: deps]
+     deps: deps,
+     docs: docs]
   end
 
   # Configuration for the OTP application
@@ -50,5 +51,13 @@ defmodule Xlsxir.Mixfile do
       licenses: ["MIT License"],
       links: %{"Github" => "https://github.com/kennellroxco/xlsxir"}
     ]
+  end
+  
+  defp docs do
+    [main: "OVERVIEW.md",
+     extras: [
+      "OVERVIEW.md",
+      "CHANGELOG.md"
+    ]]
   end
 end

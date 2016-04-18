@@ -50,8 +50,8 @@ defmodule Xlsxir.Parse do
     - 1 at index 0 which is the standard format for Excel numbers
     - 14 at index 1 which is the Excel date format of `mm-dd-yy`
 
-        iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
-        [nil, 'd']
+          iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
+          [nil, 'd']
   """
   def num_style(path) do
     {:ok, styles} = extract_xml(path, 'xl/styles.xml')

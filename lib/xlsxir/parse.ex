@@ -27,7 +27,14 @@ defmodule Xlsxir.Parse do
   def shared_strings(path) do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
     strings
-    |> xpath(~x"//t/text()"sl)
+    |> xpath(~x"//t"l)
+    |> Enum.map(fn string -> case string do
+          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> 
+            to_string(str)
+          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_},{_,_,_,_,str2,_}],_,_,_} ->
+            to_string(str) <> to_string(str2)
+        end 
+      end)
   end
 
   @doc """

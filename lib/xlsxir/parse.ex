@@ -36,7 +36,7 @@ defmodule Xlsxir.Parse do
       end)
   end
 
-  def join_string_fragments(xml) do
+  defp join_string_fragments(xml) do
     Tuple.to_list(xml)
     |> Enum.at(8)
     |> Enum.reduce("", fn(x, acc) -> {_,_,_,_,str,_} = x
@@ -45,8 +45,8 @@ defmodule Xlsxir.Parse do
   end
 
   @doc """
-  Receives Excel style data in xml format, parses it and returns the numFmtId attributes in a list which is then processed
-  into a list of style types.
+  Receives Excel style data in xml format, parses it and returns the `numFmtId` attributes in a list which is then processed
+  into a list of style types (`'d'` for date type, `'nil'` for standard number type).
 
   ## Parameters
 

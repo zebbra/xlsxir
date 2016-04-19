@@ -54,7 +54,7 @@ defmodule Xlsxir.Mixfile do
   end
   
   defp docs do
-    [ main: "overview",
+    [ main: "OVERVIEW.md",
       extras: 
         [
           "OVERVIEW.md",

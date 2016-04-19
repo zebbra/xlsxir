@@ -29,11 +29,18 @@ defmodule Xlsxir.Parse do
     strings
     |> xpath(~x"//t"l)
     |> Enum.map(fn string -> case string do
-          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> 
-            to_string(str)
-          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_},{_,_,_,_,str2,_}],_,_,_} ->
-            to_string(str) <> to_string(str2)
+          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> to_string(str)
+          {:xmlElement,_,_,_,_,_,_,_,_,_,_,_}                 -> join_string_fragments(string)
+          _                                                   -> raise "sharedStrings.xml parse error"
         end 
+      end)
+  end
+
+  def join_string_fragments(xml) do
+    Tuple.to_list(xml)
+    |> Enum.at(8)
+    |> Enum.reduce("", fn(x, acc) -> {_,_,_,_,str,_} = x
+        acc <> to_string(str)
       end)
   end
 

@@ -46,7 +46,7 @@ Strings will be returned as type `string`, resulting values for functions from w
 
 ## Contributing
 
-Contributions are encouraged. Feel free to fork the repo, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. 
+Contributions are encouraged. Feel free to fork the [repo](https://github.com/kennellroxco/xlsxir), add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. 
 
 ## Bug Reporting
 

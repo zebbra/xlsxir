@@ -27,7 +27,21 @@ defmodule Xlsxir.Parse do
   def shared_strings(path) do
     {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
     strings
-    |> xpath(~x"//t/text()"sl)
+    |> xpath(~x"//t"l)
+    |> Enum.map(fn string -> case string do
+          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> to_string(str)
+          {:xmlElement,_,_,_,_,_,_,_,_,_,_,_}                 -> join_string_fragments(string)
+          _                                                   -> raise "sharedStrings.xml parse error"
+        end 
+      end)
+  end
+
+  def join_string_fragments(xml) do
+    Tuple.to_list(xml)
+    |> Enum.at(8)
+    |> Enum.reduce("", fn(x, acc) -> {_,_,_,_,str,_} = x
+        acc <> to_string(str)
+      end)
   end
 
   @doc """
@@ -43,8 +57,8 @@ defmodule Xlsxir.Parse do
     - 1 at index 0 which is the standard format for Excel numbers
     - 14 at index 1 which is the Excel date format of `mm-dd-yy`
 
-        iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
-        [nil, 'd']
+          iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
+          [nil, 'd']
   """
   def num_style(path) do
     {:ok, styles} = extract_xml(path, 'xl/styles.xml')

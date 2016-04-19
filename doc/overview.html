@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.11.4">
+    <title>Xlsxir – Xlsxir v0.0.3</title>
+    <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
+    <script src="dist/sidebar_items.js"></script>
+  </head>
+  <body data-type="extras">
+
+<div class="main">
+<button class="sidebar-toggle">
+  <i class="icon-menu"></i>
+</button>
+<section class="sidebar">
+  <button class="sidebar-toggle">
+    <i class="icon-menu"></i>
+  </button>
+
+  
+  <a href="OVERVIEW.md.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+        Xlsxir
+      </h1>
+      <h2 class="sidebar-projectVersion">
+        v0.0.3
+      </h2>
+    </div>
+    
+  </a>
+
+  <div class="sidebar-search">
+    <i class="icon-search"></i>
+    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
+  </div>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+    
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+    
+
+    
+
+    
+  </ul>
+
+  <ul id="full-list" class="sidebar-fullList"></ul>
+  <div class="sidebar-noResults"></div>
+</section>
+
+<section class="content">
+  <div id="content" class="content-inner">
+
+
+<h1>Xlsxir</h1>
+<p>Xlsxir is an Elixir library that parses Microsoft Excel worksheets (currently only 
+<code class="inline">.xlsx</code> format) and returns the data in either a <code class="inline">list</code> or a <code class="inline">map</code>. </p>
+<h2 id="installation"> Installation</h2><p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
+<pre><code class="elixir">def deps do
+  [ {:xlsxir, &quot;~&gt; 0.0.1&quot;} ]
+end</code></pre>
+<p>Or, you can directly reference the GitHub repo:</p>
+<pre><code class="elixir">def deps do
+  [ {:xlsxir, github: &quot;kennellroxco/xlsxir&quot;} ]
+end</code></pre>
+<h2 id="basic-usage"> Basic Usage</h2><p>Xlsxir can parse an excel file and return the data in one of two ways depending on the option chosen. The main function takes 2 or 3 arguments:</p>
+<pre><code class="elixir">Xlsxir.extract(path, index, option \\ :rows)</code></pre>
+<p>Argument descriptions:</p>
+<ul>
+<li><code class="inline">path</code> the path of the file to be parsed in <code class="inline">string</code> format
+</li>
+<li><code class="inline">index</code> is the position of the worksheet you wish to parse, starting with <code class="inline">0</code>
+</li>
+<li><code class="inline">option</code> is the method in which you want the data returned
+</li>
+</ul>
+<p>Options:</p>
+<ul>
+<li><code class="inline">:rows</code> - a list of row value lists (default) - i.e. <code class="inline">[[row_1_values], [row_2_values], ...]</code>
+</li>
+<li><code class="inline">:cells</code> - a map of cell/value pairs - i.e. <code class="inline">%{ A1: value_of_cell, B1: value_of_cell, ...}</code>
+</li>
+</ul>
+<p>Refer to <a href="https://kennellroxco.github.io">Xlsxir library</a> documentation for more detailed examples. </p>
+<h2 id="considerations"> Considerations</h2><p>Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within Excel are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in Excel will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and Excel date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Excel does not support dates prior to 1/1/1900.</p>
+<h2 id="contributing"> Contributing</h2><p>Contributions are encouraged. Feel free to fork the repo, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
+<h2 id="bug-reporting"> Bug Reporting</h2><p>Please report any bugs or request future enhancements via the <a href="https://github.com/kennellroxco/xlsxir/issues">Issues</a> page. </p>
+
+    <footer class="footer">
+      <p>
+        <span class="line">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.4),
+        </span>
+        <span class="line">
+          designed by
+          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          </span>
+      </p>
+      <button class="night-mode-toggle" />
+    </footer>
+  </div>
+</section>
+</div>
+  <script src="dist/app-6d2e071366.js"></script>
+  </body>
+</html>
+

@@ -12,7 +12,8 @@ defmodule Xlsxir.Mixfile do
      description: description,
      package: package,
      deps: deps,
-     docs: docs]
+     docs: [main: "overview", extras: ["OVERVIEW.MD", "CHANGELOG.md"]]
+    ]
   end
 
   # Configuration for the OTP application
@@ -53,13 +54,4 @@ defmodule Xlsxir.Mixfile do
     ]
   end
   
-  defp docs do
-    [ main: "overview", 
-      extras: 
-        [
-          "OVERVIEW.md",
-          "CHANGELOG.md"
-        ]
-    ]
-  end
 end

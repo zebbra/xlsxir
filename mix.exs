@@ -54,10 +54,12 @@ defmodule Xlsxir.Mixfile do
   end
   
   defp docs do
-    [main: "OVERVIEW.md",
-     extras: [
-      "OVERVIEW.md",
-      "CHANGELOG.md"
-    ]]
+    [ main: "overview",
+      extras: 
+        [
+          "OVERVIEW.md",
+          "CHANGELOG.md"
+        ]
+    ]
   end
 end

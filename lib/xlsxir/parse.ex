@@ -62,17 +62,34 @@ defmodule Xlsxir.Parse do
   """
   def num_style(path) do
     {:ok, styles} = extract_xml(path, 'xl/styles.xml')
+    custom = custom_style(styles)
 
     styles
     |> xpath(~x"//cellXfs/xf/@numFmtId"l)
     |> Enum.map(fn style_type -> 
         case List.to_integer(style_type) do
           i when i in 0..3   -> nil
+          i when i in 9..11  -> nil
           i when i in 14..22 -> 'd'
           i when i in 45..47 -> 'd'
-          _                  -> raise "Unknown style type: #{style_type}."
+          i when i > 3       -> custom[style_type] 
+          _                  -> raise "Unsupported style type: #{style_type}."
         end                          
       end)
+  end
+
+  def custom_style(xml) do
+    custom = xml
+             |> xpath(~x"//numFmt"l)
+             |> Enum.reduce(%{}, fn fmt, acc -> 
+                 {_,_,_,_,_,_,_,[{_,:numFmtId,_,_,_,_,_,_,id,_},{_,:formatCode,_,_,_,_,_,_,code,_}],_,_,_,_} = fmt
+                 Map.put_new(acc, id, code)
+               end)
+
+  # change values from char list to strings
+  # ~r/\bred\b/i -> nil
+  # ~r/[dhmsy]/  -> 'd'
+  # else         -> nil
   end
 
   @doc """

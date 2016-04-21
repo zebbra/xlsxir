@@ -2,6 +2,9 @@ defmodule Xlsxir.Parse do
   import Xlsxir.Unzip, only: [extract_xml: 2]
   import SweetXml
 
+  @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,59,60,61,62,67,68,69,70]
+  @date [14,15,16,17,18,19,20,21,22,27,30,36,45,46,47,50,57]
+
   @moduledoc """
   Receives Excel xml data via the `extract_xml` function of the `Unzip` module and parses it.
   """
@@ -25,8 +28,9 @@ defmodule Xlsxir.Parse do
           ["string one", "string two"]
   """
   def shared_strings(path) do
-    {:ok, strings} = extract_xml(path, 'xl/sharedStrings.xml')
-    strings
+    {:ok, xml} = extract_xml(path, 'xl/sharedStrings.xml')
+
+    xml 
     |> xpath(~x"//t"l)
     |> Enum.map(fn string -> case string do
           {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> to_string(str)
@@ -61,25 +65,20 @@ defmodule Xlsxir.Parse do
           [nil, 'd']
   """
   def num_style(path) do
-    {:ok, styles} = extract_xml(path, 'xl/styles.xml')
-    custom = custom_style(styles)
+    {:ok, xml} = extract_xml(path, 'xl/styles.xml')
+    custom = custom_style(xml)
 
-    styles
+    xml 
     |> xpath(~x"//cellXfs/xf/@numFmtId"l)
     |> Enum.map(fn style_type -> 
         case List.to_integer(style_type) do
-          i when i in 0..4           -> nil
-          i when i in 9..13          -> nil
-          i when i in 14..22         -> 'd'
-          i when i in 37..40         -> nil
-          i when i in 45..47         -> 'd'
-          i when i in 48..49         -> nil
-          i when i in 59..62         -> nil
-          i when i in 67..70         -> nil
-          27 || 30 || 36 || 50 || 57 -> 'd'
-          44                         -> nil
-          i when i > 4               -> custom[style_type] 
-          _                          -> raise "Unsupported style type: #{style_type}."
+          i when i in @num           -> nil
+          i when i in @date          -> 'd'
+          _                          -> if Map.has_key?(custom, style_type) do
+                                          custom[style_type]
+                                        else
+                                          raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
+                                        end
         end                          
       end)
   end
@@ -125,9 +124,9 @@ defmodule Xlsxir.Parse do
           [[A1: ['s', nil, '0'], B1: ['s', nil, '1'], C1: [nil, nil, '10'], D1: [nil, nil, '20'], E1: [nil, 'd', '42370']]]
   """
   def worksheet(path, index, styles) do
-    {:ok, sheet} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
+    {:ok, xml} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
-    sheet
+    xml 
     |> xpath(~x"//worksheet/sheetData/row/c"l)
     |> Stream.map(&(process_column(&1, styles)))
     |> Enum.chunk_by(fn cell -> Keyword.keys([cell])

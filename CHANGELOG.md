@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.0.4
+
+- Expanded coverage of Office Open XML standard `numFmt` (Standard Number Format). The `formatCode` for a standard `numFmt` is implied rather than explicitly identified in the XML file.
+- Implemented support for Office Open XML custom `numFmt` (Custom Number Format) utilizing the `formatCode` explicitly identified in the XML file. 
+- Added `Number Styles` documentation covering standard and custom `numFmt` and how to manually add an unsupported `numFmt`.
+
 ## 0.0.3
 
 - Fixed issue related to strings that contain special characters. Refactored `Xlsxir.Parse.shared_strings/1` to properly parse strings with special characters.

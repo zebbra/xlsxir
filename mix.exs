@@ -2,8 +2,9 @@ defmodule Xlsxir.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :xlsxir,
-     version: "0.0.3",
+    [
+     app: :xlsxir,
+     version: "0.0.4",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
@@ -12,7 +13,7 @@ defmodule Xlsxir.Mixfile do
      description: description,
      package: package,
      deps: deps,
-     docs: [main: "overview", extras: ["OVERVIEW.MD", "CHANGELOG.md"]]
+     docs: [main: "overview", extras: ["CHANGELOG.md", "NUMBER_STYLES.md", "OVERVIEW.md"]] 
     ]
   end
 

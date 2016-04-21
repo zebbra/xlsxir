@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Change Log – Xlsxir v0.0.3</title>
+    <title>CHANGELOG – Xlsxir v0.0.4</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.3
+        v0.0.4
       </h2>
     </div>
     
@@ -59,11 +59,22 @@
 
 
 <h1>Change Log</h1>
-<h2 id="0-0-3"> 0.0.3</h2><ul>
+<h2>0.0.4</h2>
+<ul>
+<li>Expanded coverage of Office Open XML standard <code class="inline">numFmt</code> (Standard Number Format). The <code class="inline">formatCode</code> for a standard <code class="inline">numFmt</code> is implied rather than explicitly identified in the XML file.
+</li>
+<li>Implemented support for Office Open XML custom <code class="inline">numFmt</code> (Custom Number Format) utilizing the <code class="inline">formatCode</code> explicitly identified in the XML file. 
+</li>
+<li>Added <code class="inline">Number Styles</code> documentation covering standard and custom <code class="inline">numFmt</code> and how to manually add an unsupported <code class="inline">numFmt</code>.
+</li>
+</ul>
+<h2>0.0.3</h2>
+<ul>
 <li>Fixed issue related to strings that contain special characters. Refactored <a href="Xlsxir.Parse.html#shared_strings/1"><code class="inline">Xlsxir.Parse.shared_strings/1</code></a> to properly parse strings with special characters.
 </li>
 </ul>
-<h2 id="0-0-2"> 0.0.2</h2><ul>
+<h2>0.0.2</h2>
+<ul>
 <li>Refactored <a href="Xlsxir.Parse.html"><code class="inline">Xlsxir.Parse</code></a> functions to improve <code class="inline">extract</code> performance on larger files.
 </li>
 <li>Expanded documentation and test coverage.
@@ -71,7 +82,8 @@
 <li>Completed <a href="Xlsxir.ConvertDate.html"><code class="inline">Xlsxir.ConvertDate</code></a> module.
 </li>
 </ul>
-<h2 id="0-0-1"> 0.0.1</h2><ul>
+<h2>0.0.1</h2>
+<ul>
 <li>Initial draft. Functionality limited to very small Excel worksheets.
 </li>
 <li><a href="Xlsxir.ConvertDate.html"><code class="inline">Xlsxir.ConvertDate</code></a> functionality incomplete.

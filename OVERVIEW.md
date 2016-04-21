@@ -9,7 +9,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 0.0.3"} ]
+  [ {:xlsxir, "~> 0.0.4"} ]
 end
 ```
 

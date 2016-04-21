@@ -68,14 +68,18 @@ defmodule Xlsxir.Parse do
     |> xpath(~x"//cellXfs/xf/@numFmtId"l)
     |> Enum.map(fn style_type -> 
         case List.to_integer(style_type) do
-          i when i in 0..4   -> nil
-          i when i in 9..13  -> nil
-          i when i in 14..22 -> 'd'
-          i when i in 37..40 -> nil
-          i when i in 45..47 -> 'd'
-          i when i in 48..49 -> nil
-          i when i > 4       -> custom[style_type] 
-          _                  -> raise "Unsupported style type: #{style_type}."
+          i when i in 0..4           -> nil
+          i when i in 9..13          -> nil
+          i when i in 14..22         -> 'd'
+          i when i in 37..40         -> nil
+          i when i in 45..47         -> 'd'
+          i when i in 48..49         -> nil
+          i when i in 59..62         -> nil
+          i when i in 67..70         -> nil
+          27 || 30 || 36 || 50 || 57 -> 'd'
+          44                         -> nil
+          i when i > 4               -> custom[style_type] 
+          _                          -> raise "Unsupported style type: #{style_type}."
         end                          
       end)
   end

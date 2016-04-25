@@ -60,9 +60,11 @@ defmodule Xlsxir.Parse do
     The example file named `test.xlsx` located in `./test/test_data` contains the following `numFmtId` attributes:
     - 1 at index 0 which is the standard format for Excel numbers
     - 14 at index 1 which is the Excel date format of `mm-dd-yy`
+    - 171, 173 at indexes 2, 3 (respectively) which are custom formats of type number
+    - 174, 175 at indexes 4, 5 (respectively) which are custom formats of type date
 
           iex> Xlsxir.Parse.num_style("./test/test_data/test.xlsx")
-          [nil, 'd']
+          [nil, 'd', nil, nil, 'd', 'd']
   """
   def num_style(path) do
     {:ok, xml} = extract_xml(path, 'xl/styles.xml')
@@ -72,13 +74,13 @@ defmodule Xlsxir.Parse do
     |> xpath(~x"//cellXfs/xf/@numFmtId"l)
     |> Enum.map(fn style_type -> 
         case List.to_integer(style_type) do
-          i when i in @num           -> nil
-          i when i in @date          -> 'd'
-          _                          -> if Map.has_key?(custom, style_type) do
-                                          custom[style_type]
-                                        else
-                                          raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
-                                        end
+          i when i in @num   -> nil
+          i when i in @date  -> 'd'
+          _                  -> if Map.has_key?(custom, style_type) do
+                                  custom[style_type]
+                                else
+                                  raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
+                                end
         end                          
       end)
   end
@@ -166,7 +168,7 @@ defmodule Xlsxir.Parse do
       [{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,val,_}],_,_,_}]         -> val
       [_,{:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,funct_val,_}],_,_,_}] -> funct_val
       []                                                            -> nil
-      _                                                             -> raise "Invalid xmlElement."
+      _                                                             -> raise "Unsupported xmlElement."
     end
   end
 

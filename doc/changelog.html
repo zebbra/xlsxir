@@ -66,6 +66,8 @@
 </li>
 <li>Added <code class="inline">Number Styles</code> documentation covering standard and custom <code class="inline">numFmt</code> and how to manually add an unsupported <code class="inline">numFmt</code>.
 </li>
+<li>Fixed issue resulting when no strings exist in a worksheet and therefore there is no <code class="inline">sharedStrings.xml</code> file (:file_not_found error).
+</li>
 </ul>
 <h2 id="0-0-3"> 0.0.3</h2><ul>
 <li>Fixed issue related to strings that contain special characters. Refactored <a href="Xlsxir.Parse.html#shared_strings/1"><code class="inline">Xlsxir.Parse.shared_strings/1</code></a> to properly parse strings with special characters.

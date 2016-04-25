@@ -148,7 +148,7 @@ required elements in the form of a <code class="inline">keyword list</code></p>
     </a>
     <span class="signature">num_style(path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L67" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L73" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -167,9 +167,13 @@ into a list of style types (<code class="inline">&#39;d&#39;</code> for date typ
 <ul>
 <li>1 at index 0 which is the standard format for Excel numbers
 </li>
-<li><p>14 at index 1 which is the Excel date format of <code class="inline">mm-dd-yy</code></p>
+<li>14 at index 1 which is the Excel date format of <code class="inline">mm-dd-yy</code>
+</li>
+<li>171, 173 at indexes 2, 3 (respectively) which are custom formats of type number
+</li>
+<li><p>174, 175 at indexes 4, 5 (respectively) which are custom formats of type date</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.Parse.num_style(&quot;./test/test_data/test.xlsx&quot;)
-[nil, &#39;d&#39;]</code></pre>
+[nil, &#39;d&#39;, nil, nil, &#39;d&#39;, &#39;d&#39;]</code></pre>
 </li>
 </ul>
 
@@ -221,7 +225,7 @@ into a list of style types (<code class="inline">&#39;d&#39;</code> for date typ
     </a>
     <span class="signature">worksheet(path, index, styles)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L126" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse.ex#L136" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

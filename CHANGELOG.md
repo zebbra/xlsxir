@@ -5,6 +5,7 @@
 - Expanded coverage of Office Open XML standard `numFmt` (Standard Number Format). The `formatCode` for a standard `numFmt` is implied rather than explicitly identified in the XML file.
 - Implemented support for Office Open XML custom `numFmt` (Custom Number Format) utilizing the `formatCode` explicitly identified in the XML file. 
 - Added `Number Styles` documentation covering standard and custom `numFmt` and how to manually add an unsupported `numFmt`.
+- Fixed issue resulting when no strings exist in a worksheet and therefore there is no `sharedStrings.xml` file (:file_not_found error).
 
 ## 0.0.3
 

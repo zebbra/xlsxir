@@ -28,16 +28,20 @@ defmodule Xlsxir.Parse do
           ["string one", "string two"]
   """
   def shared_strings(path) do
-    {:ok, xml} = extract_xml(path, 'xl/sharedStrings.xml')
+    xml = pull_file(path, 'xl/sharedStrings.xml') 
 
-    xml 
-    |> xpath(~x"//t"l)
-    |> Enum.map(fn string -> case string do
-          {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> to_string(str)
-          {:xmlElement,_,_,_,_,_,_,_,_,_,_,_}                 -> join_string_fragments(string)
-          _                                                   -> raise "sharedStrings.xml parse error"
-        end 
-      end)
+    if xml == [] do
+      []
+    else
+      xml 
+      |> xpath(~x"//t"l)
+      |> Enum.map(fn string -> case string do
+              {:xmlElement,_,_,_,_,_,_,_,[{_,_,_,_,str,_}],_,_,_} -> to_string(str)
+              {:xmlElement,_,_,_,_,_,_,_,_,_,_,_}                 -> join_string_fragments(string)
+              _                                                   -> raise "sharedStrings.xml parse error"
+            end 
+          end)
+    end
   end
 
   defp join_string_fragments(xml) do
@@ -67,22 +71,26 @@ defmodule Xlsxir.Parse do
           [nil, 'd', nil, nil, 'd', 'd']
   """
   def num_style(path) do
-    {:ok, xml} = extract_xml(path, 'xl/styles.xml')
-    custom = custom_style(xml)
+    xml = pull_file(path, 'xl/styles.xml')
+    custom = unless xml == [], do: custom_style(xml)
 
-    xml 
-    |> xpath(~x"//cellXfs/xf/@numFmtId"l)
-    |> Enum.map(fn style_type -> 
-        case List.to_integer(style_type) do
-          i when i in @num   -> nil
-          i when i in @date  -> 'd'
-          _                  -> if Map.has_key?(custom, style_type) do
-                                  custom[style_type]
-                                else
-                                  raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
-                                end
-        end                          
-      end)
+    if xml == [] do
+      []
+    else
+      xml 
+      |> xpath(~x"//cellXfs/xf/@numFmtId"l)
+      |> Enum.map(fn style_type -> 
+         case List.to_integer(style_type) do
+           i when i in @num   -> nil
+           i when i in @date  -> 'd'
+           _                  -> if Map.has_key?(custom, style_type) do
+                                   custom[style_type]
+                                 else
+                                   raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
+                                 end
+         end                          
+       end)
+    end
   end
 
   defp custom_style(xml) do
@@ -126,7 +134,7 @@ defmodule Xlsxir.Parse do
           [[A1: ['s', nil, '0'], B1: ['s', nil, '1'], C1: [nil, nil, '10'], D1: [nil, nil, '20'], E1: [nil, 'd', '42370']]]
   """
   def worksheet(path, index, styles) do
-    {:ok, xml} = extract_xml(path, 'xl/worksheets/sheet#{index + 1}.xml')
+    xml = pull_file(path, 'xl/worksheets/sheet#{index + 1}.xml')
 
     xml 
     |> xpath(~x"//worksheet/sheetData/row/c"l)
@@ -178,4 +186,10 @@ defmodule Xlsxir.Parse do
     |> List.to_string
   end
 
+  defp pull_file(path, inner_path) do
+    case extract_xml(path, inner_path) do
+      {:ok, file}               -> file
+      {:error, :file_not_found} -> []
+     end
+  end
 end

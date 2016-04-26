@@ -1,4 +1,5 @@
 defmodule Xlsxir.Format do
+  alias Xlsxir.ConvertDate
 
   @moduledoc """
   Receives parsed excel worksheet data, formats the cell values and returns the data in either a
@@ -79,7 +80,9 @@ defmodule Xlsxir.Format do
       [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Excel type error
       [ 's',    _,  i]  -> Enum.at(strings, List.to_integer(i))                                # Excel type string
       [ nil,  nil,  n]  -> convert_char_number(n)                                              # Excel type number
-      [ nil,  'd',  d]  -> Xlsxir.ConvertDate.from_excel(d)                                    # Excel type date
+      [ 'n',  nil,  n]  -> convert_char_number(n)
+      [ nil,  'd',  d]  -> ConvertDate.from_excel(d)                                           # Excel type date
+      [ 'n',  'd',  d]  -> ConvertDate.from_excel(d)
       ['str', nil,  s]  -> List.to_string(s)                                                   # Excel type formula w/ string 
       _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped Excel type
     end

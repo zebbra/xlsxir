@@ -44,6 +44,12 @@ Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more d
 
 Strings will be returned as type `string`, resulting values for functions from within Excel are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in Excel will be returned as type `integer` or `float`, and Excel date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Excel does not support dates prior to 1/1/1900.
 
+## Planned Development
+
+- Performance improvement for larger files
+- Adding time support for dates (i.e. {{YYYY, MM, DD}, {h, m, s}})
+- Export functionality to .xlsx file type with formatting options
+
 ## Contributing
 
 Contributions are encouraged. Feel free to fork the repo, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. 

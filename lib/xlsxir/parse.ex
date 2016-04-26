@@ -105,7 +105,7 @@ defmodule Xlsxir.Parse do
     |> Enum.reduce(%{}, fn {k, v}, acc -> 
          cond do
            String.match?(to_string(v), ~r/\bred\b/i) -> Map.put_new(acc, k, nil)
-           String.match?(to_string(v), ~r/[dhmsy]/)  -> Map.put_new(acc, k, 'd')
+           String.match?(to_string(v), ~r/[dhmsy]/i) -> Map.put_new(acc, k, 'd')
            true                                      -> Map.put_new(acc, k, nil)
          end
       end)

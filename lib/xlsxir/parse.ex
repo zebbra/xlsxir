@@ -86,7 +86,7 @@ defmodule Xlsxir.Parse do
            _                  -> if Map.has_key?(custom, style_type) do
                                    custom[style_type]
                                  else
-                                   raise "Unsupported style type: #{style_type}. See doc page \"Number Styles.\" for more info."
+                                   raise "Unsupported style type: #{style_type}. See doc page \"Number Styles\" for more info."
                                  end
          end                          
        end)

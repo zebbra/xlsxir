@@ -76,6 +76,7 @@ defmodule Xlsxir.Format do
   """
   def format_cell_value(list, strings) do
     case list do
+      [ nil, nil, nil]  -> nil                                                                 # Empty cell without assigned attribute
       [   _,    _, ""]  -> ""                                                                  # Empty cell with assigned attribute
       [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Excel type error
       [ 's',    _,  i]  -> Enum.at(strings, List.to_integer(i))                                # Excel type string

@@ -1,5 +1,5 @@
 defmodule Xlsxir do
-
+  require IEx
   alias Xlsxir.{Unzip, Sax, Parse, Format}
 
   @moduledoc """
@@ -39,12 +39,13 @@ defmodule Xlsxir do
           %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
   """
   def extract(path, index, option \\ :rows) do
-    {:ok, file}         = Unzip.validate_path(path)
-    {:ok, xml_path}     = Unzip.extract_xml_to_file(file, index)
-    strings             = Parse.shared_strings(file)
-    styles              = Parse.num_style(file)
+    {:ok, file}       = Unzip.validate_path(path)
+    
+    {:ok, file_paths} = Unzip.xml_file_list(index)
+                        |> Unzip.extract_xml_to_file(file)
 
-    Enum.at(xml_path, 0)
+    IEx.pry
+    if Enum.count(file_paths) == 3, do: Enum.at(file_paths, 2), else: Enum.at(file_paths, 1)
     |> to_string
     |> Sax.parse_sheet
     

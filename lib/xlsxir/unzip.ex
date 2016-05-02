@@ -60,23 +60,23 @@ defmodule Xlsxir.Unzip do
        end
   end
 
-  def extract_xml_to_file(path, index, files \\ xml_file_list(index)) do
-    path
-    |> to_char_list
-    |> :zip.extract([{:file_list, files}, {:cwd, 'priv/temp/'}])
-    |> case do
-        {:ok, [file_list]} -> {:ok, file_list}
-        {:ok, []}          -> {:error, :file_not_found}
-        {:error, cause}    -> {:error, cause}
-       end
+  def xml_file_list(index) do
+    [
+     'xl/styles.xml',
+     'xl/sharedStrings.xml',
+     'xl/worksheets/sheet#{index + 1}.xml'
+    ]
   end
 
-  defp xml_file_list(index) do
-    [
-     'xl/worksheets/sheet#{index + 1}.xml',
-     'xl/styles.xml',
-     'xl/sharedStrings.xml'
-    ]
+  def extract_xml_to_file(file_list, path) do
+    path
+    |> to_char_list
+    |> :zip.extract([{:file_list, file_list}, {:cwd, 'priv/temp/'}])
+    |> case do
+        {:ok, file_list} -> {:ok, file_list}
+        {:ok, []}        -> {:error, :file_not_found}
+        {:error, cause}  -> {:error, cause}
+       end
   end
 
   def delete_dir do

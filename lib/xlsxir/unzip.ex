@@ -49,7 +49,7 @@ defmodule Xlsxir.Unzip do
         {:ok, "test_successful"}
   """
 
-  def extract_xml(path, inner_path) do
+  def extract_xml_to_memory(path, inner_path) do
     path
     |> to_char_list
     |> :zip.extract([:memory, {:file_filter, fn(file) -> elem(file, 1) == inner_path end}])
@@ -58,6 +58,29 @@ defmodule Xlsxir.Unzip do
         {:ok, []}                  -> {:error, :file_not_found}
         {:error, cause}            -> {:error, cause}
        end
+  end
+
+  def extract_xml_to_file(path, index, files \\ xml_file_list(index)) do
+    path
+    |> to_char_list
+    |> :zip.extract([{:file_list, files}, {:cwd, 'priv/temp/'}])
+    |> case do
+        {:ok, [file_list]} -> {:ok, file_list}
+        {:ok, []}          -> {:error, :file_not_found}
+        {:error, cause}    -> {:error, cause}
+       end
+  end
+
+  defp xml_file_list(index) do
+    [
+     'xl/worksheets/sheet#{index + 1}.xml',
+     'xl/styles.xml',
+     'xl/sharedStrings.xml'
+    ]
+  end
+
+  def delete_dir do
+    File.rmdir!("./priv/temp/xl")
   end
 
 end

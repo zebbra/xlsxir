@@ -14,13 +14,12 @@ defmodule Xlsxir.Sax do
     index   = 0
     c_state = {pid, index, @chunk}
 
-    content = :erlsom.parse_sax("",
-                                nil,
-                                &sax_event_handler/2,
-                                [{:continuation_function, &continue_file/2, c_state}])
+    :erlsom.parse_sax("",
+      nil,
+      &sax_event_handler/2,
+      [{:continuation_function, &continue_file/2, c_state}])
 
     :ok = File.close(pid)
-    content
   end
 
   def continue_file(tail, {pid, offset, chunk}) do
@@ -57,7 +56,6 @@ defmodule Xlsxir.Sax do
   end
 
   def sax_event_handler({:endElement,_,'c',_}, state) do
-    #Ets.add(List.to_atom(state.cell_ref), [state.data_type, state.num_style, state.value])
     Worksheet.add_cell(List.to_atom(state.cell_ref), [state.data_type, state.num_style, state.value]) 
   end
 

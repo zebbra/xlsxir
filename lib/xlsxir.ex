@@ -1,6 +1,6 @@
 defmodule Xlsxir do
 
-  alias Xlsxir.{Unzip, Parse, Format}
+  alias Xlsxir.{Unzip, Sax, Parse, Format}
 
   @moduledoc """
   Extracts and parses data from a Microsoft Excel workbook, returning either a list or a map.
@@ -39,12 +39,16 @@ defmodule Xlsxir do
           %{ A1: "string one", B1: "string two", C1: 10, D1: 20, E1: {2016,1,1}}
   """
   def extract(path, index, option \\ :rows) do
-    {:ok, file} = Unzip.validate_path(path)
-    strings = Parse.shared_strings(file)
-    styles = Parse.num_style(file)
+    {:ok, file}         = Unzip.validate_path(path)
+    {:ok, xml_path}     = Unzip.extract_xml_to_file(file, index)
+    strings             = Parse.shared_strings(file)
+    styles              = Parse.num_style(file)
 
-    file
-    |> Parse.worksheet(index, styles)
-    |> Format.prepare_output(strings, option)
+    Enum.at(xml_path, 0)
+    |> to_string
+    |> Sax.parse_sheet
+    
+    #|> Parse.worksheet(index, styles)
+    #|> Format.prepare_output(strings, option)
   end
 end

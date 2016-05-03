@@ -1,6 +1,12 @@
-defmodule Xlsxir.Worksheet do
+alias Xlsxir.{Worksheet, Style, String} 
 
-    def sax_event_handler({:startElement,_,'c',_,xml_attr}, _state) do
+defmodule Xlsxir.ParseWorksheet do
+  
+  defmodule CellState do
+    defstruct cell_ref: "", data_type: "", num_style: "", value: ""
+  end
+  
+  def sax_event_handler({:startElement,_,'c',_,xml_attr}, _state) do
     state = %CellState{}
     
     a = Enum.map(xml_attr, fn(attr) -> 
@@ -35,10 +41,10 @@ defmodule Xlsxir.Worksheet do
 
 end
 
-defmodule Xlsxir.String do
+defmodule Xlsxir.ParseString do
   
 end
 
-defmodule Xlsxir.Style do
+defmodule Xlsxir.ParseStyle do
   
 end

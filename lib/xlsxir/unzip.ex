@@ -48,18 +48,7 @@ defmodule Xlsxir.Unzip do
         iex> Xlsxir.Unzip.extract_xml(path, inner_path)
         {:ok, "test_successful"}
   """
-
-  def extract_xml_to_memory(path, inner_path) do
-    path
-    |> to_char_list
-    |> :zip.extract([:memory, {:file_filter, fn(file) -> elem(file, 1) == inner_path end}])
-    |> case do
-        {:ok, [{_, file_content}]} -> {:ok, file_content}
-        {:ok, []}                  -> {:error, :file_not_found}
-        {:error, cause}            -> {:error, cause}
-       end
-  end
-
+  
   def xml_file_list(index) do
     [
      'xl/styles.xml',

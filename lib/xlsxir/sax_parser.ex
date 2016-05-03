@@ -1,14 +1,15 @@
 defmodule Xlsxir.Sax do
-  alias Xlsxir.Worksheet
-
-  defmodule CellState do
-    defstruct cell_ref: "", data_type: "", num_style: "", value: ""
-  end
+  alias Xlsxir.{ParseWorksheet, ParseStyle, ParseString, Worksheet, Style, String}
 
   @chunk 10000
 
-  def parse_sheet(path, type) do
-    Worksheet.new
+  def parse(path, type) do
+    case type do
+      :worksheet -> Worksheet.new
+      :style     -> Style.new
+      :string    -> String.new
+    end
+
     {:ok, pid} = File.open(path, [:binary])
 
     index   = 0
@@ -17,9 +18,9 @@ defmodule Xlsxir.Sax do
     :erlsom.parse_sax("",
       nil,
       case type do
-        :worksheet -> &Worksheet.sax_event_handler/2
-        :style     -> &Style.sax_event_handler/2
-        :string    -> &String.sax_event_handler/2
+        :worksheet -> &ParseWorksheet.sax_event_handler/2
+        :style     -> &ParseStyle.sax_event_handler/2
+        :string    -> &ParseString.sax_event_handler/2
         _          -> raise "Invalid file type for sax_event_handler/2"
       end,
       [{:continuation_function, &continue_file/2, c_state}])

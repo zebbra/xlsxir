@@ -1,5 +1,4 @@
 defmodule Xlsxir.Parse do
-  import Xlsxir.Unzip, only: [extract_xml_to_memory: 2]
   import SweetXml
 
   @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,59,60,61,62,67,68,69,70]
@@ -186,8 +185,8 @@ defmodule Xlsxir.Parse do
     |> List.to_string
   end
 
-  defp pull_file(path, inner_path) do
-    case extract_xml_to_memory(path, inner_path) do
+  defp pull_file(path, file_list) do
+    case Xlsxir.Unzip.extract_xml_to_file(file_list, path) do
       {:ok, file}               -> file
       {:error, :file_not_found} -> []
      end

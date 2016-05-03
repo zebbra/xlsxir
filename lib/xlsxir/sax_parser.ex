@@ -1,5 +1,5 @@
-defmodule Xlsxir.Sax do
-  alias Xlsxir.{ParseWorksheet, ParseStyle, ParseString, Worksheet, Style, String}
+defmodule Xlsxir.SaxParser do
+  alias Xlsxir.{ParseWorksheet, ParseStyle, ParseString, Worksheet, Style, SharedString}
 
   @chunk 10000
 
@@ -7,7 +7,7 @@ defmodule Xlsxir.Sax do
     case type do
       :worksheet -> Worksheet.new
       :style     -> Style.new
-      :string    -> String.new
+      :string    -> SharedString.new
     end
 
     {:ok, pid} = File.open(path, [:binary])

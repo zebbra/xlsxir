@@ -19,35 +19,46 @@ end
 
 defmodule Xlsxir.Style do
   def new do
+    Agent.start_link(fn -> [] end, name: NumFmtId)
     Agent.start_link(fn -> [] end, name: Style)
   end
 
-  def add_style_type(style_type) do
-    Agent.update(Style, &(&1 ++ style_type)))
+  def add_id(num_fmt_id) do
+    unless Enum.member?(get_id, num_fmt_id), do: Agent.update(NumFmtId, &(Enum.into([num_fmt_id], &1)))
   end
 
-  def get do
+  def add_style(style) do
+    Agent.update(Style, &(Enum.into([style], &1)))
+  end
+
+  def get_id do
+    Agent.get(NumFmtId, &(&1))
+  end
+
+  def get_style do
     Agent.get(Style, &(&1))
-    |> Enum.reverse
   end
 
-  def delete do
+  def delete_id do
+    Agent.stop(NumFmtId)
+  end
+
+  def delete_style do
     Agent.stop(Style)
   end
 end
 
-defmodule Xlsxir.String do
+defmodule Xlsxir.SharedString do
   def new do
     Agent.start_link(fn -> [] end, name: String)
   end
 
-  def add_shared_string(shared_string do
-    Agent.update(String, &(&1 ++ shared_string)))
+  def add_shared_string(shared_string) do
+    Agent.update(String, &(Enum.into([shared_string], &1)))
   end
 
   def get do
     Agent.get(String, &(&1))
-    |> Enum.reverse
   end
 
   def delete do

@@ -1,8 +1,15 @@
 defmodule Xlsxir.SaxParser do
+  @moduledoc """
+  
+  """
+
   alias Xlsxir.{ParseWorksheet, ParseStyle, ParseString, Worksheet, Style, SharedString}
 
   @chunk 10000
 
+  @doc """
+  
+  """
   def parse(path, type) do
     case type do
       :worksheet -> Worksheet.new
@@ -28,7 +35,7 @@ defmodule Xlsxir.SaxParser do
     :ok = File.close(pid)
   end
 
-  def continue_file(tail, {pid, offset, chunk}) do
+  defp continue_file(tail, {pid, offset, chunk}) do
     case :file.pread(pid, offset, chunk) do
       {:ok, data} -> {<<tail :: binary, data :: binary>>, {pid, offset + chunk, chunk}}
       :oef        -> {tail, {pid, offset, chunk}}

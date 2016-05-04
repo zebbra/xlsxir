@@ -1,4 +1,7 @@
 defmodule Xlsxir.Worksheet do
+  @moduledoc """
+  
+  """
   def new do
     Agent.start_link(fn -> [] end, name: Sheet)
   end
@@ -17,14 +20,40 @@ defmodule Xlsxir.Worksheet do
   end
 end
 
+defmodule Xlsxir.SharedString do
+  @moduledoc """
+  
+  """
+  def new do
+    Agent.start_link(fn -> [] end, name: String)
+  end
+
+  def add_shared_string(shared_string) do
+    Agent.update(String, &(Enum.into([shared_string], &1)))
+  end
+
+  def get do
+    Agent.get(String, &(&1))
+  end
+
+  def delete do
+    Agent.stop(String)
+  end
+end
+
 defmodule Xlsxir.Style do
+  @moduledoc """
+  
+  """
   def new do
     Agent.start_link(fn -> [] end, name: NumFmtId)
     Agent.start_link(fn -> [] end, name: Style)
   end
 
   def add_id(num_fmt_id) do
-    unless Enum.member?(get_id, num_fmt_id), do: Agent.update(NumFmtId, &(Enum.into([num_fmt_id], &1)))
+    unless Enum.member?(get_id, num_fmt_id) do 
+      Agent.update(NumFmtId, &(Enum.into([num_fmt_id], &1)))
+    end
   end
 
   def add_style(style) do
@@ -48,20 +77,3 @@ defmodule Xlsxir.Style do
   end
 end
 
-defmodule Xlsxir.SharedString do
-  def new do
-    Agent.start_link(fn -> [] end, name: String)
-  end
-
-  def add_shared_string(shared_string) do
-    Agent.update(String, &(Enum.into([shared_string], &1)))
-  end
-
-  def get do
-    Agent.get(String, &(&1))
-  end
-
-  def delete do
-    Agent.stop(String)
-  end
-end

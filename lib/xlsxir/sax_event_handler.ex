@@ -2,7 +2,7 @@ alias Xlsxir.{Worksheet, Style, SharedString}
 
 defmodule Xlsxir.ParseWorksheet do
   @moduledoc """
-  
+  Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
   
   defmodule CellState do
@@ -10,7 +10,18 @@ defmodule Xlsxir.ParseWorksheet do
   end
   
   @doc """
-  
+  Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
+  worksheet XML file, ultimately sending a keyword list of cell references and their assocated data to the `Worksheet` agent 
+  process that was started by `Xlsxir.SaxParser.parse/2`. 
+
+  ## Parameters
+
+  - pattern - the XML pattern of the event to match upon
+  - state - the state of the `%CellState{}` struct which temporarily holds applicable data of the current cell being parsed
+
+  ## Example
+  Each entry in the keyword list created consists of a cell reference atom and a list containing the cell's data type, style index
+  and value (i.e. `[A1: ['s', nil, '0'], ...]`).
   """
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, _state) do
     state = %CellState{}
@@ -18,7 +29,11 @@ defmodule Xlsxir.ParseWorksheet do
     a = Enum.map(xml_attr, fn(attr) -> 
       case attr do
         {:attribute,'r',_,_,ref}   -> {:r, ref  }
-        {:attribute,'s',_,_,style} -> {:s, style}
+        {:attribute,'s',_,_,style} -> {:s, if Style.alive? do
+                                             Enum.at(Style.get, List.to_integer(style))
+                                           else 
+                                             nil
+                                           end}
         {:attribute,'t',_,_,type}  -> {:t, type }
         _                                      -> raise "Unknown cell attribute"
       end
@@ -49,11 +64,22 @@ end
 
 defmodule Xlsxir.ParseString do
   @moduledoc """
-  
+  Holds the SAX event instructions for parsing sharedString data via `Xlsxir.SaxParser.parse/2`
   """
 
   @doc """
-  
+  Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
+  sharedString XML file, ultimately sending each parsed string to the `SharedString` agent process that was started by 
+  `Xlsxir.SaxParser.parse/2`. 
+
+  ## Parameters
+
+  - pattern - the XML pattern of the event to match upon
+  - state - the state argument is unused when parsing strings and is therefore proceeded by an underscore
+
+  ## Example
+  Recursively sends strings from the `xl/sharedStrings.xml` file to `SharedString.add_shared_string/1`. The data can ultimately
+  be retreived by the `get/0` function of the agent process (i.e. `Xlsxir.SharedString.get` would return `["string 1", "string 2", ...]`).
   """
   def sax_event_handler({:characters, value}, _state) do
     value
@@ -61,13 +87,13 @@ defmodule Xlsxir.ParseString do
     |> SharedString.add_shared_string
   end
 
-  def sax_event_handler(_, state), do: state
+  def sax_event_handler(_, _state), do: nil
  
 end
 
 defmodule Xlsxir.ParseStyle do
   @moduledoc """
-  
+  Holds the SAX event instructions for parsing style data via `Xlsxir.SaxParser.parse/2`
   """
 
   @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,49,59,60,61,62,67,68,69,70]
@@ -78,7 +104,19 @@ defmodule Xlsxir.ParseStyle do
   end
 
   @doc """
-  
+  Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
+  styles XML file, ultimately sending each parsed style type to the `Style` agent process that was started by 
+  `Xlsxir.SaxParser.parse/2`. The style types generated are `nil` for numbers and `'d'` for dates. 
+
+  ## Parameters
+
+  - pattern - the XML pattern of the event to match upon
+  - state - the state of the `%CustomStyleState{}` struct which temporarily holds each `numFmtId` and its associated `formatCode` for custom format types
+
+  ## Example
+  Recursively sends style types generated from parsing the `xl/sharedStrings.xml` file to `Style.add/1`. The data can ultimately
+  be retreived by the `get/0` function of the agent process (i.e. `Xlsxir.Style.get` would return something like `[nil, 'd', ...]` depending on
+  each style type generated).
   """
   def sax_event_handler(:startDocument, _state), do: state = %CustomStyleState{}
 
@@ -115,10 +153,10 @@ defmodule Xlsxir.ParseStyle do
 
     Enum.each(Style.get_id, fn style_type -> 
       case List.to_integer(style_type) do
-        i when i in @num   -> Style.add_style(nil)
-        i when i in @date  -> Style.add_style('d')
+        i when i in @num   -> Style.add(nil)
+        i when i in @date  -> Style.add('d')
         _                  -> if Map.has_key?(custom_type, style_type) do
-                                Style.add_style(custom_type[style_type])
+                                Style.add(custom_type[style_type])
                               else
                                 raise "Unsupported style type: #{style_type}. 
                                   See doc page \"Number Styles\" for more info."

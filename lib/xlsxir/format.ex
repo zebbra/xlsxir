@@ -1,5 +1,5 @@
 defmodule Xlsxir.Format do
-  alias Xlsxir.ConvertDate
+  alias Xlsxir.{ConvertDate, Worksheet, SharedString}
 
   @moduledoc """
   Receives parsed excel worksheet data, formats the cell values and returns the data in either a
@@ -10,10 +10,13 @@ defmodule Xlsxir.Format do
   Main function of `Format` module. Receives the parsed excel worksheet data, the parsed excel string
   data and the chosen format via `option` which defaults to `:rows`.
   """
-  def prepare_output(worksheet, shared_strings, option) do
+  def prepare_output(option) do
+    sheet = Worksheet.get 
+    shared_strings = SharedString.get 
+
     case option do
-      :rows  -> row_list(worksheet, shared_strings)
-      :cells -> cell_map(worksheet, shared_strings)
+      :rows  -> row_list(sheet, shared_strings)
+      :cells -> cell_map(sheet, shared_strings)
       _      -> raise ArgumentError, message: "Invalid option."
     end
   end
@@ -31,6 +34,11 @@ defmodule Xlsxir.Format do
   """
   def row_list(sheet, strings) do
     sheet
+    |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
+                            |> List.first
+                            |> Atom.to_string
+                            |> regx_scan
+                          end)
     |> Enum.map(fn row ->
         Enum.map(row, fn {_k, v} -> format_cell_value(v, strings) end)
       end)
@@ -100,6 +108,12 @@ defmodule Xlsxir.Format do
         false -> List.to_integer(number)
         true  -> List.to_float(number)
        end
+  end
+
+  defp regx_scan(cell) do
+    ~r/[0-9]/
+    |> Regex.scan(cell)
+    |> List.to_string
   end
 
 

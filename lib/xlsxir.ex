@@ -44,10 +44,14 @@ defmodule Xlsxir do
     {:ok, file_paths} = Unzip.xml_file_list(index)
                         |> Unzip.extract_xml_to_file(file)
 
-    IEx.pry
-    if Enum.count(file_paths) == 3, do: Enum.at(file_paths, 2), else: Enum.at(file_paths, 1)
-    |> to_string
-    |> Sax.parse_sheet
+    Enum.each(file_paths, fn file -> 
+      case file do
+        'temp/xl/sharedString.xml' -> Sax.parse(to_string(file), :string)
+        'temp/xl/styles.xml'       -> Sax.parse(to_string(file), :style)
+        _                          -> Sax.parse(to_string(file), :worksheet)
+      end
+    end)
+
     
     #|> Parse.worksheet(index, styles)
     #|> Format.prepare_output(strings, option)

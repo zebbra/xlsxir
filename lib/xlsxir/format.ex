@@ -12,7 +12,7 @@ defmodule Xlsxir.Format do
   """
   def prepare_output(option) do
     sheet = Worksheet.get 
-    shared_strings = SharedString.get 
+    shared_strings = if SharedString.alive?, do: SharedString.get 
 
     case option do
       :rows  -> row_list(sheet, shared_strings)
@@ -34,13 +34,8 @@ defmodule Xlsxir.Format do
   """
   def row_list(sheet, strings) do
     sheet
-    |> Enum.chunk_by(fn cell -> Keyword.keys([cell])
-                            |> List.first
-                            |> Atom.to_string
-                            |> regx_scan
-                          end)
     |> Enum.map(fn row ->
-        Enum.map(row, fn {_k, v} -> format_cell_value(v, strings) end)
+        Enum.map(row, fn [_k, v] -> format_cell_value(v, strings) end)
       end)
   end
 
@@ -59,7 +54,7 @@ defmodule Xlsxir.Format do
   def cell_map(sheet, strings) do
     sheet
     |> Enum.map(fn row ->
-        Enum.map(row, fn{k, v} ->
+        Enum.map(row, fn [k, v] ->
           {k, format_cell_value(v, strings)}
         end)
       end)
@@ -108,12 +103,6 @@ defmodule Xlsxir.Format do
         false -> List.to_integer(number)
         true  -> List.to_float(number)
        end
-  end
-
-  defp regx_scan(cell) do
-    ~r/[0-9]/
-    |> Regex.scan(cell)
-    |> List.to_string
   end
 
 end

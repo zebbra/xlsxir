@@ -7,8 +7,8 @@ defmodule Xlsxir.Worksheet do
     Agent.start_link(fn -> [] end, name: Sheet)
   end
 
-  def add_cell(key, value) do
-    Agent.update(Sheet, &(Keyword.put(&1, key, value)))
+  def add_row(row) do
+    Agent.update(Sheet, &(Enum.into(&1, [row])))
   end
 
   def get do
@@ -40,6 +40,13 @@ defmodule Xlsxir.SharedString do
 
   def delete do
     Agent.stop(SharedStrings)
+  end
+
+  def alive? do
+    case Process.whereis(SharedStrings) do
+      nil -> false
+      pid -> Process.alive?(pid)
+    end
   end
 end
 
@@ -77,6 +84,10 @@ defmodule Xlsxir.Style do
 
   def get do
     Agent.get(Styles, &(&1))
+  end
+
+  def get_at(index) do
+    Agent.get(Styles, &(Enum.at(&1, index)))
   end
 
   def delete do

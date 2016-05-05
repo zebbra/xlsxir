@@ -5,8 +5,8 @@ defmodule Xlsxir.ParseWorksheet do
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
   
-  defmodule CellState do
-    defstruct cell_ref: "", data_type: "", num_style: "", value: ""
+  defmodule RowState do
+    defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: ""
   end
   
   @doc """
@@ -23,14 +23,17 @@ defmodule Xlsxir.ParseWorksheet do
   Each entry in the keyword list created consists of a cell reference atom and a list containing the cell's data type, style index
   and value (i.e. `[A1: ['s', nil, '0'], ...]`).
   """
-  def sax_event_handler({:startElement,_,'c',_,xml_attr}, _state) do
-    state = %CellState{}
 
+  def sax_event_handler({:startElement,_,'row',_,_}, _state) do
+    state = %RowState{}
+  end
+
+  def sax_event_handler({:startElement,_,'c',_,xml_attr}, state) do
     a = Enum.map(xml_attr, fn(attr) -> 
       case attr do
         {:attribute,'r',_,_,ref}   -> {:r, ref  }
         {:attribute,'s',_,_,style} -> {:s, if Style.alive? do
-                                             Enum.at(Style.get, List.to_integer(style))
+                                             Style.get_at(List.to_integer(style))
                                            else 
                                              nil
                                            end}
@@ -53,11 +56,16 @@ defmodule Xlsxir.ParseWorksheet do
     if state == nil, do: nil, else: %{state | value: value}
   end
 
-  def sax_event_handler({:endElement,_,'c',_}, state) do
-    Worksheet.add_cell(List.to_atom(state.cell_ref), [state.data_type, state.num_style, state.value]) 
+  def sax_event_handler({:endElement,_,'c',_}, %RowState{row: row} = state) do
+    %{state | row: Enum.into(row, [[to_string(state.cell_ref), [state.data_type, state.num_style, state.value]]])} 
   end
 
-  #def sax_event_handler(:endDocument, state), do: state
+  def sax_event_handler({:endElement,_,'row',_}, state) do
+    state.row
+    |> Enum.reverse
+    |> Worksheet.add_row
+  end
+
   def sax_event_handler(_, state), do: state
 
 end

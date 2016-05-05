@@ -92,7 +92,7 @@ defmodule Xlsxir.Unzip do
         iex> Xlsxir.Unzip.delete_dir(["./temp"])
         :ok
   """
-  def delete_dir(dir \\ ["temp/xl/worksheets", "temp/xl", "temp"]) do
+  def delete_temp_dir(dir \\ ["temp/xl/worksheets", "temp/xl", "temp"]) do
     search_and_destroy(dir)
   end
 

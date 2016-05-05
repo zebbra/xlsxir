@@ -62,7 +62,7 @@ defmodule Xlsxir do
     Worksheet.delete
     Style.delete
     SharedString.delete
-    Unzip.delete_dir
+    Unzip.delete_temp_dir
   end
 
 end

@@ -1,6 +1,6 @@
 defmodule Xlsxir do
   require IEx
-  alias Xlsxir.{Unzip, Sax, Parse, Format}
+  alias Xlsxir.{Unzip, SaxParser, Format, Worksheet, Style, SharedString}
 
   @moduledoc """
   Extracts and parses data from a Microsoft Excel workbook, returning either a list or a map.
@@ -46,14 +46,23 @@ defmodule Xlsxir do
 
     Enum.each(file_paths, fn file -> 
       case file do
-        'temp/xl/sharedString.xml' -> Sax.parse(to_string(file), :string)
-        'temp/xl/styles.xml'       -> Sax.parse(to_string(file), :style)
-        _                          -> Sax.parse(to_string(file), :worksheet)
+        'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
+        'temp/xl/styles.xml'        -> SaxParser.parse(to_string(file), :style)
+        _                           -> SaxParser.parse(to_string(file), :worksheet)
       end
     end)
 
-    
-    #|> Parse.worksheet(index, styles)
-    #|> Format.prepare_output(strings, option)
+    results = Format.prepare_output(option)
+
+    cleanup
+    results
   end
+
+  defp cleanup do
+    Worksheet.delete
+    Style.delete
+    SharedString.delete
+    Unzip.delete_dir
+  end
+
 end

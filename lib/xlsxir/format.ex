@@ -116,38 +116,4 @@ defmodule Xlsxir.Format do
     |> List.to_string
   end
 
-
-#### Save for future development ####
-
-#   # generate reference list for all cells
-#   defp cell_reference_list do
-#     Stream.flat_map(1..1048576, fn n ->
-#       Stream.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
-#     end)
-#   end
-
-#   defp row_reference_list(n) do
-#     Enum.map(0..16384, fn i -> String.to_atom(col_letter(i) <> Integer.to_string(n)) end)
-#   end
-
-#   # given index, return Excel column letter (i.e. 0 -> "A", 26 -> "AA")
-#   defp col_letter(i), do: do_col_letter(i, [])
-
-#   defp do_col_letter(i, ltrs) when i/26 >= 1 do
-#     ltr = rem(i, 26) + 65
-
-#     i/26 - 1
-#     |> Float.floor
-#     |> round
-#     |> do_col_letter([ltr|ltrs])
-#   end
-
-#   defp do_col_letter(i, ltrs) do
-#     ltr = rem(i, 26) + 65
-
-#     [ltr|ltrs]
-#     |> Enum.map(fn(x) -> <<x>> end)
-#     |> List.to_string
-#   end
-
 end

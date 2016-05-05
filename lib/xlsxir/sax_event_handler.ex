@@ -25,7 +25,7 @@ defmodule Xlsxir.ParseWorksheet do
   """
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, _state) do
     state = %CellState{}
-    
+
     a = Enum.map(xml_attr, fn(attr) -> 
       case attr do
         {:attribute,'r',_,_,ref}   -> {:r, ref  }
@@ -50,14 +50,14 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   def sax_event_handler({:characters, value}, state) do
-    %{state | value: value}
+    if state == nil, do: nil, else: %{state | value: value}
   end
 
   def sax_event_handler({:endElement,_,'c',_}, state) do
     Worksheet.add_cell(List.to_atom(state.cell_ref), [state.data_type, state.num_style, state.value]) 
   end
 
-  def sax_event_handler(:endDocument, state), do: state
+  #def sax_event_handler(:endDocument, state), do: state
   def sax_event_handler(_, state), do: state
 
 end

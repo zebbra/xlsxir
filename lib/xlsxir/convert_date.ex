@@ -1,6 +1,4 @@
 defmodule Xlsxir.ConvertDate do
-  import Xlsxir.Format, only: [convert_char_number: 1]
-
   @moduledoc """
   Converts an Excel date serial number, in `char_list` format, to a date formatted in 
   Erlang `:calendar.date()` type format (i.e. `{year, month, day}`).
@@ -89,5 +87,18 @@ defmodule Xlsxir.ConvertDate do
       days <= 365 + l -> {12, days - 334 - l}
       true            -> raise "Invalid Excel serial date."
     end
+  end
+
+  @doc """
+  Converts Excel number to either integer or float.
+  """
+  def convert_char_number(number) do
+    number
+    |> List.to_string
+    |> String.match?(~r/[.]/)
+    |> case do
+        false -> List.to_integer(number)
+        true  -> List.to_float(number)
+       end
   end
 end

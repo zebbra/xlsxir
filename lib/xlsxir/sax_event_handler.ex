@@ -1,6 +1,6 @@
-alias Xlsxir.{Worksheet, Style, SharedString} 
+alias Xlsxir.{Worksheet, Style, SharedString, Index} 
 
-defmodule Xlsxir.ParseWorksheet do
+defmodule Xlsxir.ParseWorksheet1 do
   @moduledoc """
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
@@ -17,12 +17,14 @@ defmodule Xlsxir.ParseWorksheet do
   ## Parameters
 
   - pattern - the XML pattern of the event to match upon
-  - state - the state of the `%CellState{}` struct which temporarily holds applicable data of the current cell being parsed
+  - state - the state of the `%RowState{}` struct which temporarily holds applicable data of the current row being parsed
 
   ## Example
   Each entry in the keyword list created consists of a cell reference atom and a list containing the cell's data type, style index
   and value (i.e. `[A1: ['s', nil, '0'], ...]`).
   """
+
+  def sax_event_handler(:startDocument, _state), do: Index.new
 
   def sax_event_handler({:startElement,_,'row',_,_}, _state) do
     state = %RowState{}
@@ -63,14 +65,18 @@ defmodule Xlsxir.ParseWorksheet do
   def sax_event_handler({:endElement,_,'row',_}, state) do
     state.row
     |> Enum.reverse
-    |> Worksheet.add_row
+    |> Worksheet.add_row(Index.get)
+
+    Index.increment_1
   end
+
+  def sax_event_handler(:endDocument, _state), do: Index.delete
 
   def sax_event_handler(_, state), do: state
 
 end
 
-defmodule Xlsxir.ParseString do
+defmodule Xlsxir.ParseString1 do
   @moduledoc """
   Holds the SAX event instructions for parsing sharedString data via `Xlsxir.SaxParser.parse/2`
   """
@@ -99,7 +105,7 @@ defmodule Xlsxir.ParseString do
  
 end
 
-defmodule Xlsxir.ParseStyle do
+defmodule Xlsxir.ParseStyle1 do
   @moduledoc """
   Holds the SAX event instructions for parsing style data via `Xlsxir.SaxParser.parse/2`
   """

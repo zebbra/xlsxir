@@ -11,12 +11,12 @@ defmodule Xlsxir.Format do
   data and the chosen format via `option` which defaults to `:rows`.
   """
   def prepare_output(option) do
-    sheet = Worksheet.get 
+    range = 0..(:ets.info(:worksheet, :size) -1)
     shared_strings = if SharedString.alive?, do: SharedString.get 
 
     case option do
-      :rows  -> row_list(sheet, shared_strings)
-      :cells -> cell_map(sheet, shared_strings)
+      :rows  -> row_list(range, shared_strings)
+      :cells -> cell_map(range, shared_strings)
       _      -> raise ArgumentError, message: "Invalid option."
     end
   end
@@ -32,11 +32,11 @@ defmodule Xlsxir.Format do
   ## Example
       [[row_1_values], [row_2_values], ...]
   """
-  def row_list(sheet, strings) do
-    sheet
-    |> Enum.map(fn row ->
-        Enum.map(row, fn [_k, v] -> format_cell_value(v, strings) end)
-      end)
+  def row_list(range, strings) do
+    range
+    |> Enum.map(fn i -> Worksheet.get_at(i)
+                        |> Enum.map(fn [_k, v] -> format_cell_value(v, strings) end)
+                      end)
   end
 
   @doc """

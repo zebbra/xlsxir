@@ -4,7 +4,7 @@ defmodule Xlsxir.Mixfile do
   def project do
     [
      app: :xlsxir,
-     version: "0.0.4",
+     version: "0.0.5",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
@@ -43,7 +43,7 @@ defmodule Xlsxir.Mixfile do
 
   defp description do
     """
-    Xlsx file parser. Data is returned in either a list or a map.
+    Xlsx file parser. Supports ISO 8601 date formats. Data is returned in either a list or a map.
     """
   end
 

@@ -28,7 +28,7 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler(:startDocument, _state), do: Index.new
 
-  def sax_event_handler({:startElement,_,'row',_,_}, _state), do: state = %RowState{}
+  def sax_event_handler({:startElement,_,'row',_,_}, _state), do: %RowState{}
 
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, state) do
     a = Enum.map(xml_attr, fn(attr) -> 
@@ -59,7 +59,6 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   def sax_event_handler({:endElement,_,'c',_}, %RowState{row: row} = state) do
-    if state.data_type == 's', do: IO.inspect([state.data_type, state.num_style, state.value])
     cell_value = format_cell_value([state.data_type, state.num_style, state.value])
 
 
@@ -76,8 +75,8 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler(:endDocument, _state) do 
     Index.delete
-    SharedString.delete
-    Style.delete
+    if SharedString.alive?, do: SharedString.delete
+    if Style.alive?, do: Style.delete
   end
 
   def sax_event_handler(_, state), do: state

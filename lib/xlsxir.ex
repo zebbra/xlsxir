@@ -1,6 +1,6 @@
 defmodule Xlsxir do
   require IEx
-  alias Xlsxir.{Unzip, SaxParser, Format, Worksheet, Style, SharedString, Timer}
+  alias Xlsxir.{Unzip, SaxParser, Worksheet, Timer}
 
   @moduledoc """
   Extracts and parses data from a Microsoft Excel workbook, returning either a list or a map.
@@ -48,19 +48,66 @@ defmodule Xlsxir do
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
         'temp/xl/styles.xml'        -> SaxParser.parse(to_string(file), :style)
-        _                           -> nil
+        _                           -> SaxParser.parse(to_string(file), :worksheet)
       end
     end)
-
-    SaxParser.parse("temp/xl/worksheets/sheet#{index + 1}.xml", :worksheet)
 
     Unzip.delete_temp_dir
     {:ok, Timer.stop}
   end
 
-  defp cleanup do
+  def get_list do
+    range = 0..(:ets.info(:worksheet, :size) -1)
+
+    range
+    |> Enum.map(fn i -> Worksheet.get_at(i)
+                        |> Enum.map(fn cell -> Enum.at(cell, 1) end)
+                      end)
+  end
+
+  def get_map do
+    range = 0..(:ets.info(:worksheet, :size) -1)
+
+    range
+    |> Enum.reduce(%{}, fn i, m -> Worksheet.get_at(i)
+                                   |> Enum.reduce(%{}, fn [k,v], acc -> Map.put(acc, k, v) end)
+                                   |> Enum.into(m)
+                                 end)
+  end
+
+  def get_cell(cell_ref) do
+    default = "No value found in cell #{cell_ref}"
+
+    row = ~r/\d+/
+          |> Regex.scan(cell_ref)
+          |> List.flatten
+          |> List.first
+          |> String.to_integer
+
+    [_, value] = Enum.find(Worksheet.get_at(row - 1), default, fn cell -> 
+                   Enum.at(cell, 0) == cell_ref 
+                 end)
+    value
+  end
+
+  def get_row(row) do
+    Enum.map(Worksheet.get_at(row - 1), fn [k,v] -> v end)
+  end
+
+  def get_col(col) do
+    Enum.map(get_map, fn {k,v} -> if cell_ltrs(k) == col, do: v end)
+    |> Enum.reject(fn x -> x == nil end)
+  end
+
+  def close do
     Worksheet.delete
-    Timer.delete
+  end
+
+  defp cell_ltrs(cell) do
+    ~r/[a-z]+/i 
+    |> Regex.scan(String.upcase(cell))
+    |> List.flatten
+    |> List.first
   end
 
 end

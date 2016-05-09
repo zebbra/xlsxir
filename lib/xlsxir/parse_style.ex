@@ -29,7 +29,7 @@ defmodule Xlsxir.ParseStyle do
   """
   def sax_event_handler(:startDocument, _state) do 
     Index.new
-    state = %CustomStyleState{}
+    %CustomStyleState{}
   end
 
   def sax_event_handler({:startElement,_,'xf',_,xml_attr}, state) do
@@ -58,8 +58,7 @@ defmodule Xlsxir.ParseStyle do
     %{state | custom_style: Map.put(custom_style, temp[:id], temp[:cd])}
   end
 
-  def sax_event_handler(:endDocument, 
-    %CustomStyleState{custom_style: custom_style} = state) do
+  def sax_event_handler(:endDocument, %CustomStyleState{custom_style: custom_style}) do
 
     custom_type = custom_style_handler(custom_style)
 

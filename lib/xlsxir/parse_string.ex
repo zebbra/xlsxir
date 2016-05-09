@@ -25,7 +25,7 @@ defmodule Xlsxir.ParseString do
   """
   def sax_event_handler(:startDocument, _state), do: Index.new
 
-  def sax_event_handler({:startElement,_,'t',_,_}, _state), do: %StringState{}
+  def sax_event_handler({:startElement,_,'si',_,_}, _state), do: %StringState{}
 
   def sax_event_handler({:characters, value}, state) do
     value
@@ -36,7 +36,7 @@ defmodule Xlsxir.ParseString do
     %{state | empty_string: false}
   end
 
-  def sax_event_handler({:endElement,_,'t',_}, %StringState{empty_string: empty_string} = state) do
+  def sax_event_handler({:endElement,_,'si',_}, %StringState{empty_string: empty_string} = state) do
     if empty_string do 
       SharedString.add_shared_string("", Index.get)
       Index.increment_1
@@ -45,6 +45,6 @@ defmodule Xlsxir.ParseString do
 
   def sax_event_handler(:endDocument, _state), do: Index.delete
 
-  def sax_event_handler(_, _state), do: nil
+  def sax_event_handler(_, state), do: state
  
 end

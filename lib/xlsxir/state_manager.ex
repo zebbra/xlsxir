@@ -13,10 +13,16 @@ defmodule Xlsxir.Worksheet do
   end
 
   def get_at(index) do
-    :ets.lookup(:worksheet, index)
-    |> List.first
-    |> Tuple.to_list
-    |> Enum.at(1)
+    row = :ets.lookup(:worksheet, index)
+
+    if row == [] do
+      row
+    else
+      row
+      |> List.first
+      |> Tuple.to_list
+      |> Enum.at(1)
+    end
   end
 
   def delete do
@@ -68,10 +74,8 @@ defmodule Xlsxir.Style do
   end
 
   # functions for `NumFmtIds`
-  def add_id(num_fmt_id) do
-    unless Enum.member?(get_id, num_fmt_id) do 
-      Agent.update(NumFmtIds, &(Enum.into([num_fmt_id], &1)))
-    end
+  def add_id(num_fmt_id) do 
+    Agent.update(NumFmtIds, &(Enum.into([num_fmt_id], &1)))
   end
 
   def get_id do
@@ -133,41 +137,29 @@ defmodule Xlsxir.Timer do
   """
 
   def start do
-    Agent.start_link(fn -> 0 end, name: Time)
-    {_, s, _} = :erlang.now
-    Agent.update(Time, &(&1 + s))
-  end
-
-  def restart do
-    reset
-    {_, s, _} = :erlang.now
-    Agent.update(Time, &(&1 + s))
+    Agent.start_link(fn -> [] end, name: Time)
+    {_, s, ms} = :erlang.timestamp
+    Agent.update(Time, &(Enum.into([s, ms],&1)))
   end
 
   def stop do
-    {_, s, _} = :erlang.now
+    {_, s, ms} = :erlang.timestamp
 
-    s
-    |> Kernel.-(Agent.get(Time, &(&1)))
-    |> convert_seconds
-  end
+    seconds = s |> Kernel.-(Agent.get(Time, &(&1)) |> Enum.at(0))
+    micro   = ms |> Kernel.-(Agent.get(Time, &(&1)) |> Enum.at(1))
 
-  def reset do
-    Agent.update(Time, &(&1 = 0))
-  end
+    hms = [
+            seconds/3600 |> Float.floor |> round, 
+            rem(seconds, 3600)/60 |> Float.floor |> round, 
+            rem(seconds, 60)
+          ]
 
-  def delete do
-    Agent.stop(Time)
-  end
-
-  defp convert_seconds(seconds) do
-    [h, m, s] = [
-                  seconds/3600 |> Float.floor |> round, 
-                  rem(seconds, 3600)/60 |> Float.floor |> round, 
-                  rem(seconds, 60)
-                ]
-
-    "#{h}h #{m}m #{s}s"            
+    case hms do
+      [0, 0, 0] -> "#{micro}ms"
+      [0, 0, s] -> "#{s}s #{micro}ms"
+      [0, m, s] -> "#{m}m #{s}s #{micro}ms"
+      [h, m, s] -> "#{h}h #{m}m #{s}s #{micro}ms"
+    end
   end
 end
 

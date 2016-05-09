@@ -35,7 +35,6 @@ defmodule Xlsxir.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [ 
-      { :sweet_xml, "~> 0.6.1"  },
       { :ex_doc,    "~> 0.11.4" },
       { :earmark,   "~> 0.2.1"  },
       { :erlsom,    "~> 1.4"    }

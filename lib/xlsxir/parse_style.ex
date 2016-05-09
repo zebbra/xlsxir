@@ -5,16 +5,17 @@ defmodule Xlsxir.ParseStyle do
   Holds the SAX event instructions for parsing style data via `Xlsxir.SaxParser.parse/2`
   """
 
+  # the following module attributes hold `numStyleId`s for standard number styles, grouping them between numbers and dates
   @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,49,59,60,61,62,67,68,69,70]
   @date [14,15,16,17,18,19,20,21,22,27,30,36,45,46,47,50,57]
 
   defmodule CustomStyleState do
-    defstruct custom_style: %{}
+    defstruct custom_style: %{}, cellxfs: false
   end
 
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
-  styles XML file, ultimately sending each parsed style type to the `Style` agent process that was started by 
+  styles XML file, ultimately sending each parsed style type to the `Xlsxir.Style` module which contains an ETS table that was started by 
   `Xlsxir.SaxParser.parse/2`. The style types generated are `nil` for numbers and `'d'` for dates. 
 
   ## Parameters
@@ -23,24 +24,34 @@ defmodule Xlsxir.ParseStyle do
   - state - the state of the `%CustomStyleState{}` struct which temporarily holds each `numFmtId` and its associated `formatCode` for custom format types
 
   ## Example
-  Recursively sends style types generated from parsing the `xl/sharedStrings.xml` file to `Style.add/1`. The data can ultimately
-  be retreived by the `get/0` function of the agent process (i.e. `Xlsxir.Style.get` would return something like `[nil, 'd', ...]` depending on
-  each style type generated).
+  Recursively sends style types generated from parsing the `xl/sharedStrings.xml` file to `Style.add_style/1`. The data can ultimately
+  be retreived by the `get_at/1` function of the `Xlsxir.Style` module (i.e. `Xlsxir.Style.get_at(0)` would return `nil` or `'d'` depending on each style type generated).
   """
   def sax_event_handler(:startDocument, _state) do 
     Index.new
     %CustomStyleState{}
   end
 
-  def sax_event_handler({:startElement,_,'xf',_,xml_attr}, state) do
-    [{_,_,_,_,id}] = Enum.filter(xml_attr, fn attr -> 
-                       case attr do 
-                         {:attribute,'numFmtId',_,_,_} -> true
-                         _                             -> false
-                       end  
-                     end)
+  def sax_event_handler({:startElement,_,'cellXfs',_,_}, state) do
+    %{state | cellxfs: true}
+  end
 
-    Style.add_id(id)
+  def sax_event_handler({:endElement,_,'cellXfs',_}, state) do
+    %{state | cellxfs: false}
+  end
+
+  def sax_event_handler({:startElement,_,'xf',_,xml_attr}, state) do
+    if state.cellxfs do
+      [{_,_,_,_,id}] = Enum.filter(xml_attr, fn attr -> 
+                         case attr do 
+                           {:attribute,'numFmtId',_,_,_} -> true
+                           _                             -> false
+                         end  
+                       end)
+
+      Style.add_id(id)
+    end
+    
     state
   end
 

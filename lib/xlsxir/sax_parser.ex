@@ -1,8 +1,7 @@
 defmodule Xlsxir.SaxParser do
   @moduledoc """
-  Provides SAX (Simple API for XML) parsing functionality of the `.xlsx` file. SAX (Simple API for XML) is an event-driven 
-  parsing algorithm for parsing large XML files in chunks, preventing the need to load the entire DOM into memory. Current chunk size
-  is set to 10,000.
+  Provides SAX (Simple API for XML) parsing functionality of the `.xlsx` file via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library. SAX (Simple API for XML) is an event-driven 
+  parsing algorithm for parsing large XML files in chunks, preventing the need to load the entire DOM into memory. Current chunk size is set to 10,000.
   """
 
   alias Xlsxir.{ParseWorksheet, ParseStyle, ParseString, Worksheet, Style, SharedString}
@@ -10,9 +9,9 @@ defmodule Xlsxir.SaxParser do
   @chunk 10000
 
   @doc """
-  Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An `Agent` 
-  process is started to hold the state of data parsed. Name of `Agent` process modules are `Worksheet`, `Style` and `SharedString` 
-  respectively.
+  Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An Erlang Term Storage (ETS) table is created to hold the state of data 
+  parsed. Name of ETS table modules that hold data for the aforementioned XML files are `Worksheet`, `Style` and `SharedString` respectively. The style and sharedstring XML files (if they
+  exist) must be parsed first in order for the worksheet parser to sucessfully complete.
 
   ## Parameters
 
@@ -26,23 +25,23 @@ defmodule Xlsxir.SaxParser do
     - cell 'C1' -> integer of 10
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
-    The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize
-    the `get/0` function of each `Agent` process to pull the parsed data. 
-
-        iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/worksheets/sheet1.xml", :worksheet)
-        :ok
-        iex> Xlsxir.Worksheet.get
-        [A1: ['s', nil, '0'], B1: ['s', nil, '1'], C1: [nil, nil, '10'], D1: [nil, nil, '20'], E1: [nil, '1', '42370']]
+    The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize the `get_at/1` function of each ETS module to pull a sample of the parsed 
+    data. Keep in mind that the worksheet data is saved to the ETS table as a list of row lists, so the `Xlsxir.Worksheet.get_at/1` function will return a full row of values.
 
         iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/styles.xml", :style)
         :ok
-        iex> Xlsxir.Style.get
-        [nil, 'd', nil, nil, 'd', 'd']
-
+        iex> Xlsxir.Style.get_at(0)
+        nil
         iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/sharedStrings.xml", :string)
         :ok
-        iex> Xlsxir.String.get
-        ["string one", "string two"]
+        iex> Xlsxir.SharedString.get_at(0)
+        "string one"
+        iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/worksheets/sheet1.xml", :worksheet)
+        :ok
+        iex> Xlsxir.Worksheet.get_at(0)
+        [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]
+        iex> Xlsxir.Worksheet.delete
+        true
   """
   def parse(path, type) do
     case type do

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.ConvertDate – Xlsxir v1.0.0</title>
+    <title>Xlsxir.ParseString – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -60,10 +60,10 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.0.0</small>
-        Xlsxir.ConvertDate
+        Xlsxir.ParseString
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_string.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -71,8 +71,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
-Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>).</p>
+          <p>Holds the SAX event instructions for parsing sharedString data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
 
         </section>
       
@@ -94,20 +93,12 @@ Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code clas
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#convert_char_number/1">convert_char_number(number)</a>
+    <a href="#sax_event_handler/2">sax_event_handler(arg1, state)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Converts Excel number to either integer or float</p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#from_excel/1">from_excel(serial)</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
-type format</p>
+    <div class="summary-synopsis"><p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
+sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS table opened by 
+<a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
 </div>
   
 </div>
@@ -132,48 +123,33 @@ type format</p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="convert_char_number/1">
+          <div class="detail" id="sax_event_handler/2">
   <div class="detail-header">
-    <a href="#convert_char_number/1" class="detail-link" title="Link to this function">
+    <a href="#sax_event_handler/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">convert_char_number(number)</span>
+    <span class="signature">sax_event_handler(arg1, state)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L95" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_string.ex#L26" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Converts Excel number to either integer or float.</p>
-
-  </section>
-</div>
-<div class="detail" id="from_excel/1">
-  <div class="detail-header">
-    <a href="#from_excel/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">from_excel(serial)</span>
-      
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L20" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-  </div>
-  
-  <section class="docstring">
-    <p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
-type format.</p>
+    <p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
+sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS table opened by 
+<a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. </p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">serial</code> - Excel date serial in <code class="inline">char_list</code> format (i.e. 4/30/75 as ‘27514’)
+<li>pattern - the XML pattern of the event to match on
+</li>
+<li>state - current state of the <code class="inline">%StringState{}</code> struct
 </li>
 </ul>
 <h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDate.from_excel(&#39;27514&#39;)
-{1975, 4, 30}</code></pre>
+<p>Recursively sends strings from the <code class="inline">xl/sharedStrings.xml</code> file to <a href="Xlsxir.SharedString.html#add_shared_string/2"><code class="inline">Xlsxir.SharedString.add_shared_string/2</code></a>. The data can ultimately
+be retreived by the <code class="inline">get_at/1</code> function of the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module (i.e. <code class="inline">Xlsxir.SharedString.get_at(0)</code> would return something like <code class="inline">&quot;string 1&quot;</code>).</p>
 
   </section>
 </div>

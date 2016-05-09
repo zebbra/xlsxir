@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.ConvertDate – Xlsxir v1.0.0</title>
+    <title>Xlsxir.Timer – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -60,10 +60,10 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.0.0</small>
-        Xlsxir.ConvertDate
+        Xlsxir.Timer
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L136" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -71,8 +71,8 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
-Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>).</p>
+          <p>An <code class="inline">Agent</code> process named <code class="inline">Time</code> which holds state for time elapsed since execution. Provides functions to start and stop the process, with the stop function returning the time elapsed as a 
+list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>).</p>
 
         </section>
       
@@ -94,21 +94,14 @@ Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code clas
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#convert_char_number/1">convert_char_number(number)</a>
+    <a href="#start/0">start()</a>
   </div>
-  
-    <div class="summary-synopsis"><p>Converts Excel number to either integer or float</p>
-</div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#from_excel/1">from_excel(serial)</a>
+    <a href="#stop/0">stop()</a>
   </div>
-  
-    <div class="summary-synopsis"><p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
-type format</p>
-</div>
   
 </div>
 
@@ -132,49 +125,38 @@ type format</p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="convert_char_number/1">
+          <div class="detail" id="start/0">
   <div class="detail-header">
-    <a href="#convert_char_number/1" class="detail-link" title="Link to this function">
+    <a href="#start/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">convert_char_number(number)</span>
+    <span class="signature">start()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L95" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L142" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Converts Excel number to either integer or float.</p>
-
+    
   </section>
 </div>
-<div class="detail" id="from_excel/1">
+<div class="detail" id="stop/0">
   <div class="detail-header">
-    <a href="#from_excel/1" class="detail-link" title="Link to this function">
+    <a href="#stop/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">from_excel(serial)</span>
+    <span class="signature">stop()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L20" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L148" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
-type format.</p>
-<h2>Parameters</h2>
-<ul>
-<li><code class="inline">serial</code> - Excel date serial in <code class="inline">char_list</code> format (i.e. 4/30/75 as ‘27514’)
-</li>
-</ul>
-<h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDate.from_excel(&#39;27514&#39;)
-{1975, 4, 30}</code></pre>
-
+    
   </section>
 </div>
 

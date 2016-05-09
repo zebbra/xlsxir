@@ -1,7 +1,7 @@
 defmodule Xlsxir.Worksheet do
   @moduledoc """
-  An Erlang Term Storage (ETS) process named `:worksheet` which holds state for data parsed from `sheet\#{n}.xml` at index `n`. Provides 
-  functions to create the process, add and retreive data, and ultimately kill the process. 
+  An Erlang Term Storage (ETS) process named `:worksheet` which holds state for data parsed from `sheet\#{n}.xml` at index `n`. Provides functions to create the process, add 
+  and retreive data, and ultimately kill the process. 
   """
 
   def new do
@@ -26,14 +26,18 @@ defmodule Xlsxir.Worksheet do
   end
 
   def delete do
-    :ets.delete(:worksheet)
+    if alive?, do: :ets.delete(:worksheet), else: true
+  end
+
+  def alive? do
+    Enum.member?(:ets.all, :worksheet)
   end
 end
 
 defmodule Xlsxir.SharedString do
   @moduledoc """
-  An Erlang Term Storage (ETS) process named `:sharedstrings` which holds state for data parsed from `sharedStrings.xml`. Provides 
-  functions to create the process, add and retreive data, and ultimately kill the process.
+  An Erlang Term Storage (ETS) process named `:sharedstrings` which holds state for data parsed from `sharedStrings.xml`. Provides functions to create the process, add 
+  and retreive data, and ultimately kill the process.
   """
 
   def new do
@@ -62,10 +66,9 @@ end
 
 defmodule Xlsxir.Style do
   @moduledoc """
-  An `Agent` process named `Styles` which holds state for data parsed from `styles.xml`. Provides 
-  functions to create the process, add and retreive data, and ultimately kill the process. Also includes
-  a temporary `Agent` process named `NumFmtIds` which is utilized during the parsing of the `styles.xml` file
-  to temporarily hold state of each `NumFmtId` contained within the file. 
+  An Erlang Term Storage (ETS) process named `:styles` which holds state for data parsed from `styles.xml`. Provides functions to create the process, add and retreive data, 
+  and ultimately kill the process. Also includes a temporary `Agent` process named `NumFmtIds` which is utilized during the parsing of the `styles.xml` file to temporarily 
+  hold state of each `NumFmtId` contained within the file. 
   """
 
   def new do
@@ -109,8 +112,8 @@ end
 
 defmodule Xlsxir.Index do
   @moduledoc """
-  An `Agent` process named `Index` which holds state of an index. Provides functions to create the process, 
-  increment the index by 1, and ultimately kill the process.
+  An `Agent` process named `Index` which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
+  and ultimately kill the process.
   """
 
   def new do
@@ -132,34 +135,36 @@ end
 
 defmodule Xlsxir.Timer do
   @moduledoc """
-  An `Agent` process named `Time` which holds state for time elapsed since execution. Provides functions to create the process, 
-  start the timer, stop the timer, reset, restart, and ultimately kill the process.
+  An `Agent` process named `Time` which holds state for time elapsed since execution. Provides functions to start and stop the process, with the stop function returning the time elapsed as a 
+  list (i.e. `[hour, minute, second, microsecond]`).
   """
 
   def start do
     Agent.start_link(fn -> [] end, name: Time)
     {_, s, ms} = :erlang.timestamp
-    Agent.update(Time, &(Enum.into([s, ms],&1)))
+    Agent.update(Time, &(Enum.into([s, ms], &1)))
   end
 
   def stop do
     {_, s, ms} = :erlang.timestamp
 
-    seconds = s |> Kernel.-(Agent.get(Time, &(&1)) |> Enum.at(0))
-    micro   = ms |> Kernel.-(Agent.get(Time, &(&1)) |> Enum.at(1))
+    seconds      = s  |> Kernel.-(Agent.get(Time, &(&1)) |> Enum.at(0))
+    microseconds = ms |> Kernel.+(Agent.get(Time, &(&1)) |> Enum.at(1))
 
-    hms = [
-            seconds/3600 |> Float.floor |> round, 
-            rem(seconds, 3600)/60 |> Float.floor |> round, 
-            rem(seconds, 60)
-          ]
+    [add_s, micro] = if microseconds > 1_000_000 do
+                       [1, microseconds - 1_000_000]
+                     else
+                       [0, microseconds]
+                     end
 
-    case hms do
-      [0, 0, 0] -> "#{micro}ms"
-      [0, 0, s] -> "#{s}s #{micro}ms"
-      [0, m, s] -> "#{m}m #{s}s #{micro}ms"
-      [h, m, s] -> "#{h}h #{m}m #{s}s #{micro}ms"
-    end
+    [h, m, s] = [
+                  seconds/3600 |> Float.floor |> round, 
+                  rem(seconds, 3600)/60 |> Float.floor |> round, 
+                  rem(seconds, 60)
+                ]
+
+    Agent.stop(Time)
+    [h, m, s + add_s, micro]
   end
 end
 

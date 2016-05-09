@@ -1,7 +1,6 @@
 defmodule Xlsxir.ParseWorksheet do
   alias Xlsxir.{Worksheet, SharedString, Style, Index, ConvertDate}
   import Xlsxir.ConvertDate, only: [convert_char_number: 1]
-  require IEx
 
   @moduledoc """
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
@@ -13,8 +12,8 @@ defmodule Xlsxir.ParseWorksheet do
   
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
-  worksheet XML file, ultimately sending a keyword list of cell references and their assocated data to the `Worksheet` agent 
-  process that was started by `Xlsxir.SaxParser.parse/2`. 
+  worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the `Xlsxir.Worksheet` module 
+  which contains an ETS table that was started by `Xlsxir.SaxParser.parse/2`. 
 
   ## Parameters
 
@@ -22,10 +21,8 @@ defmodule Xlsxir.ParseWorksheet do
   - state - the state of the `%RowState{}` struct which temporarily holds applicable data of the current row being parsed
 
   ## Example
-  Each entry in the keyword list created consists of a cell reference atom and a list containing the cell's data type, style index
-  and value (i.e. `[A1: ['s', nil, '0'], ...]`).
+  Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. `[["A1", "string one"], ...]`).
   """
-
   def sax_event_handler(:startDocument, _state), do: Index.new
 
   def sax_event_handler({:startElement,_,'row',_,_}, _state), do: %RowState{}

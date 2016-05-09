@@ -1,5 +1,27 @@
 # Change Log
 
+## 1.0.0
+
+Major changes in version 1.0.0 (non-backwards compatible) to improve performance and incorporate new functionality, including: 
+
+- Refactored the `Unzip` module to extract `.xlsx` contents to file instead of memory to improve memory usage. The following functions were created to support this functionality:
+..- `Xlsxir.Unzip.extract_to_file/2` - Extracts necessary files to a `./temp` directory for use during extraction
+..- `Xlsxir.delete_temp_dir/1` - Deletes './temp' directory and all of its contents
+- Implemented Simple API for XML (SAX) parsing functionalty via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library to improve performance and allow support for large `.xlsx` files
+..- `SweetXml` parsing library has been deprcated from `Xlsxir` and is no longer utilized in v1.0.0
+- Implemented Erlang Term Storage (ETS) for temporary storage of extracted data
+- Removed `option` argument from the initial extract function (`Xlsxir.extract/3` is now `Xlsxir.extract/2`). Data is no longer returned via `Xlsxir.extract` and is instead written to an ETS table. 
+- Implemented various functions for accessing the extracted data:
+..- `Xlsxir.get_list/0` - Return entire worksheet data in the form of a list of row lists
+..- `Xlsxir.get_map/0` - Return entire worksheet data in the form of a map of cell names and values
+..- `Xlsxir.get_cell/1` - Return value of specified cell
+..- `Xlsxir.get_row/1` - Return values of specified row
+..- `Xlsxir.get_column/1` - Return values of specified column
+- Implemented `Xlsxir.close/0` function to allow the deletion of the ETS table containing extracted worksheet data to free up memory 
+- Implemented `Xlsxir.Timer` module for tracking elapsed time of extraction process
+- Changed cell references from `atoms` to `strings` due to Elixir `atom` limitations (i.e. `:A1` to `"A1"`)
+- Updated documentation and testing to incorporate changes
+
 ## 0.0.5
 
 - Minor bug fixes and documentation updates

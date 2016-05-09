@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Change Log – Xlsxir v0.0.4</title>
+    <title>CHANGELOG – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.4
+        v1.0.0
       </h2>
     </div>
     
@@ -59,29 +59,68 @@
 
 
 <h1>Change Log</h1>
-<h2 id="0-0-4"> 0.0.4</h2><ul>
+<h2>1.0.0</h2>
+<p>Major changes in version 1.0.0 (non-backwards compatible) to improve performance and incorporate new functionality, including: </p>
+<ul>
+<li>Refactored the <code class="inline">Unzip</code> module to extract <code class="inline">.xlsx</code> contents to file instead of memory to improve memory usage. The following functions were created to support this functionality:
+..- <code class="inline">Xlsxir.Unzip.extract_to_file/2</code> - Extracts necessary files to a <code class="inline">./temp</code> directory for use during extraction
+..- <code class="inline">Xlsxir.delete_temp_dir/1</code> - Deletes ‘./temp’ directory and all of its contents
+</li>
+<li>Implemented Simple API for XML (SAX) parsing functionalty via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library to improve performance and allow support for large <code class="inline">.xlsx</code> files
+..- <code class="inline">SweetXml</code> parsing library has been deprcated from <a href="Xlsxir.html"><code class="inline">Xlsxir</code></a> and is no longer utilized in v1.0.0
+</li>
+<li>Implemented Erlang Term Storage (ETS) for temporary storage of extracted data
+</li>
+<li>Removed <code class="inline">option</code> argument from the initial extract function (<a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> is now <code class="inline">Xlsxir.extract/2</code>). Data is no longer returned via <code class="inline">Xlsxir.extract</code> and is instead written to an ETS table. 
+</li>
+<li>Implemented various functions for accessing the extracted data:
+..- <a href="Xlsxir.html#get_list/0"><code class="inline">Xlsxir.get_list/0</code></a> - Return entire worksheet data in the form of a list of row lists
+..- <a href="Xlsxir.html#get_map/0"><code class="inline">Xlsxir.get_map/0</code></a> - Return entire worksheet data in the form of a map of cell names and values
+..- <a href="Xlsxir.html#get_cell/1"><code class="inline">Xlsxir.get_cell/1</code></a> - Return value of specified cell
+..- <a href="Xlsxir.html#get_row/1"><code class="inline">Xlsxir.get_row/1</code></a> - Return values of specified row
+..- <code class="inline">Xlsxir.get_column/1</code> - Return values of specified column
+</li>
+<li>Implemented <a href="Xlsxir.html#close/0"><code class="inline">Xlsxir.close/0</code></a> function to allow the deletion of the ETS table containing extracted worksheet data to free up memory 
+</li>
+<li>Implemented <a href="Xlsxir.Timer.html"><code class="inline">Xlsxir.Timer</code></a> module for tracking elapsed time of extraction process
+</li>
+<li>Changed cell references from <code class="inline">atoms</code> to <code class="inline">strings</code> due to Elixir <code class="inline">atom</code> limitations (i.e. <code class="inline">:A1</code> to <code class="inline">&quot;A1&quot;</code>)
+</li>
+<li>Updated documentation and testing to incorporate changes
+</li>
+</ul>
+<h2>0.0.5</h2>
+<ul>
+<li>Minor bug fixes and documentation updates
+</li>
+</ul>
+<h2>0.0.4</h2>
+<ul>
 <li>Expanded coverage of Office Open XML standard <code class="inline">numFmt</code> (Standard Number Format). The <code class="inline">formatCode</code> for a standard <code class="inline">numFmt</code> is implied rather than explicitly identified in the XML file.
 </li>
 <li>Implemented support for Office Open XML custom <code class="inline">numFmt</code> (Custom Number Format) utilizing the <code class="inline">formatCode</code> explicitly identified in the XML file. 
 </li>
 <li>Added <code class="inline">Number Styles</code> documentation covering standard and custom <code class="inline">numFmt</code> and how to manually add an unsupported <code class="inline">numFmt</code>.
 </li>
-<li>Fixed issue resulting when no strings exist in a worksheet and therefore there is no <code class="inline">sharedStrings.xml</code> file (:file_not_found error).
+<li>Fixed issue resulting when no strings exist in a worksheet and therefore there is no <code class="inline">sharedStrings.xml</code> file (<code class="inline">:file_not_found</code> error).
 </li>
 </ul>
-<h2 id="0-0-3"> 0.0.3</h2><ul>
-<li>Fixed issue related to strings that contain special characters. Refactored <a href="Xlsxir.Parse.html#shared_strings/1"><code class="inline">Xlsxir.Parse.shared_strings/1</code></a> to properly parse strings with special characters.
+<h2>0.0.3</h2>
+<ul>
+<li>Fixed issue related to strings that contain special characters. Refactored <code class="inline">Xlsxir.Parse.shared_strings/1</code> to properly parse strings with special characters.
 </li>
 </ul>
-<h2 id="0-0-2"> 0.0.2</h2><ul>
-<li>Refactored <a href="Xlsxir.Parse.html"><code class="inline">Xlsxir.Parse</code></a> functions to improve <code class="inline">extract</code> performance on larger files.
+<h2>0.0.2</h2>
+<ul>
+<li>Refactored <code class="inline">Xlsxir.Parse</code> functions to improve <code class="inline">extract</code> performance on larger files.
 </li>
 <li>Expanded documentation and test coverage.
 </li>
 <li>Completed <a href="Xlsxir.ConvertDate.html"><code class="inline">Xlsxir.ConvertDate</code></a> module.
 </li>
 </ul>
-<h2 id="0-0-1"> 0.0.1</h2><ul>
+<h2>0.0.1</h2>
+<ul>
 <li>Initial draft. Functionality limited to very small Excel worksheets.
 </li>
 <li><a href="Xlsxir.ConvertDate.html"><code class="inline">Xlsxir.ConvertDate</code></a> functionality incomplete.

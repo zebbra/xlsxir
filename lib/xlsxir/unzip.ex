@@ -1,8 +1,7 @@
 defmodule Xlsxir.Unzip do
 
   @moduledoc """
-  Provides validation of accepted file extension types for file path and extracts requested inner files
-  from a `.zip` file type.
+  Provides validation of accepted file extension types for file path, extracts required `.xlsx` contents to `./temp` and ultimately deletes the `./temp` directory and its contents.
   """
 
   @doc """
@@ -14,13 +13,13 @@ defmodule Xlsxir.Unzip do
 
   ## Example
 
-      iex> path = "Good_Example.xlsx"
-      iex> Xlsxir.Unzip.validate_path(path)
-      {:ok, 'Good_Example.xlsx'}
+         iex> path = "Good_Example.xlsx"
+         iex> Xlsxir.Unzip.validate_path(path)
+         {:ok, 'Good_Example.xlsx'}
 
-      iex> path = "bad_path.xml"
-      iex> Xlsxir.Unzip.validate_path(path)
-      {:error, "Invalid path. Currently only .xlsx file types are supported."}
+         iex> path = "bad_path.xml"
+         iex> Xlsxir.Unzip.validate_path(path)
+         {:error, "Invalid path. Currently only .xlsx file types are supported."}
   """
   def validate_path(path) do
     path = to_string path
@@ -39,8 +38,8 @@ defmodule Xlsxir.Unzip do
 
   ## Example
 
-          iex> Xlsxir.xml_file_list(0)
-          ['xl/styles.xml', 'xl/sharedStrings.xml', 'xl/worksheets/sheet1.xml']
+         iex> Xlsxir.Unzip.xml_file_list(0)
+         ['xl/styles.xml', 'xl/sharedStrings.xml', 'xl/worksheets/sheet1.xml']
   """
   def xml_file_list(index) do
     [
@@ -59,40 +58,46 @@ defmodule Xlsxir.Unzip do
   - `path` - file path of a `.xlsx` file type in `string` format
 
   ## Example
+  An example file named `test.zip` located in './test_data/test' containing a single file named `test.txt`:
 
-    An example file named `test.zip` located in './test_data/test' containing a single file named `test.txt`
-    containing a single string of "test_successful":
-
-        iex> path = "./test/test_data/test.zip"
-        iex> file_list = ['test.txt']
-        iex> Xlsxir.Unzip.extract_xml_to_file(file_list, path)
-        'temp/test.txt'
+      iex> path = "./test/test_data/test.zip"
+      iex> file_list = ['test.txt']
+      iex> Xlsxir.Unzip.extract_xml_to_file(file_list, path)
+      {:ok, ['temp/test.txt']}
+      iex> File.ls("./temp")
+      {:ok, ["test.txt"]}
+      iex> Xlsxir.Unzip.delete_dir(["./temp"])
+      :ok
   """
   def extract_xml_to_file(file_list, path) do
     path
     |> to_char_list
     |> :zip.extract([{:file_list, file_list}, {:cwd, 'temp/'}])
-    |> case do
-        {:ok, files_list} -> {:ok, files_list}
-        {:ok, []}         -> {:error, :file_not_found}
+    |> case do 
         {:error, cause}   -> {:error, cause}
+        {:ok, []}         -> {:error, :file_not_found}
+        {:ok, files_list} -> {:ok, files_list}
        end
   end
 
   @doc """
-  Deletes all files and directories contained in `./temp`.
+  Deletes all files and directories contained in specified directory.
 
   ## Parameters
 
   - `dir` - list of directories to delete (default set for standard Xlsxir functionality)
 
   ## Example
-    Delete `test.txt` which was extracted in the previous doc test:
+  An example file named `test.zip` located in './test_data/test' containing a single file named `test.txt`:
 
-        iex> Xlsxir.Unzip.delete_dir(["./temp"])
-        :ok
+      iex> path = "./test/test_data/test.zip"
+      iex> file_list = ['test.txt']
+      iex> Xlsxir.Unzip.extract_xml_to_file(file_list, path)
+      {:ok, ['temp/test.txt']}     
+      iex> Xlsxir.Unzip.delete_dir(["./temp"])
+      :ok
   """
-  def delete_temp_dir(dir \\ ["temp/xl/worksheets", "temp/xl", "temp"]) do
+  def delete_dir(dir \\ ["temp/xl/worksheets", "temp/xl", "temp"]) do
     search_and_destroy(dir)
   end
 

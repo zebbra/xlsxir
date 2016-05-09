@@ -21,12 +21,12 @@ defmodule Xlsxir do
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
-      iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-      :ok
-      iex> Xlsxir.Worksheet.alive?
-      true
-      iex> Xlsxir.close
-      :ok
+        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+        :ok
+        iex> Xlsxir.Worksheet.alive?
+        true
+        iex> Xlsxir.close
+        :ok
   """
   def extract(path, index, timer \\ false) do
     if timer, do: Timer.start
@@ -63,12 +63,12 @@ defmodule Xlsxir do
   - cell 'D1' -> formula of "4 * 5"
   - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-        :ok
-        iex> Xlsxir.get_list
-        [["string one", "string two", 10, 20, {2016, 1, 1}]]
-        iex> Xlsxir.close
-        :ok
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> Xlsxir.get_list
+          [["string one", "string two", 10, 20, {2016, 1, 1}]]
+          iex> Xlsxir.close
+          :ok
   """
   def get_list do
     range = 0..(:ets.info(:worksheet, :size) -1)
@@ -90,12 +90,12 @@ defmodule Xlsxir do
   - cell 'D1' -> formula of "4 * 5"
   - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-        :ok
-        iex> Xlsxir.get_map
-        %{ "A1" => "string one", "B1" => "string two", "C1" => 10, "D1" => 20, "E1" => {2016,1,1}}
-        iex> Xlsxir.close
-        :ok
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> Xlsxir.get_map
+          %{ "A1" => "string one", "B1" => "string two", "C1" => 10, "D1" => 20, "E1" => {2016,1,1}}
+          iex> Xlsxir.close
+          :ok
   """
   def get_map do
     range = 0..(:ets.info(:worksheet, :size) -1)
@@ -122,12 +122,12 @@ defmodule Xlsxir do
   - cell 'D1' -> formula of "4 * 5"
   - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-        :ok
-        iex> Xlsxir.get_cell("A1")
-        "string one"
-        iex> Xlsxir.close
-        :ok
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> Xlsxir.get_cell("A1")
+          "string one"
+          iex> Xlsxir.close
+          :ok
   """
   def get_cell(cell_ref) do
     data = get_map
@@ -148,12 +148,12 @@ defmodule Xlsxir do
   - cell 'D1' -> formula of "4 * 5"
   - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-        :ok
-        iex> Xlsxir.get_row(1)
-        ["string one", "string two", 10, 20, {2016, 1, 1}]
-        iex> Xlsxir.close
-        :ok
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> Xlsxir.get_row(1)
+          ["string one", "string two", 10, 20, {2016, 1, 1}]
+          iex> Xlsxir.close
+          :ok
   """
   def get_row(row) do
     Enum.map(Worksheet.get_at(row - 1), fn [_k, v] -> v end)
@@ -173,12 +173,12 @@ defmodule Xlsxir do
   - cell 'D1' -> formula of "4 * 5"
   - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
 
-        iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
-        :ok
-        iex> Xlsxir.get_col("A")
-        ["string one"]
-        iex> Xlsxir.close
-        :ok
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> Xlsxir.get_col("A")
+          ["string one"]
+          iex> Xlsxir.close
+          :ok
   """
   def get_col(col) do
     Enum.map(get_map, fn {k,v} -> if cell_ltrs(k) == col, do: v end)

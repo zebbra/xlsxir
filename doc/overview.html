@@ -70,15 +70,18 @@ end</code></pre>
   [ {:xlsxir, github: &quot;kennellroxco/xlsxir&quot;} ]
 end</code></pre>
 <h2>Basic Usage</h2>
-<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS table via the <code class="inline">Xlsxir.extract/2</code> function:</p>
-<pre><code class="elixir">Xlsxir.extract(path, index)</code></pre>
+<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS table via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> function:</p>
+<pre><code class="elixir">Xlsxir.extract(path, index, timer \\ false)</code></pre>
 <p>Argument descriptions:</p>
 <ul>
 <li><code class="inline">path</code> the path of the file to be parsed in <code class="inline">string</code> format
 </li>
 <li><code class="inline">index</code> is the position of the worksheet you wish to parse (zero-based index)
 </li>
+<li><code class="inline">timer</code> is a boolean flag that controls an extraction timer that returns time elapsed when set to <code class="inline">true</code>. Defalut value is <code class="inline">false</code>.
+</li>
 </ul>
+<p>Upon successful completion, the extraction process returns <code class="inline">:ok</code> with <code class="inline">timer</code> set to <code class="inline">false</code>, or <code class="inline">{:ok, time_elapsed}</code> with <code class="inline">timer</code> set to <code class="inline">true</code>.</p>
 <p>The extracted worksheet data can be accessed using any of the following functions:</p>
 <ul>
 <li><a href="Xlsxir.html#get_list/0"><code class="inline">Xlsxir.get_list/0</code></a> - Returns entire worksheet data in the form of a list of row lists (i.e. <code class="inline">[[row 1 values], [row 2 values], ...]</code>)

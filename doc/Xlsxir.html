@@ -233,11 +233,11 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
 <h2>Example</h2>
 <p>Extract first worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
-:ok
-iex&gt; Xlsxir.Worksheet.alive?
-true
-iex&gt; Xlsxir.close
-:ok</code></pre>
+  :ok
+  iex&gt; Xlsxir.Worksheet.alive?
+  true
+  iex&gt; Xlsxir.close
+  :ok</code></pre>
 
   </section>
 </div>
@@ -274,12 +274,12 @@ this would be an expensive task for a large worksheet.</p>
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  :ok
-  iex&gt; Xlsxir.get_cell(“A1”)
-  “string one”
-  iex&gt; Xlsxir.close
-  :ok</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; Xlsxir.get_cell(&quot;A1&quot;)
+&quot;string one&quot;
+iex&gt; Xlsxir.close
+:ok</code></pre>
 </li>
 </ul>
 
@@ -317,12 +317,12 @@ this would be an expensive task for a large worksheet.</p>
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  :ok
-  iex&gt; Xlsxir.get_col(“A”)
-  ["string one"]
-  iex&gt; Xlsxir.close
-  :ok</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; Xlsxir.get_col(&quot;A&quot;)
+[&quot;string one&quot;]
+iex&gt; Xlsxir.close
+:ok</code></pre>
 </li>
 </ul>
 
@@ -355,12 +355,12 @@ this would be an expensive task for a large worksheet.</p>
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  :ok
-  iex&gt; Xlsxir.get_list
-  [["string one", "string two", 10, 20, {2016, 1, 1}]]
-  iex&gt; Xlsxir.close
-  :ok</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; Xlsxir.get_list
+[[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]]
+iex&gt; Xlsxir.close
+:ok</code></pre>
 </li>
 </ul>
 
@@ -393,12 +393,12 @@ this would be an expensive task for a large worksheet.</p>
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  :ok
-  iex&gt; Xlsxir.get_map
-  %{ “A1” =&gt; “string one”, “B1” =&gt; “string two”, “C1” =&gt; 10, “D1” =&gt; 20, “E1” =&gt; {2016,1,1}}
-  iex&gt; Xlsxir.close
-  :ok</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; Xlsxir.get_map
+%{ &quot;A1&quot; =&gt; &quot;string one&quot;, &quot;B1&quot; =&gt; &quot;string two&quot;, &quot;C1&quot; =&gt; 10, &quot;D1&quot; =&gt; 20, &quot;E1&quot; =&gt; {2016,1,1}}
+iex&gt; Xlsxir.close
+:ok</code></pre>
 </li>
 </ul>
 
@@ -436,12 +436,12 @@ this would be an expensive task for a large worksheet.</p>
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<p>  iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
-  :ok
-  iex&gt; Xlsxir.get_row(1)
-  ["string one", "string two", 10, 20, {2016, 1, 1}]
-  iex&gt; Xlsxir.close
-  :ok</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; Xlsxir.get_row(1)
+[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]
+iex&gt; Xlsxir.close
+:ok</code></pre>
 </li>
 </ul>
 

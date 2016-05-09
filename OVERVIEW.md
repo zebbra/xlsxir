@@ -22,15 +22,18 @@ end
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS table via the `Xlsxir.extract/2` function:
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS table via the `Xlsxir.extract/3` function:
 
 ```elixir
-Xlsxir.extract(path, index)
+Xlsxir.extract(path, index, timer \\ false)
 ```
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
 - `index` is the position of the worksheet you wish to parse (zero-based index)
+- `timer` is a boolean flag that controls an extraction timer that returns time elapsed when set to `true`. Defalut value is `false`.
+
+Upon successful completion, the extraction process returns `:ok` with `timer` set to `false`, or `{:ok, time_elapsed}` with `timer` set to `true`.
 
 The extracted worksheet data can be accessed using any of the following functions:
 - `Xlsxir.get_list/0` - Returns entire worksheet data in the form of a list of row lists (i.e. `[[row 1 values], [row 2 values], ...]`)

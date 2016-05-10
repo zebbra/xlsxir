@@ -28,20 +28,20 @@ defmodule Xlsxir.SaxParser do
     The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize the `get_at/1` function of each ETS module to pull a sample of the parsed 
     data. Keep in mind that the worksheet data is saved to the ETS table as a list of row lists, so the `Xlsxir.Worksheet.get_at/1` function will return a full row of values.
 
-        iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/styles.xml", :style)
-        :ok
-        iex> Xlsxir.Style.get_at(0)
-        nil
-        iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/sharedStrings.xml", :string)
-        :ok
-        iex> Xlsxir.SharedString.get_at(0)
-        "string one"
-        iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/worksheets/sheet1.xml", :worksheet)
-        :ok
-        iex> Xlsxir.Worksheet.get_at(0)
-        [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]
-        iex> Xlsxir.Worksheet.delete
-        true
+          iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/styles.xml", :style)
+          :ok
+          iex> Xlsxir.Style.get_at(0)
+          nil
+          iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/sharedStrings.xml", :string)
+          :ok
+          iex> Xlsxir.SharedString.get_at(0)
+          "string one"
+          iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/worksheets/sheet1.xml", :worksheet)
+          :ok
+          iex> Xlsxir.Worksheet.get_at(0)
+          [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]
+          iex> Xlsxir.Worksheet.delete
+          true
   """
   def parse(path, type) do
     case type do

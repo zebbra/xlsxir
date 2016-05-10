@@ -4,6 +4,9 @@ defmodule Xlsxir.Worksheet do
   and retreive data, and ultimately kill the process. 
   """
 
+  @doc """
+  Initialize new ETS table with `[:set, :protected, :named_table]` options.
+  """
   def new do
     :ets.new(:worksheet, [:set, :protected, :named_table])
   end

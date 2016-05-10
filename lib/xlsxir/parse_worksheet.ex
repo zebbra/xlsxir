@@ -17,8 +17,8 @@ defmodule Xlsxir.ParseWorksheet do
 
   ## Parameters
 
-  - pattern - the XML pattern of the event to match upon
-  - state - the state of the `%RowState{}` struct which temporarily holds applicable data of the current row being parsed
+  - `arg1` - the XML pattern of the event to match upon
+  - `state` - the state of the `%RowState{}` struct which temporarily holds applicable data of the current row being parsed
 
   ## Example
   Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. `[["A1", "string one"], ...]`).

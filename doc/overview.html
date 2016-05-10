@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir – Xlsxir v1.0.0</title>
+    <title>OVERVIEW – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -59,8 +59,9 @@
 
 
 <h1>Xlsxir</h1>
-<p>Xlsxir is an Elixir library that parses <code class="inline">.xlsx</code> files using Simple API for XML (SAX) parsing via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library, extracts the data to an Erlang Term Storage (ETS) table and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  </p>
-<h2 id="installation"> Installation</h2><p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
+<p>Xlsxir is an Elixir library that parses <code class="inline">.xlsx</code> files using Simple API for XML (SAX) parsing via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  </p>
+<h2>Installation</h2>
+<p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
 <pre><code class="elixir">def deps do
   [ {:xlsxir, &quot;~&gt; 1.0.0&quot;} ]
 end</code></pre>
@@ -68,7 +69,8 @@ end</code></pre>
 <pre><code class="elixir">def deps do
   [ {:xlsxir, github: &quot;kennellroxco/xlsxir&quot;} ]
 end</code></pre>
-<h2 id="basic-usage"> Basic Usage</h2><p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS table via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> function:</p>
+<h2>Basic Usage</h2>
+<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS process via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> function:</p>
 <pre><code class="elixir">Xlsxir.extract(path, index, timer \\ false)</code></pre>
 <p>Argument descriptions:</p>
 <ul>
@@ -90,14 +92,17 @@ end</code></pre>
 </li>
 <li><a href="Xlsxir.html#get_row/1"><code class="inline">Xlsxir.get_row/1</code></a> - Returns values of specified row (i.e. <code class="inline">1</code> returns the first row of data)
 </li>
-<li><code class="inline">Xlsxir.get_column/1</code> - Returns values of specified column (i.e <code class="inline">&quot;A&quot;</code> returns the first column of data)
+<li><a href="Xlsxir.html#get_col/1"><code class="inline">Xlsxir.get_col/1</code></a> - Returns values of specified column (i.e <code class="inline">&quot;A&quot;</code> returns the first column of data)
 </li>
 </ul>
-<p>Once the table data is no longer needed, run <code class="inline">Xlsxir.close</code> to delete the ETS table and free memory.</p>
+<p>Once the table data is no longer needed, run <code class="inline">Xlsxir.close</code> to delete the ETS process and free memory.</p>
 <p>Refer to <a href="https://hexdocs.pm/xlsxir/index.html">Xlsxir documentation</a> for more detailed examples. </p>
-<h2 id="considerations"> Considerations</h2><p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>
-<h2 id="contributing"> Contributing</h2><p>Contributions are encouraged. Feel free to fork the <a href="https://github.com/kennellroxco/xlsxir">repo</a>, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
-<h2 id="bug-reporting"> Bug Reporting</h2><p>Please report any bugs or request future enhancements via the <a href="https://github.com/kennellroxco/xlsxir/issues">Issues</a> page. </p>
+<h2>Considerations</h2>
+<p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>
+<h2>Contributing</h2>
+<p>Contributions are encouraged. Feel free to fork the <a href="https://github.com/kennellroxco/xlsxir">repo</a>, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
+<h2>Bug Reporting</h2>
+<p>Please report any bugs or request future enhancements via the <a href="https://github.com/kennellroxco/xlsxir/issues">Issues</a> page. </p>
 
     <footer class="footer">
       <p>

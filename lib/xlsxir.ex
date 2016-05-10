@@ -2,11 +2,11 @@ defmodule Xlsxir do
   alias Xlsxir.{Unzip, SaxParser, Worksheet, Timer}
 
   @moduledoc """
-  Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) table and provides various functions for accessing the data.
+  Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.
   """
 
   @doc """
-  Extracts worksheet data contained in the specified `.xlsx` file to an ETS table named `:worksheet` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction 
+  Extracts worksheet data contained in the specified `.xlsx` file to an ETS process named `:worksheet` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction 
   returns `:ok` with the timer argument set to false and returns a tuple of `{:ok, time}` where time is a list containing time elapsed during the extraction process 
   (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true. 
 
@@ -53,7 +53,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS table and returns data formatted as a list of row value lists.
+  Accesses `:worksheet` ETS process and returns data formatted as a list of row value lists.
 
   ## Example
   An example file named `test.xlsx` located in `./test/test_data` containing the following:
@@ -80,7 +80,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS table and returns data formatted as a map of cell references and values.
+  Accesses `:worksheet` ETS process and returns data formatted as a map of cell references and values.
 
   ## Example
   An example file named `test.xlsx` located in `./test/test_data` containing the following:
@@ -108,7 +108,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS table and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
+  Accesses `:worksheet` ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
   this would be an expensive task for a large worksheet.
 
   ## Parameters
@@ -135,7 +135,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS table and returns values of specified row in a `list`. Blank rows are not counted.
+  Accesses `:worksheet` ETS process and returns values of specified row in a `list`. Blank rows are not counted.
 
   ## Parameters
   - `row` - Reference name of row to be returned in `integer` format (i.e. `1`)
@@ -160,7 +160,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS table and returns values of specified column in a `list`.
+  Accesses `:worksheet` ETS process and returns values of specified column in a `list`.
 
   ## Parameters
   - `col` - Reference name of column to be returned in `string` format (i.e. `"A"`)
@@ -186,7 +186,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Deletes ETS table `:worksheet` and returns `:ok` if successful.
+  Deletes ETS process `:worksheet` and returns `:ok` if successful.
 
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:

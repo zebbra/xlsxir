@@ -63,7 +63,7 @@
         Xlsxir.Timer
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L139" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L202" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -97,11 +97,18 @@ list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>).</p>
     <a href="#start/0">start()</a>
   </div>
   
+    <div class="summary-synopsis"><p>Initiates a new <code class="inline">Time</code> Agent process. Records current time via <code class="inline">:erlang.timestamp</code> and saves it to the Agent process</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#stop/0">stop()</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Records current time via <code class="inline">:erlang.timestamp</code> and compares it to the timestamp held by the <code class="inline">Time</code> Agent process to determin the amount of time elapsed. Returns the time elapsed in the format of 
+<code class="inline">[hour, minute, second, microsecond]</code></p>
+</div>
   
 </div>
 
@@ -132,14 +139,15 @@ list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>).</p>
     </a>
     <span class="signature">start()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L145" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L211" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Initiates a new <code class="inline">Time</code> Agent process. Records current time via <code class="inline">:erlang.timestamp</code> and saves it to the Agent process. </p>
+
   </section>
 </div>
 <div class="detail" id="stop/0">
@@ -149,14 +157,16 @@ list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>).</p>
     </a>
     <span class="signature">stop()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L151" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L221" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Records current time via <code class="inline">:erlang.timestamp</code> and compares it to the timestamp held by the <code class="inline">Time</code> Agent process to determin the amount of time elapsed. Returns the time elapsed in the format of 
+<code class="inline">[hour, minute, second, microsecond]</code>. </p>
+
   </section>
 </div>
 

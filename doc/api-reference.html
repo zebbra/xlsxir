@@ -77,14 +77,14 @@
         <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.html">Xlsxir</a></div>
   
-    <div class="summary-synopsis"><p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) table and provides various functions for accessing the data</p>
+    <div class="summary-synopsis"><p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.ConvertDate.html">Xlsxir.ConvertDate</a></div>
   
-    <div class="summary-synopsis"><p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
+    <div class="summary-synopsis"><p>Converts an ISO 8601 date format serial number, in <code class="inline">char_list</code> format, to a date formatted in 
 Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>)</p>
 </div>
   
@@ -92,7 +92,7 @@ Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code clas
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Index.html">Xlsxir.Index</a></div>
   
-    <div class="summary-synopsis"><p>An <code class="inline">Agent</code> process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
+    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
 and ultimately kill the process</p>
 </div>
   
@@ -105,10 +105,6 @@ and ultimately kill the process</p>
   
 </div>
 <div class="summary-row">
-  <div class="summary-signature"><a href="Xlsxir.ParseString.StringState.html">Xlsxir.ParseString.StringState</a></div>
-  
-</div>
-<div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.ParseStyle.html">Xlsxir.ParseStyle</a></div>
   
     <div class="summary-synopsis"><p>Holds the SAX event instructions for parsing style data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
@@ -116,18 +112,10 @@ and ultimately kill the process</p>
   
 </div>
 <div class="summary-row">
-  <div class="summary-signature"><a href="Xlsxir.ParseStyle.CustomStyleState.html">Xlsxir.ParseStyle.CustomStyleState</a></div>
-  
-</div>
-<div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.ParseWorksheet.html">Xlsxir.ParseWorksheet</a></div>
   
     <div class="summary-synopsis"><p>Holds the SAX event instructions for parsing worksheet data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
 </div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature"><a href="Xlsxir.ParseWorksheet.RowState.html">Xlsxir.ParseWorksheet.RowState</a></div>
   
 </div>
 <div class="summary-row">
@@ -150,7 +138,7 @@ and retreive data, and ultimately kill the process</p>
   <div class="summary-signature"><a href="Xlsxir.Style.html">Xlsxir.Style</a></div>
   
     <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:styles</code> which holds state for data parsed from <code class="inline">styles.xml</code>. Provides functions to create the process, add and retreive data, 
-and ultimately kill the process. Also includes a temporary <code class="inline">Agent</code> process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
+and ultimately kill the process. Also includes a temporary Agent process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
 hold state of each <code class="inline">NumFmtId</code> contained within the file</p>
 </div>
   

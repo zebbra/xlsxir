@@ -6,26 +6,24 @@ defmodule Xlsxir.ParseWorksheet do
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
   
-  defmodule RowState do
-    defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: ""
-  end
+  defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: ""
   
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
   worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the `Xlsxir.Worksheet` module 
-  which contains an ETS table that was started by `Xlsxir.SaxParser.parse/2`. 
+  which contains an ETS process that was started by `Xlsxir.SaxParser.parse/2`. 
 
   ## Parameters
 
   - `arg1` - the XML pattern of the event to match upon
-  - `state` - the state of the `%RowState{}` struct which temporarily holds applicable data of the current row being parsed
+  - `state` - the state of the `%Xlsxir.ParseWorksheet{}` struct which temporarily holds applicable data of the current row being parsed
 
   ## Example
   Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. `[["A1", "string one"], ...]`).
   """
   def sax_event_handler(:startDocument, _state), do: Index.new
 
-  def sax_event_handler({:startElement,_,'row',_,_}, _state), do: %RowState{}
+  def sax_event_handler({:startElement,_,'row',_,_}, _state), do: %Xlsxir.ParseWorksheet{}
 
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, state) do
     a = Enum.map(xml_attr, fn(attr) -> 
@@ -55,7 +53,7 @@ defmodule Xlsxir.ParseWorksheet do
     if state == nil, do: nil, else: %{state | value: value}
   end
 
-  def sax_event_handler({:endElement,_,'c',_}, %RowState{row: row} = state) do
+  def sax_event_handler({:endElement,_,'c',_}, %Xlsxir.ParseWorksheet{row: row} = state) do
     cell_value = format_cell_value([state.data_type, state.num_style, state.value])
 
 
@@ -82,14 +80,14 @@ defmodule Xlsxir.ParseWorksheet do
     case list do
       [ nil, nil, nil]  -> nil                                                                 # Empty cell without assigned attribute
       [   _,    _, ""]  -> ""                                                                  # Empty cell with assigned attribute
-      [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Excel type error
-      [ 's',    _,  i]  -> SharedString.get_at(List.to_integer(i))                             # Excel type string
-      [ nil,  nil,  n]  -> convert_char_number(n)                                              # Excel type number
+      [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Type error
+      [ 's',    _,  i]  -> SharedString.get_at(List.to_integer(i))                             # Type string
+      [ nil,  nil,  n]  -> convert_char_number(n)                                              # Type number
       [ 'n',  nil,  n]  -> convert_char_number(n)
-      [ nil,  'd',  d]  -> ConvertDate.from_excel(d)                                           # Excel type date
-      [ 'n',  'd',  d]  -> ConvertDate.from_excel(d)
-      ['str', nil,  s]  -> List.to_string(s)                                                   # Excel type formula w/ string 
-      _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped Excel type
+      [ nil,  'd',  d]  -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
+      [ 'n',  'd',  d]  -> ConvertDate.from_serial(d)
+      ['str', nil,  s]  -> List.to_string(s)                                                   # Type formula w/ string 
+      _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
     end
   end
 

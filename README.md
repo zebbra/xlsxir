@@ -1,6 +1,6 @@
 # Xlsxir
 
-Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) table and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  
+Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  
 
 ## Installation
 
@@ -22,7 +22,7 @@ end
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS table via the `Xlsxir.extract/3` function:
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3` function:
 
 ```elixir
 Xlsxir.extract(path, index, timer \\ false)
@@ -40,9 +40,9 @@ The extracted worksheet data can be accessed using any of the following function
 - `Xlsxir.get_map/0` - Returns entire worksheet data in the form of a map of cell names and values (i.e. `%{"A1" => value, "A2" => value, ...}`)
 - `Xlsxir.get_cell/1` - Returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)
 - `Xlsxir.get_row/1` - Returns values of specified row (i.e. `1` returns the first row of data)
-- `Xlsxir.get_column/1` - Returns values of specified column (i.e `"A"` returns the first column of data)
+- `Xlsxir.get_col/1` - Returns values of specified column (i.e `"A"` returns the first column of data)
 
-Once the table data is no longer needed, run `Xlsxir.close` to delete the ETS table and free memory.
+Once the table data is no longer needed, run `Xlsxir.close` to delete the ETS process and free memory.
 
 Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more detailed examples. 
 

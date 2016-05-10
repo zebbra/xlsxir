@@ -5,16 +5,22 @@ defmodule Xlsxir.Worksheet do
   """
 
   @doc """
-  Initialize new ETS table with `[:set, :protected, :named_table]` options.
+  Initializes new ETS process with `[:set, :protected, :named_table]` options.
   """
   def new do
     :ets.new(:worksheet, [:set, :protected, :named_table])
   end
 
+  @doc """
+  Stores a row at a given index in the ETS process.
+  """
   def add_row(row, index) do
     :worksheet |> :ets.insert({index, row})
   end
 
+  @doc """
+  Returns a row at a given index of the ETS process. 
+  """
   def get_at(index) do
     row = :ets.lookup(:worksheet, index)
 
@@ -28,10 +34,16 @@ defmodule Xlsxir.Worksheet do
     end
   end
 
+  @doc """
+  Deletes the ETS process from memory.
+  """
   def delete do
     if alive?, do: :ets.delete(:worksheet), else: true
   end
 
+  @doc """
+  Validates whether the ETS process is active, returning true or false. 
+  """
   def alive? do
     Enum.member?(:ets.all, :worksheet)
   end
@@ -43,14 +55,23 @@ defmodule Xlsxir.SharedString do
   and retreive data, and ultimately kill the process.
   """
 
+  @doc """
+  Initializes new ETS process with `[:set, :protected, :named_table]` options.
+  """
   def new do
     :ets.new(:sharedstrings, [:set, :protected, :named_table])
   end
 
+  @doc """
+  Stores a sharedstring at a given index in the ETS process.
+  """
   def add_shared_string(shared_string, index) do
     :sharedstrings |> :ets.insert({index, shared_string})
   end
 
+  @doc """
+  Returns a sharedstring at a given index of the ETS process. 
+  """
   def get_at(index) do
     :ets.lookup(:sharedstrings, index)
     |> List.first
@@ -58,10 +79,16 @@ defmodule Xlsxir.SharedString do
     |> Enum.at(1)
   end
 
+  @doc """
+  Deletes the ETS process from memory.
+  """
   def delete do
     :ets.delete(:sharedstrings)
   end
 
+  @doc """
+  Validates whether the ETS process is active, returning true or false. 
+  """
   def alive? do
     Enum.member?(:ets.all, :sharedstrings)
   end
@@ -70,33 +97,51 @@ end
 defmodule Xlsxir.Style do
   @moduledoc """
   An Erlang Term Storage (ETS) process named `:styles` which holds state for data parsed from `styles.xml`. Provides functions to create the process, add and retreive data, 
-  and ultimately kill the process. Also includes a temporary `Agent` process named `NumFmtIds` which is utilized during the parsing of the `styles.xml` file to temporarily 
+  and ultimately kill the process. Also includes a temporary Agent process named `NumFmtIds` which is utilized during the parsing of the `styles.xml` file to temporarily 
   hold state of each `NumFmtId` contained within the file. 
   """
 
+  @doc """
+  Initializes new ETS process with `[:set, :protected, :named_table]` options. Additionally, initiates an Agent process to temporarily hold `numFmtId`s for `Xlsxir.ParseStyle`. 
+  """
   def new do
     Agent.start_link(fn -> [] end, name: NumFmtIds)
     :ets.new(:styles, [:set, :protected, :named_table])
   end
 
   # functions for `NumFmtIds`
+  @doc """
+  Adds a `numFmtId` to the `NumFmtIds` Agent process.
+  """
   def add_id(num_fmt_id) do 
     Agent.update(NumFmtIds, &(Enum.into([num_fmt_id], &1)))
   end
 
+  @doc """
+  Returns a  list of `numFmtId`s stored in the `NumFmtIds` Agent process.
+  """
   def get_id do
     Agent.get(NumFmtIds, &(&1))
   end
 
+  @doc """
+  Deletes `NumFmtIds` Agent process.
+  """
   def delete_id do
     Agent.stop(NumFmtIds)
   end
 
   # functions for `:styles`
+  @doc """
+  Stores a style type at a given index in the ETS process.
+  """
   def add_style(style, index) do
     :styles |> :ets.insert({index, style})
   end
 
+  @doc """
+  Returns a style type at a given index of the ETS process. 
+  """
   def get_at(index) do
     :ets.lookup(:styles, index)
     |> List.first
@@ -104,10 +149,16 @@ defmodule Xlsxir.Style do
     |> Enum.at(1)
   end
 
+  @doc """
+  Deletes the ETS process from memory.
+  """
   def delete do
     :ets.delete(:styles)
   end
 
+  @doc """
+  Validates whether the ETS process is active, returning true or false. 
+  """
   def alive? do
     Enum.member?(:ets.all, :styles)
   end
@@ -115,22 +166,34 @@ end
 
 defmodule Xlsxir.Index do
   @moduledoc """
-  An `Agent` process named `Index` which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
+  An Agent process named `Index` which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
   and ultimately kill the process.
   """
 
+  @doc """
+  Initiates a new `Index` Agent process with a value of `0`.
+  """
   def new do
     Agent.start_link(fn -> 0 end, name: Index)
   end
 
+  @doc """
+  Increments active `Index` Agent process by `1`.
+  """
   def increment_1 do
     Agent.update(Index, &(&1 + 1))
   end
 
+  @doc """
+  Returns current value of `Index` Agent process
+  """
   def get do
     Agent.get(Index, &(&1))
   end
 
+  @doc """
+  Deletes `Index` Agent process
+  """
   def delete do
     Agent.stop(Index)
   end
@@ -142,12 +205,19 @@ defmodule Xlsxir.Timer do
   list (i.e. `[hour, minute, second, microsecond]`).
   """
 
+  @doc """
+  Initiates a new `Time` Agent process. Records current time via `:erlang.timestamp` and saves it to the Agent process. 
+  """
   def start do
     Agent.start_link(fn -> [] end, name: Time)
     {_, s, ms} = :erlang.timestamp
     Agent.update(Time, &(Enum.into([s, ms], &1)))
   end
 
+  @doc """
+  Records current time via `:erlang.timestamp` and compares it to the timestamp held by the `Time` Agent process to determin the amount of time elapsed. Returns the time elapsed in the format of 
+  `[hour, minute, second, microsecond]`. 
+  """
   def stop do
     {_, s, ms} = :erlang.timestamp
 

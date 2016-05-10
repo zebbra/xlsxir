@@ -71,7 +71,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
+          <p>Converts an ISO 8601 date format serial number, in <code class="inline">char_list</code> format, to a date formatted in 
 Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>).</p>
 
         </section>
@@ -97,16 +97,16 @@ Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code clas
     <a href="#convert_char_number/1">convert_char_number(number)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Converts Excel number to either integer or float</p>
+    <div class="summary-synopsis"><p>Converts extracted number in <code class="inline">char_list</code> format to either <code class="inline">integer</code> or <code class="inline">float</code></p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#from_excel/1">from_excel(serial)</a>
+    <a href="#from_serial/1">from_serial(serial)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
+    <div class="summary-synopsis"><p>Receives an ISO 8601 date format serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
 type format</p>
 </div>
   
@@ -146,16 +146,16 @@ type format</p>
   </div>
   
   <section class="docstring">
-    <p>Converts Excel number to either integer or float.</p>
+    <p>Converts extracted number in <code class="inline">char_list</code> format to either <code class="inline">integer</code> or <code class="inline">float</code>.</p>
 
   </section>
 </div>
-<div class="detail" id="from_excel/1">
+<div class="detail" id="from_serial/1">
   <div class="detail-header">
-    <a href="#from_excel/1" class="detail-link" title="Link to this function">
+    <a href="#from_serial/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">from_excel(serial)</span>
+    <span class="signature">from_serial(serial)</span>
       
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_date.ex#L20" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -164,15 +164,15 @@ type format</p>
   </div>
   
   <section class="docstring">
-    <p>Receives an Excel date serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
+    <p>Receives an ISO 8601 date format serial number and returns a date formatted in Erlang <code class="inline">:calendar.date()</code>
 type format.</p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">serial</code> - Excel date serial in <code class="inline">char_list</code> format (i.e. 4/30/75 as ‘27514’)
+<li><code class="inline">serial</code> - ISO 8601 date format serial in <code class="inline">char_list</code> format (i.e. 4/30/75 as ‘27514’)
 </li>
 </ul>
 <h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDate.from_excel(&#39;27514&#39;)
+<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDate.from_serial(&#39;27514&#39;)
 {1975, 4, 30}</code></pre>
 
   </section>

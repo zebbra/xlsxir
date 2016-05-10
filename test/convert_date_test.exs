@@ -24,7 +24,7 @@ defmodule ConvertDateTest do
   end
 
   test "first day of every month in non-leap year (2015)" do
-    assert Enum.map(test_one_data, &from_excel/1) == test_one_results
+    assert Enum.map(test_one_data, &from_serial/1) == test_one_results
   end
 
   def test_two_data, do: ['42035', '42063', '42094', '42124', '42155', '42185', '42216', '42247', '42277', '42308', '42338', '42369']
@@ -47,7 +47,7 @@ defmodule ConvertDateTest do
   end
 
   test "last day of every month in non-leap year (2015)" do
-    assert Enum.map(test_two_data, &from_excel/1) == test_two_results
+    assert Enum.map(test_two_data, &from_serial/1) == test_two_results
   end
 
   def test_three_data, do: ['42019', '42050', '42078', '42109', '42139', '42170', '42200', '42231', '42262', '42292', '42323', '42353']
@@ -70,7 +70,7 @@ defmodule ConvertDateTest do
   end
 
   test "middle of every month in non-leap year (2015)" do
-    assert Enum.map(test_three_data, &from_excel/1) == test_three_results
+    assert Enum.map(test_three_data, &from_serial/1) == test_three_results
   end
 
   def test_four_data, do: ['42370', '42401', '42430', '42461', '42491', '42522', '42552', '42583', '42614', '42644', '42675', '42705']
@@ -93,7 +93,7 @@ defmodule ConvertDateTest do
   end
 
   test "first day of every month in leap year (2016)" do
-    assert Enum.map(test_four_data, &from_excel/1) == test_four_results
+    assert Enum.map(test_four_data, &from_serial/1) == test_four_results
   end
 
   def test_five_data, do: ['42400', '42429', '42460', '42490', '42521', '42551', '42582', '42613', '42643', '42674', '42704', '42735']
@@ -116,7 +116,7 @@ defmodule ConvertDateTest do
   end
 
   test "last day of every month in leap year (2016)" do
-    assert Enum.map(test_five_data, &from_excel/1) == test_five_results
+    assert Enum.map(test_five_data, &from_serial/1) == test_five_results
   end
 
   def test_six_data, do: ['42384', '42415', '42444', '42475', '42505', '42536', '42566', '42597', '42628', '42658', '42689', '42719']
@@ -139,7 +139,7 @@ defmodule ConvertDateTest do
   end
 
   test "middle of every month in leap year (2016)" do
-    assert Enum.map(test_six_data, &from_excel/1) == test_six_results
+    assert Enum.map(test_six_data, &from_serial/1) == test_six_results
   end
 
 end

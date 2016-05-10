@@ -9,8 +9,8 @@ defmodule Xlsxir.SaxParser do
   @chunk 10000
 
   @doc """
-  Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An Erlang Term Storage (ETS) table is created to hold the state of data 
-  parsed. Name of ETS table modules that hold data for the aforementioned XML files are `Worksheet`, `Style` and `SharedString` respectively. The style and sharedstring XML files (if they
+  Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data 
+  parsed. Name of ETS process modules that hold data for the aforementioned XML files are `Worksheet`, `Style` and `SharedString` respectively. The style and sharedstring XML files (if they
   exist) must be parsed first in order for the worksheet parser to sucessfully complete.
 
   ## Parameters
@@ -25,8 +25,8 @@ defmodule Xlsxir.SaxParser do
     - cell 'C1' -> integer of 10
     - cell 'D1' -> formula of `=4*5`
     - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
-    The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize the `get_at/1` function of each ETS module to pull a sample of the parsed 
-    data. Keep in mind that the worksheet data is saved to the ETS table as a list of row lists, so the `Xlsxir.Worksheet.get_at/1` function will return a full row of values.
+    The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize the `get_at/1` function of each ETS process module to pull a sample of the parsed 
+    data. Keep in mind that the worksheet data is stored in the ETS process as a list of row lists, so the `Xlsxir.Worksheet.get_at/1` function will return a full row of values.
 
           iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/styles.xml", :style)
           :ok

@@ -97,7 +97,7 @@
   </div>
   
     <div class="summary-synopsis"><p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
-sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS table opened by 
+sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS process started by 
 <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
 </div>
   
@@ -130,7 +130,7 @@ sharedString XML file, ultimately sending each parsed string to the <a href="Xls
     </a>
     <span class="signature">sax_event_handler(arg1, state)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_string.ex#L26" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_string.ex#L24" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -138,13 +138,13 @@ sharedString XML file, ultimately sending each parsed string to the <a href="Xls
   
   <section class="docstring">
     <p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
-sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS table opened by 
+sharedString XML file, ultimately sending each parsed string to the <a href="Xlsxir.SharedString.html"><code class="inline">Xlsxir.SharedString</code></a> module which contains an ETS process started by 
 <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. </p>
 <h2>Parameters</h2>
 <ul>
 <li>pattern - the XML pattern of the event to match on
 </li>
-<li>state - current state of the <code class="inline">%StringState{}</code> struct
+<li>state - current state of the <code class="inline">%Xlsxir.ParseString{}</code> struct
 </li>
 </ul>
 <h2>Example</h2>

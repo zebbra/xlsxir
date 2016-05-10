@@ -63,7 +63,7 @@
         Xlsxir.Style
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L70" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L97" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -72,7 +72,7 @@
       
         <section id="moduledoc" class="docstring">
           <p>An Erlang Term Storage (ETS) process named <code class="inline">:styles</code> which holds state for data parsed from <code class="inline">styles.xml</code>. Provides functions to create the process, add and retreive data, 
-and ultimately kill the process. Also includes a temporary <code class="inline">Agent</code> process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
+and ultimately kill the process. Also includes a temporary Agent process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
 hold state of each <code class="inline">NumFmtId</code> contained within the file. </p>
 
         </section>
@@ -98,11 +98,17 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     <a href="#add_id/1">add_id(num_fmt_id)</a>
   </div>
   
+    <div class="summary-synopsis"><p>Adds a <code class="inline">numFmtId</code> to the <code class="inline">NumFmtIds</code> Agent process</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#add_style/2">add_style(style, index)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Stores a style type at a given index in the ETS process</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -110,11 +116,17 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     <a href="#alive?/0">alive?()</a>
   </div>
   
+    <div class="summary-synopsis"><p>Validates whether the ETS process is active, returning true or false</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#delete/0">delete()</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Deletes the ETS process from memory</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -122,11 +134,17 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     <a href="#delete_id/0">delete_id()</a>
   </div>
   
+    <div class="summary-synopsis"><p>Deletes <code class="inline">NumFmtIds</code> Agent process</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#get_at/1">get_at(index)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Returns a style type at a given index of the ETS process</p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -134,11 +152,17 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     <a href="#get_id/0">get_id()</a>
   </div>
   
+    <div class="summary-synopsis"><p>Returns a  list of <code class="inline">numFmtId</code>s stored in the <code class="inline">NumFmtIds</code> Agent process</p>
+</div>
+  
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#new/0">new()</a>
   </div>
+  
+    <div class="summary-synopsis"><p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options. Additionally, initiates an Agent process to temporarily hold <code class="inline">numFmtId</code>s for <a href="Xlsxir.ParseStyle.html"><code class="inline">Xlsxir.ParseStyle</code></a></p>
+</div>
   
 </div>
 
@@ -169,14 +193,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">add_id(num_fmt_id)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L83" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L116" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Adds a <code class="inline">numFmtId</code> to the <code class="inline">NumFmtIds</code> Agent process.</p>
+
   </section>
 </div>
 <div class="detail" id="add_style/2">
@@ -186,14 +211,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">add_style(style, index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L96" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L138" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Stores a style type at a given index in the ETS process.</p>
+
   </section>
 </div>
 <div class="detail" id="alive?/0">
@@ -203,14 +229,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">alive?()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L111" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L162" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Validates whether the ETS process is active, returning true or false. </p>
+
   </section>
 </div>
 <div class="detail" id="delete/0">
@@ -220,14 +247,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">delete()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L107" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L155" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Deletes the ETS process from memory.</p>
+
   </section>
 </div>
 <div class="detail" id="delete_id/0">
@@ -237,14 +265,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">delete_id()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L91" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L130" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Deletes <code class="inline">NumFmtIds</code> Agent process.</p>
+
   </section>
 </div>
 <div class="detail" id="get_at/1">
@@ -254,14 +283,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">get_at(index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L100" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L145" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Returns a style type at a given index of the ETS process. </p>
+
   </section>
 </div>
 <div class="detail" id="get_id/0">
@@ -271,14 +301,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">get_id()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L87" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L123" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Returns a  list of <code class="inline">numFmtId</code>s stored in the <code class="inline">NumFmtIds</code> Agent process.</p>
+
   </section>
 </div>
 <div class="detail" id="new/0">
@@ -288,14 +319,15 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
     </a>
     <span class="signature">new()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L77" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L107" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    
+    <p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options. Additionally, initiates an Agent process to temporarily hold <code class="inline">numFmtId</code>s for <a href="Xlsxir.ParseStyle.html"><code class="inline">Xlsxir.ParseStyle</code></a>. </p>
+
   </section>
 </div>
 

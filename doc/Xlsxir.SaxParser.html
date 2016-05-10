@@ -97,8 +97,8 @@ parsing algorithm for parsing large XML files in chunks, preventing the need to 
     <a href="#parse/2">parse(path, type)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Parses <code class="inline">xl/worksheets/sheet#{n}.xml</code> at index <code class="inline">n</code>, <code class="inline">xl/styles.xml</code> and <code class="inline">xl/sharedStrings.xml</code> using SAX parsing. An Erlang Term Storage (ETS) table is created to hold the state of data 
-parsed. Name of ETS table modules that hold data for the aforementioned XML files are <code class="inline">Worksheet</code>, <code class="inline">Style</code> and <code class="inline">SharedString</code> respectively. The style and sharedstring XML files (if they
+    <div class="summary-synopsis"><p>Parses <code class="inline">xl/worksheets/sheet#{n}.xml</code> at index <code class="inline">n</code>, <code class="inline">xl/styles.xml</code> and <code class="inline">xl/sharedStrings.xml</code> using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data 
+parsed. Name of ETS process modules that hold data for the aforementioned XML files are <code class="inline">Worksheet</code>, <code class="inline">Style</code> and <code class="inline">SharedString</code> respectively. The style and sharedstring XML files (if they
 exist) must be parsed first in order for the worksheet parser to sucessfully complete</p>
 </div>
   
@@ -138,8 +138,8 @@ exist) must be parsed first in order for the worksheet parser to sucessfully com
   </div>
   
   <section class="docstring">
-    <p>Parses <code class="inline">xl/worksheets/sheet#{n}.xml</code> at index <code class="inline">n</code>, <code class="inline">xl/styles.xml</code> and <code class="inline">xl/sharedStrings.xml</code> using SAX parsing. An Erlang Term Storage (ETS) table is created to hold the state of data 
-parsed. Name of ETS table modules that hold data for the aforementioned XML files are <code class="inline">Worksheet</code>, <code class="inline">Style</code> and <code class="inline">SharedString</code> respectively. The style and sharedstring XML files (if they
+    <p>Parses <code class="inline">xl/worksheets/sheet#{n}.xml</code> at index <code class="inline">n</code>, <code class="inline">xl/styles.xml</code> and <code class="inline">xl/sharedStrings.xml</code> using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data 
+parsed. Name of ETS process modules that hold data for the aforementioned XML files are <code class="inline">Worksheet</code>, <code class="inline">Style</code> and <code class="inline">SharedString</code> respectively. The style and sharedstring XML files (if they
 exist) must be parsed first in order for the worksheet parser to sucessfully complete.</p>
 <h2>Parameters</h2>
 <ul>
@@ -160,8 +160,8 @@ exist) must be parsed first in order for the worksheet parser to sucessfully com
 <li>cell ‘D1’ -&gt; formula of <code class="inline">=4*5</code>
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370
-  The <code class="inline">.xlsx</code> file contents have been extracted to <code class="inline">./test/test_data/test</code>. For purposes of this example, we utilize the <code class="inline">get_at/1</code> function of each ETS module to pull a sample of the parsed 
-  data. Keep in mind that the worksheet data is saved to the ETS table as a list of row lists, so the <a href="Xlsxir.Worksheet.html#get_at/1"><code class="inline">Xlsxir.Worksheet.get_at/1</code></a> function will return a full row of values.</p>
+  The <code class="inline">.xlsx</code> file contents have been extracted to <code class="inline">./test/test_data/test</code>. For purposes of this example, we utilize the <code class="inline">get_at/1</code> function of each ETS process module to pull a sample of the parsed 
+  data. Keep in mind that the worksheet data is stored in the ETS process as a list of row lists, so the <a href="Xlsxir.Worksheet.html#get_at/1"><code class="inline">Xlsxir.Worksheet.get_at/1</code></a> function will return a full row of values.</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.SaxParser.parse(&quot;./test/test_data/test/xl/styles.xml&quot;, :style)
 :ok
 iex&gt; Xlsxir.Style.get_at(0)

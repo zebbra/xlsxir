@@ -71,7 +71,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) table and provides various functions for accessing the data.</p>
+          <p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.</p>
 
         </section>
       
@@ -96,7 +96,7 @@
     <a href="#close/0">close()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Deletes ETS table <code class="inline">:worksheet</code> and returns <code class="inline">:ok</code> if successful</p>
+    <div class="summary-synopsis"><p>Deletes ETS process <code class="inline">:worksheet</code> and returns <code class="inline">:ok</code> if successful</p>
 </div>
   
 </div>
@@ -105,7 +105,7 @@
     <a href="#extract/3">extract(path, index, timer \\ false)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS table named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction 
+    <div class="summary-synopsis"><p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS process named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction 
 returns <code class="inline">:ok</code> with the timer argument set to false and returns a tuple of <code class="inline">{:ok, time}</code> where time is a list containing time elapsed during the extraction process 
 (i.e. <code class="inline">[hour, minute, second, microsecond]</code>) when the timer argument is set to true</p>
 </div>
@@ -116,7 +116,7 @@ returns <code class="inline">:ok</code> with the timer argument set to false and
     <a href="#get_cell/1">get_cell(cell_ref)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS table and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
 this would be an expensive task for a large worksheet</p>
 </div>
   
@@ -126,7 +126,7 @@ this would be an expensive task for a large worksheet</p>
     <a href="#get_col/1">get_col(col)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS table and returns values of specified column in a <code class="inline">list</code></p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified column in a <code class="inline">list</code></p>
 </div>
   
 </div>
@@ -135,7 +135,7 @@ this would be an expensive task for a large worksheet</p>
     <a href="#get_list/0">get_list()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS table and returns data formatted as a list of row value lists</p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns data formatted as a list of row value lists</p>
 </div>
   
 </div>
@@ -144,7 +144,7 @@ this would be an expensive task for a large worksheet</p>
     <a href="#get_map/0">get_map()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS table and returns data formatted as a map of cell references and values</p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns data formatted as a map of cell references and values</p>
 </div>
   
 </div>
@@ -153,7 +153,7 @@ this would be an expensive task for a large worksheet</p>
     <a href="#get_row/1">get_row(row)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS table and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted</p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted</p>
 </div>
   
 </div>
@@ -192,7 +192,7 @@ this would be an expensive task for a large worksheet</p>
   </div>
   
   <section class="docstring">
-    <p>Deletes ETS table <code class="inline">:worksheet</code> and returns <code class="inline">:ok</code> if successful.</p>
+    <p>Deletes ETS process <code class="inline">:worksheet</code> and returns <code class="inline">:ok</code> if successful.</p>
 <h2>Example</h2>
 <p>Extract first worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
@@ -216,7 +216,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS table named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction 
+    <p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS process named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction 
 returns <code class="inline">:ok</code> with the timer argument set to false and returns a tuple of <code class="inline">{:ok, time}</code> where time is a list containing time elapsed during the extraction process 
 (i.e. <code class="inline">[hour, minute, second, microsecond]</code>) when the timer argument is set to true. </p>
 <p>Cells containing formulas in the worksheet are extracted as either a <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the resulting value of the cell. 
@@ -255,7 +255,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS table and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
 this would be an expensive task for a large worksheet.</p>
 <h2>Parameters</h2>
 <ul>
@@ -299,7 +299,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS table and returns values of specified column in a <code class="inline">list</code>.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified column in a <code class="inline">list</code>.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">col</code> - Reference name of column to be returned in <code class="inline">string</code> format (i.e. <code class="inline">&quot;A&quot;</code>)
@@ -342,7 +342,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS table and returns data formatted as a list of row value lists.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns data formatted as a list of row value lists.</p>
 <h2>Example</h2>
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
@@ -380,7 +380,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS table and returns data formatted as a map of cell references and values.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns data formatted as a map of cell references and values.</p>
 <h2>Example</h2>
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
@@ -418,7 +418,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS table and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">row</code> - Reference name of row to be returned in <code class="inline">integer</code> format (i.e. <code class="inline">1</code>)

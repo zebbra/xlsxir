@@ -9,19 +9,17 @@ defmodule Xlsxir.ParseStyle do
   @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,49,59,60,61,62,67,68,69,70]
   @date [14,15,16,17,18,19,20,21,22,27,30,36,45,46,47,50,57]
 
-  defmodule CustomStyleState do
-    defstruct custom_style: %{}, cellxfs: false
-  end
+  defstruct custom_style: %{}, cellxfs: false
 
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
-  styles XML file, ultimately sending each parsed style type to the `Xlsxir.Style` module which contains an ETS table that was started by 
+  styles XML file, ultimately sending each parsed style type to the `Xlsxir.Style` module which contains an ETS process that was started by 
   `Xlsxir.SaxParser.parse/2`. The style types generated are `nil` for numbers and `'d'` for dates. 
 
   ## Parameters
 
   - pattern - the XML pattern of the event to match upon
-  - state - the state of the `%CustomStyleState{}` struct which temporarily holds each `numFmtId` and its associated `formatCode` for custom format types
+  - state - the state of the `%Xlsxir.ParseStyle{}` struct which temporarily holds each `numFmtId` and its associated `formatCode` for custom format types
 
   ## Example
   Recursively sends style types generated from parsing the `xl/sharedStrings.xml` file to `Style.add_style/1`. The data can ultimately
@@ -29,7 +27,7 @@ defmodule Xlsxir.ParseStyle do
   """
   def sax_event_handler(:startDocument, _state) do 
     Index.new
-    %CustomStyleState{}
+    %Xlsxir.ParseStyle{}
   end
 
   def sax_event_handler({:startElement,_,'cellXfs',_,_}, state) do
@@ -56,7 +54,7 @@ defmodule Xlsxir.ParseStyle do
   end
 
   def sax_event_handler({:startElement,_,'numFmt',_,xml_attr}, 
-    %CustomStyleState{custom_style: custom_style} = state) do
+    %Xlsxir.ParseStyle{custom_style: custom_style} = state) do
     
     temp = Enum.reduce(xml_attr, %{}, fn attr, acc -> 
             case attr do
@@ -69,7 +67,7 @@ defmodule Xlsxir.ParseStyle do
     %{state | custom_style: Map.put(custom_style, temp[:id], temp[:cd])}
   end
 
-  def sax_event_handler(:endDocument, %CustomStyleState{custom_style: custom_style}) do
+  def sax_event_handler(:endDocument, %Xlsxir.ParseStyle{custom_style: custom_style}) do
 
     custom_type = custom_style_handler(custom_style)
 

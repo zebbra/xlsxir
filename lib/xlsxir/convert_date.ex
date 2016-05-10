@@ -1,25 +1,23 @@
 defmodule Xlsxir.ConvertDate do
-  import Xlsxir.Format, only: [convert_char_number: 1]
-
   @moduledoc """
-  Converts an Excel date serial number, in `char_list` format, to a date formatted in 
+  Converts an ISO 8601 date format serial number, in `char_list` format, to a date formatted in 
   Erlang `:calendar.date()` type format (i.e. `{year, month, day}`).
   """
 
   @doc """
-  Receives an Excel date serial number and returns a date formatted in Erlang `:calendar.date()`
+  Receives an ISO 8601 date format serial number and returns a date formatted in Erlang `:calendar.date()`
   type format.
 
   ## Parameters
 
-  - `serial` - Excel date serial in `char_list` format (i.e. 4/30/75 as '27514')
+  - `serial` - ISO 8601 date format serial in `char_list` format (i.e. 4/30/75 as '27514')
 
   ## Example
 
-      iex> Xlsxir.ConvertDate.from_excel('27514')
+      iex> Xlsxir.ConvertDate.from_serial('27514')
       {1975, 4, 30}
   """
-  def from_excel(serial) do
+  def from_serial(serial) do
     f_serial = serial
                |> convert_char_number
                |> is_float
@@ -89,5 +87,18 @@ defmodule Xlsxir.ConvertDate do
       days <= 365 + l -> {12, days - 334 - l}
       true            -> raise "Invalid Excel serial date."
     end
+  end
+
+  @doc """
+  Converts extracted number in `char_list` format to either `integer` or `float`.
+  """
+  def convert_char_number(number) do
+    number
+    |> List.to_string
+    |> String.match?(~r/[.]/)
+    |> case do
+        false -> List.to_integer(number)
+        true  -> List.to_float(number)
+       end
   end
 end

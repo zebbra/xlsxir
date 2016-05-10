@@ -4,7 +4,7 @@ defmodule Xlsxir.Mixfile do
   def project do
     [
      app: :xlsxir,
-     version: "0.0.5",
+     version: "1.0.0",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
@@ -35,15 +35,15 @@ defmodule Xlsxir.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [ 
-      { :sweet_xml, "~> 0.6.1" },
       { :ex_doc,    "~> 0.11.4" },
-      { :earmark,   "~> 0.2.1" }
+      { :earmark,   "~> 0.2.1"  },
+      { :erlsom,    "~> 1.4"    }
     ]
   end
 
   defp description do
     """
-    Xlsx file parser. Supports ISO 8601 date formats. Data is returned in either a list or a map.
+    Xlsx file parser. Supports large files and ISO 8601 date formats. Data is extracted to an Erlang Term Storage (ETS) table and is accessed through various functions.
     """
   end
 

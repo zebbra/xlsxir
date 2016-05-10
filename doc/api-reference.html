@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>API Reference – Xlsxir v0.0.5</title>
+    <title>API Reference – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.5
+        v1.0.0
       </h2>
     </div>
     
@@ -58,7 +58,11 @@
   <div id="content" class="content-inner">
 
   <h1>
+<<<<<<< HEAD
+    <small class="visible-xs">Xlsxir v1.0.0</small>
+=======
     <small class="visible-xs">Xlsxir v0.0.5</small>
+>>>>>>> master
     API Reference
   </h1>
 
@@ -77,38 +81,92 @@
         <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.html">Xlsxir</a></div>
   
-    <div class="summary-synopsis"><p>Extracts and parses data from a Microsoft Excel workbook, returning either a list or a map</p>
+    <div class="summary-synopsis"><p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.ConvertDate.html">Xlsxir.ConvertDate</a></div>
   
-    <div class="summary-synopsis"><p>Converts an Excel date serial number, in <code class="inline">char_list</code> format, to a date formatted in 
+    <div class="summary-synopsis"><p>Converts an ISO 8601 date format serial number, in <code class="inline">char_list</code> format, to a date formatted in 
 Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>)</p>
 </div>
   
 </div>
 <div class="summary-row">
-  <div class="summary-signature"><a href="Xlsxir.Format.html">Xlsxir.Format</a></div>
+  <div class="summary-signature"><a href="Xlsxir.Index.html">Xlsxir.Index</a></div>
   
-    <div class="summary-synopsis"><p>Receives parsed excel worksheet data, formats the cell values and returns the data in either a
-list or a map depending on the option chosen</p>
+    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
+and ultimately kill the process</p>
 </div>
   
 </div>
 <div class="summary-row">
-  <div class="summary-signature"><a href="Xlsxir.Parse.html">Xlsxir.Parse</a></div>
+  <div class="summary-signature"><a href="Xlsxir.ParseString.html">Xlsxir.ParseString</a></div>
   
-    <div class="summary-synopsis"><p>Receives Excel xml data via the <code class="inline">extract_xml</code> function of the <code class="inline">Unzip</code> module and parses it</p>
+    <div class="summary-synopsis"><p>Holds the SAX event instructions for parsing sharedString data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.ParseStyle.html">Xlsxir.ParseStyle</a></div>
+  
+    <div class="summary-synopsis"><p>Holds the SAX event instructions for parsing style data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.ParseWorksheet.html">Xlsxir.ParseWorksheet</a></div>
+  
+    <div class="summary-synopsis"><p>Holds the SAX event instructions for parsing worksheet data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.SaxParser.html">Xlsxir.SaxParser</a></div>
+  
+    <div class="summary-synopsis"><p>Provides SAX (Simple API for XML) parsing functionality of the <code class="inline">.xlsx</code> file via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library. SAX (Simple API for XML) is an event-driven 
+parsing algorithm for parsing large XML files in chunks, preventing the need to load the entire DOM into memory. Current chunk size is set to 10,000</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.SharedString.html">Xlsxir.SharedString</a></div>
+  
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:sharedstrings</code> which holds state for data parsed from <code class="inline">sharedStrings.xml</code>. Provides functions to create the process, add 
+and retreive data, and ultimately kill the process</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.Style.html">Xlsxir.Style</a></div>
+  
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:styles</code> which holds state for data parsed from <code class="inline">styles.xml</code>. Provides functions to create the process, add and retreive data, 
+and ultimately kill the process. Also includes a temporary Agent process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
+hold state of each <code class="inline">NumFmtId</code> contained within the file</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.Timer.html">Xlsxir.Timer</a></div>
+  
+    <div class="summary-synopsis"><p>An <code class="inline">Agent</code> process named <code class="inline">Time</code> which holds state for time elapsed since execution. Provides functions to start and stop the process, with the stop function returning the time elapsed as a 
+list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>)</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Unzip.html">Xlsxir.Unzip</a></div>
   
-    <div class="summary-synopsis"><p>Provides validation of accepted file extension types for file path and extracts requested inner files
-from a <code class="inline">.zip</code> file type</p>
+    <div class="summary-synopsis"><p>Provides validation of accepted file extension types for file path, extracts required <code class="inline">.xlsx</code> contents to <code class="inline">./temp</code> and ultimately deletes the <code class="inline">./temp</code> directory and its contents</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.Worksheet.html">Xlsxir.Worksheet</a></div>
+  
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:worksheet</code> which holds state for data parsed from <code class="inline">sheet#{n}.xml</code> at index <code class="inline">n</code>. Provides functions to create the process, add 
+and retreive data, and ultimately kill the process</p>
 </div>
   
 </div>

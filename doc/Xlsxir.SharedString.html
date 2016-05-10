@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir.Format – Xlsxir v0.0.5</title>
+    <title>Xlsxir.SharedString – Xlsxir v1.0.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.0.5
+        v1.0.0
       </h2>
     </div>
     
@@ -59,11 +59,16 @@
 
 
       <h1>
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+        <small class="visible-xs">Xlsxir v1.0.0</small>
+        Xlsxir.SharedString
+=======
         <small class="visible-xs">Xlsxir v0.0.5</small>
         Xlsxir.Format
+>>>>>>> master:doc/Xlsxir.Format.html
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L52" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -71,8 +76,8 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Receives parsed excel worksheet data, formats the cell values and returns the data in either a
-list or a map depending on the option chosen.</p>
+          <p>An Erlang Term Storage (ETS) process named <code class="inline">:sharedstrings</code> which holds state for data parsed from <code class="inline">sharedStrings.xml</code>. Provides functions to create the process, add 
+and retreive data, and ultimately kill the process.</p>
 
         </section>
       
@@ -94,47 +99,46 @@ list or a map depending on the option chosen.</p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#cell_map/2">cell_map(sheet, strings)</a>
+    <a href="#add_shared_string/2">add_shared_string(shared_string, index)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Formats parsed excel worksheet into a map of cell/value pairs</p>
+    <div class="summary-synopsis"><p>Stores a sharedstring at a given index in the ETS process</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#convert_char_number/1">convert_char_number(number)</a>
+    <a href="#alive?/0">alive?()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Converts Excel number to either integer or float</p>
+    <div class="summary-synopsis"><p>Validates whether the ETS process is active, returning true or false</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#format_cell_value/2">format_cell_value(list, strings)</a>
+    <a href="#delete/0">delete()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Uses attributes from xml to format cell value</p>
+    <div class="summary-synopsis"><p>Deletes the ETS process from memory</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#prepare_output/3">prepare_output(worksheet, shared_strings, option)</a>
+    <a href="#get_at/1">get_at(index)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Main function of <code class="inline">Format</code> module. Receives the parsed excel worksheet data, the parsed excel string
-data and the chosen format via <code class="inline">option</code> which defaults to <code class="inline">:rows</code></p>
+    <div class="summary-synopsis"><p>Returns a sharedstring at a given index of the ETS process</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#row_list/2">row_list(sheet, strings)</a>
+    <a href="#new/0">new()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Formats parsed excel worksheet into a list of lists containing cell values by row</p>
+    <div class="summary-synopsis"><p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options</p>
 </div>
   
 </div>
@@ -159,124 +163,113 @@ data and the chosen format via <code class="inline">option</code> which defaults
             </a>
             Functions
           </h1>
-          <div class="detail" id="cell_map/2">
+          <div class="detail" id="add_shared_string/2">
   <div class="detail-header">
-    <a href="#cell_map/2" class="detail-link" title="Link to this function">
+    <a href="#add_shared_string/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">cell_map(sheet, strings)</span>
+    <span class="signature">add_shared_string(shared_string, index)</span>
       
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L68" class="view-source" rel="help" title="View Source">
+=======
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L51" class="view-source" rel="help" title="View Source">
+>>>>>>> master:doc/Xlsxir.Format.html
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Formats parsed excel worksheet into a map of cell/value pairs.</p>
-<h2>Parameters</h2>
-<ul>
-<li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via <code class="inline">Xlsxir.Parse.worksheet/2</code>
-</li>
-<li><code class="inline">strings</code> - list of sharedStrings.xml data from Excel file that was parsed via <a href="Xlsxir.Parse.html#shared_strings/1"><code class="inline">Xlsxir.Parse.shared_strings/1</code></a>
-</li>
-</ul>
-<h2>Example</h2>
-<pre><code class="elixir">%{ A1: value_of_cell, B1: value_of_cell, ...}</code></pre>
+    <p>Stores a sharedstring at a given index in the ETS process.</p>
 
   </section>
 </div>
-<div class="detail" id="convert_char_number/1">
+<div class="detail" id="alive?/0">
   <div class="detail-header">
-    <a href="#convert_char_number/1" class="detail-link" title="Link to this function">
+    <a href="#alive?/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">convert_char_number(number)</span>
+    <span class="signature">alive?()</span>
       
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L92" class="view-source" rel="help" title="View Source">
+=======
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L95" class="view-source" rel="help" title="View Source">
+>>>>>>> master:doc/Xlsxir.Format.html
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Converts Excel number to either integer or float.</p>
+    <p>Validates whether the ETS process is active, returning true or false. </p>
 
   </section>
 </div>
-<div class="detail" id="format_cell_value/2">
+<div class="detail" id="delete/0">
   <div class="detail-header">
-    <a href="#format_cell_value/2" class="detail-link" title="Link to this function">
+    <a href="#delete/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">format_cell_value(list, strings)</span>
+    <span class="signature">delete()</span>
       
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L85" class="view-source" rel="help" title="View Source">
+=======
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L77" class="view-source" rel="help" title="View Source">
+>>>>>>> master:doc/Xlsxir.Format.html
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Uses attributes from xml to format cell value.</p>
-<h2>Parameters</h2>
-<ul>
-<li><code class="inline">list</code> - list containing attribute, style and value of column from xml file
-</li>
-<li><code class="inline">strings</code> - list of strings from the sharedStrings.xml file
-</li>
-</ul>
-<h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.Format.format_cell_value([nil, nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
-1
-iex&gt; Xlsxir.Format.format_cell_value([&#39;s&#39;, nil, &#39;1&#39;], [&quot;A&quot;, &quot;B&quot;])
-&quot;B&quot;</code></pre>
+    <p>Deletes the ETS process from memory.</p>
 
   </section>
 </div>
-<div class="detail" id="prepare_output/3">
+<div class="detail" id="get_at/1">
   <div class="detail-header">
-    <a href="#prepare_output/3" class="detail-link" title="Link to this function">
+    <a href="#get_at/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">prepare_output(worksheet, shared_strings, option)</span>
+    <span class="signature">get_at(index)</span>
       
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L75" class="view-source" rel="help" title="View Source">
+=======
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L13" class="view-source" rel="help" title="View Source">
+>>>>>>> master:doc/Xlsxir.Format.html
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Main function of <code class="inline">Format</code> module. Receives the parsed excel worksheet data, the parsed excel string
-data and the chosen format via <code class="inline">option</code> which defaults to <code class="inline">:rows</code>.</p>
+    <p>Returns a sharedstring at a given index of the ETS process. </p>
 
   </section>
 </div>
-<div class="detail" id="row_list/2">
+<div class="detail" id="new/0">
   <div class="detail-header">
-    <a href="#row_list/2" class="detail-link" title="Link to this function">
+    <a href="#new/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">row_list(sheet, strings)</span>
+    <span class="signature">new()</span>
       
+<<<<<<< HEAD:doc/Xlsxir.SharedString.html
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L61" class="view-source" rel="help" title="View Source">
+=======
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/format.ex#L32" class="view-source" rel="help" title="View Source">
+>>>>>>> master:doc/Xlsxir.Format.html
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Formats parsed excel worksheet into a list of lists containing cell values by row.</p>
-<h2>Parameters</h2>
-<ul>
-<li><code class="inline">sheet</code> - map of xml worksheet data from Excel file that was parsed via Xlsxir.Parse.worksheet/2
-</li>
-<li><code class="inline">strings</code> - list of sharedStrings.xml from Excel file that was parsed via Xlsxir.Parse.shared_strings/1
-</li>
-</ul>
-<h2>Example</h2>
-<pre><code class="elixir">[[row_1_values], [row_2_values], ...]</code></pre>
+    <p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options.</p>
 
   </section>
 </div>

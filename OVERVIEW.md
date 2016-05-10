@@ -42,7 +42,7 @@ The extracted worksheet data can be accessed using any of the following function
 - `Xlsxir.get_row/1` - Returns values of specified row (i.e. `1` returns the first row of data)
 - `Xlsxir.get_col/1` - Returns values of specified column (i.e `"A"` returns the first column of data)
 
-Once the table data is no longer needed, run `Xlsxir.close` to delete the ETS process and free memory.
+Once the table data is no longer needed, run `Xlsxir.close` to delete the ETS process and free memory. Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error. 
 
 Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more detailed examples. 
 

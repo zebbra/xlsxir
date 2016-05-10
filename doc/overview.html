@@ -63,11 +63,7 @@
 <h2>Installation</h2>
 <p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
 <pre><code class="elixir">def deps do
-<<<<<<< HEAD
   [ {:xlsxir, &quot;~&gt; 1.0.0&quot;} ]
-=======
-  [ {:xlsxir, &quot;~&gt; 0.0.5&quot;} ]
->>>>>>> master
 end</code></pre>
 <p>Or, you can directly reference the GitHub repo:</p>
 <pre><code class="elixir">def deps do
@@ -99,7 +95,7 @@ end</code></pre>
 <li><a href="Xlsxir.html#get_col/1"><code class="inline">Xlsxir.get_col/1</code></a> - Returns values of specified column (i.e <code class="inline">&quot;A&quot;</code> returns the first column of data)
 </li>
 </ul>
-<p>Once the table data is no longer needed, run <code class="inline">Xlsxir.close</code> to delete the ETS process and free memory.</p>
+<p>Once the table data is no longer needed, run <code class="inline">Xlsxir.close</code> to delete the ETS process and free memory. Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new <code class="inline">:worksheet</code> ETS process when one already exists, you will get an error. </p>
 <p>Refer to <a href="https://hexdocs.pm/xlsxir/index.html">Xlsxir documentation</a> for more detailed examples. </p>
 <h2>Considerations</h2>
 <p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>

@@ -68,7 +68,7 @@ Please report any bugs or request future enhancements via the [Issues](https://g
 
 ## Acknowledgements
 
-I'd like to thank the following people where were a big help in the development of this library:
+I'd like to thank the following people who were a big help in the development of this library:
 
 - Paulo Almeida (@pma) has been a big help with the testing of Xlsxir and has provided several great ideas for development
 - Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable. I don't know that I could have figured out SAX parsing in Erlang without it.

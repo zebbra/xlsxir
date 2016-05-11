@@ -52,6 +52,7 @@ Cell references are formatted as a string (i.e. "A1"). Strings will be returned 
 
 ## Planned Development
 
+- Allow for multiple ETS process to be started when parsing multiple worksheets
 - Additional performance improvement for larger files
 - Adding time support for dates (i.e. {{YYYY, MM, DD}, {h, m, s}})
 - Export functionality to .xlsx file type with formatting options

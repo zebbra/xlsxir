@@ -38,7 +38,7 @@ defmodule Xlsxir.SaxParser do
           "string one"
           iex> Xlsxir.SaxParser.parse("./test/test_data/test/xl/worksheets/sheet1.xml", :worksheet)
           :ok
-          iex> Xlsxir.Worksheet.get_at(0)
+          iex> Xlsxir.Worksheet.get_at(1)
           [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]
           iex> Xlsxir.Worksheet.delete
           true

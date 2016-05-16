@@ -68,12 +68,11 @@ defmodule Xlsxir do
           :ok
   """
   def get_list do
-    range = 0..(:ets.info(:worksheet, :size) -1)
-
-    range
-    |> Enum.map(fn i -> Worksheet.get_at(i)
-                        |> Enum.map(fn cell -> Enum.at(cell, 1) end)
-                      end)
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> Enum.sort
+    |> Enum.map(fn obj -> Enum.at(obj, 1)
+                          |> Enum.map(fn row -> Enum.at(row, 1) end)
+                        end)
   end
 
   @doc """
@@ -95,13 +94,13 @@ defmodule Xlsxir do
           :ok
   """
   def get_map do
-    range = 0..(:ets.info(:worksheet, :size) -1)
-
-    range
-    |> Enum.reduce(%{}, fn i, m -> Worksheet.get_at(i)
-                                   |> Enum.reduce(%{}, fn [k,v], acc -> Map.put(acc, k, v) end)
-                                   |> Enum.into(m)
-                                 end)
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> Enum.sort
+    |> Enum.reduce(%{}, fn match_obj, acc -> 
+         Enum.at(match_obj, 1)
+         |> Enum.reduce(%{}, fn [k, v], acc2 -> Map.put(acc2, k, v) end)
+         |> Enum.into(acc)
+       end)
   end
 
   @doc """
@@ -136,7 +135,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS process and returns values of specified row in a `list`. Blank rows are not counted.
+  Accesses `:worksheet` ETS process and returns values of specified row in a `list`.
 
   ## Parameters
   - `row` - Reference name of row to be returned in `integer` format (i.e. `1`)
@@ -157,7 +156,10 @@ defmodule Xlsxir do
           :ok
   """
   def get_row(row) do
-    Enum.map(Worksheet.get_at(row - 1), fn [_k, v] -> v end)
+    [[row]] = :ets.match(:worksheet, {to_string(row), :"$1"})
+
+    row
+    |> Enum.map(fn cell -> Enum.at(cell, 1) end)
   end
 
   @doc """

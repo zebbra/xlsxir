@@ -70,9 +70,9 @@ defmodule Xlsxir do
   def get_list do
     :ets.match(:worksheet, {:"$1", :"$2"})
     |> Enum.sort
-    |> Enum.map(fn obj -> Enum.at(obj, 1)
-                          |> Enum.map(fn row -> Enum.at(row, 1) end)
-                        end)
+    |> Enum.map(fn [_, cells] -> cells
+                                   |> Enum.map(fn row -> Enum.at(row, 1) end)
+                                 end)
   end
 
   @doc """
@@ -96,8 +96,8 @@ defmodule Xlsxir do
   def get_map do
     :ets.match(:worksheet, {:"$1", :"$2"})
     |> Enum.sort
-    |> Enum.reduce(%{}, fn match_obj, acc -> 
-         Enum.at(match_obj, 1)
+    |> Enum.reduce(%{}, fn [_, cells], acc -> 
+         cells
          |> Enum.reduce(%{}, fn [k, v], acc2 -> Map.put(acc2, k, v) end)
          |> Enum.into(acc)
        end)
@@ -129,7 +129,7 @@ defmodule Xlsxir do
     [[row]]     = :ets.match(:worksheet, {row_num, :"$1"})
 
     row
-    |> Enum.filter(fn cell -> Enum.at(cell, 0) == cell_ref end) 
+    |> Enum.filter(fn [ref, _] -> ref == cell_ref end) 
     |> List.first
     |> Enum.at(1)
   end
@@ -159,7 +159,7 @@ defmodule Xlsxir do
     [[row]] = :ets.match(:worksheet, {to_string(row), :"$1"})
 
     row
-    |> Enum.map(fn cell -> Enum.at(cell, 1) end)
+    |> Enum.map(fn [_, value] -> value end)
   end
 
   @doc """
@@ -184,8 +184,50 @@ defmodule Xlsxir do
           :ok
   """
   def get_col(col) do
-    Enum.map(get_map, fn {k,v} -> if cell_ltrs(k) == col, do: v end)
-    |> Enum.reject(fn x -> x == nil end)
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> Enum.sort
+    |> Enum.map(fn [_, cells] -> cells
+                                 |> Enum.filter_map(fn [k, _v] -> 
+                                      Regex.scan(~r/[A-Z]+/i, k) == [[col]] end, 
+                                      fn [_k, v] -> v 
+                                    end)
+                               end)
+    |> List.flatten
+  end
+
+  @doc """
+  Returns count data based on `num_type` specified, default is `:all`. 
+  - `:rows` - Returns number of rows contained in worksheet
+  - `:cols` - Returns number of columns contained in worksheet
+  - `:cells` - Returns number of cells contained in worksheet
+  - `:all` - Returns a keyword list containing all of the above
+  """
+  def get_info(num_type \\ :all) do
+    case num_type do
+      :rows  -> row_num
+      :cols  -> col_num
+      :cells -> cell_num
+      _      -> [
+                  rows:  row_num,
+                  cols:  col_num,
+                  cells: cell_num
+                ]
+    end
+  end
+
+  defp row_num do
+    :ets.info(:worksheet, :size)
+  end
+
+  defp col_num do
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> Enum.scan(0, fn [_, cells], acc -> acc = Enum.count(cells) end)
+    |> Enum.max
+  end
+
+  defp cell_num do
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> Enum.reduce(0, fn [_, cells], acc -> acc + Enum.count(cells) end)
   end
 
   @doc """
@@ -205,13 +247,6 @@ defmodule Xlsxir do
       false -> raise "Unable to close worksheet"
       true -> :ok
     end
-  end
-
-  defp cell_ltrs(cell) do
-    ~r/[a-z]+/i 
-    |> Regex.scan(String.upcase(cell))
-    |> List.flatten
-    |> List.first
   end
 
 end

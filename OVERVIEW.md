@@ -33,18 +33,34 @@ Argument descriptions:
 - `index` is the position of the worksheet you wish to parse (zero-based index)
 - `timer` is a boolean flag that controls an extraction timer that returns time elapsed when set to `true`. Defalut value is `false`.
 
-Upon successful completion, the extraction process returns `:ok` with `timer` set to `false`, or `{:ok, time_elapsed}` with `timer` set to `true`.
+Upon successful completion, the extraction process returns: 
+- `:ok` with `timer` set to `false`
+- `{:ok, time_elapsed}` with `timer` set to `true`
 
+<br/>
 The extracted worksheet data can be accessed using any of the following functions:
-- `Xlsxir.get_list/0` - Returns entire worksheet data in the form of a list of row lists (i.e. `[[row 1 values], [row 2 values], ...]`)
-- `Xlsxir.get_map/0` - Returns entire worksheet data in the form of a map of cell names and values (i.e. `%{"A1" => value, "A2" => value, ...}`)
-- `Xlsxir.get_cell/1` - Returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)
-- `Xlsxir.get_row/1` - Returns values of specified row (i.e. `1` returns the first row of data)
-- `Xlsxir.get_col/1` - Returns values of specified column (i.e `"A"` returns the first column of data)
+```elixir
+Xlsxir.get_list
+Xlsxir.get_map
+Xlsxir.get_cell(cell_ref)
+Xlsxir.get_row(row_num)
+Xlsxir.get_col(col_ltr)
+Xlsxir.get_info(num_type)
+```
+`Xlsxir.get_list/0` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
+`Xlsxir.get_map/0` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
+`Xlsxir.get_cell/1` returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)<br/>
+`Xlsxir.get_row/1` returns values of specified row (i.e. `1` returns the first row of data)<br/>
+`Xlsxir.get_col/1` returns values of specified column (i.e. `"A"` returns the first column of data)<br/>
+`Xlsxir.get_info/1` returns count data for `num_type` specified (i.e. `:rows`, `:cols`, `:cells`, `:all`)<br/>
 
-Once the table data is no longer needed, run `Xlsxir.close` to delete the ETS process and free memory. Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error. 
+Once the table data is no longer needed, run the following function to delete the ETS process and free memory:
+```elixir
+Xlsxir.close 
+```
+Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error.
 
-Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more detailed examples. 
+Refer to [API Reference](https://hexdocs.pm/xlsxir/api-reference.html) for more detailed examples. 
 
 ## Considerations
 

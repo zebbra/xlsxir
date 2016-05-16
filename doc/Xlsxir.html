@@ -116,8 +116,7 @@ returns <code class="inline">:ok</code> with the timer argument set to false and
     <a href="#get_cell/1">get_cell(cell_ref)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
-this would be an expensive task for a large worksheet</p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell</p>
 </div>
   
 </div>
@@ -127,6 +126,25 @@ this would be an expensive task for a large worksheet</p>
   </div>
   
     <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified column in a <code class="inline">list</code></p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#get_info/1">get_info(num_type \\ :all)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Returns count data based on <code class="inline">num_type</code> specified, default is <code class="inline">:all</code>. </p>
+<ul>
+<li><code class="inline">:rows</code> - Returns number of rows contained in worksheet
+</li>
+<li><code class="inline">:cols</code> - Returns number of columns contained in worksheet
+</li>
+<li><code class="inline">:cells</code> - Returns number of cells contained in worksheet
+</li>
+<li><code class="inline">:all</code> - Returns a keyword list containing all of the above
+</li>
+</ul>
 </div>
   
 </div>
@@ -153,7 +171,7 @@ this would be an expensive task for a large worksheet</p>
     <a href="#get_row/1">get_row(row)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted</p>
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code></p>
 </div>
   
 </div>
@@ -185,7 +203,7 @@ this would be an expensive task for a large worksheet</p>
     </a>
     <span class="signature">close()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L199" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L244" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -248,15 +266,14 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
     </a>
     <span class="signature">get_cell(cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L132" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L127" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
-this would be an expensive task for a large worksheet.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns value of specified cell.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">cell_ref</code> - Reference name of cell to be returned in <code class="inline">string</code> format (i.e. <code class="inline">&quot;A1&quot;</code>)
@@ -292,7 +309,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L183" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L186" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -328,6 +345,34 @@ iex&gt; Xlsxir.close
 
   </section>
 </div>
+<div class="detail" id="get_info/1">
+  <div class="detail-header">
+    <a href="#get_info/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">get_info(num_type \\ :all)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L205" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Returns count data based on <code class="inline">num_type</code> specified, default is <code class="inline">:all</code>. </p>
+<ul>
+<li><code class="inline">:rows</code> - Returns number of rows contained in worksheet
+</li>
+<li><code class="inline">:cols</code> - Returns number of columns contained in worksheet
+</li>
+<li><code class="inline">:cells</code> - Returns number of cells contained in worksheet
+</li>
+<li><code class="inline">:all</code> - Returns a keyword list containing all of the above
+</li>
+</ul>
+
+  </section>
+</div>
 <div class="detail" id="get_list/0">
   <div class="detail-header">
     <a href="#get_list/0" class="detail-link" title="Link to this function">
@@ -335,7 +380,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_list()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L73" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L70" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -373,7 +418,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_map()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L100" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L96" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -418,7 +463,7 @@ iex&gt; Xlsxir.close
   </div>
   
   <section class="docstring">
-    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>. Blank rows are not counted.</p>
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">row</code> - Reference name of row to be returned in <code class="inline">integer</code> format (i.e. <code class="inline">1</code>)

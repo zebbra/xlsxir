@@ -46,10 +46,7 @@ defmodule Xlsxir do
     SaxParser.parse("temp/xl/worksheets/sheet#{index + 1}.xml", :worksheet)
     Unzip.delete_dir
 
-    case timer do
-      false -> :ok
-      true  -> {:ok, Timer.stop}
-    end
+    if timer, do: {:ok, Timer.stop}, else: :ok
   end
 
   @doc """
@@ -108,8 +105,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Accesses `:worksheet` ETS process and returns value of specified cell. Note: entire worksheet is traversed each time this function is executed. Use with caution as 
-  this would be an expensive task for a large worksheet.
+  Accesses `:worksheet` ETS process and returns value of specified cell.
 
   ## Parameters
   - `cell_ref` - Reference name of cell to be returned in `string` format (i.e. `"A1"`)
@@ -130,8 +126,13 @@ defmodule Xlsxir do
           :ok
   """
   def get_cell(cell_ref) do
-    data = get_map
-    data[cell_ref]
+    [[row_num]] = ~r/\d+/ |> Regex.scan(cell_ref)
+    [[row]]     = :ets.match(:worksheet, {row_num, :"$1"})
+
+    row
+    |> Enum.filter(fn cell -> Enum.at(cell, 0) == cell_ref end) 
+    |> List.first
+    |> Enum.at(1)
   end
 
   @doc """

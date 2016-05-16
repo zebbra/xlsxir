@@ -1,5 +1,5 @@
 defmodule Xlsxir.ParseWorksheet do
-  alias Xlsxir.{Worksheet, SharedString, Style, Index, ConvertDate}
+  alias Xlsxir.{Worksheet, SharedString, Style, ConvertDate}
   import Xlsxir.ConvertDate, only: [convert_char_number: 1]
 
   @moduledoc """
@@ -21,8 +21,6 @@ defmodule Xlsxir.ParseWorksheet do
   ## Example
   Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. `[["A1", "string one"], ...]`).
   """
-  def sax_event_handler(:startDocument, _state), do: Index.new
-
   def sax_event_handler({:startElement,_,'row',_,_}, _state), do: %Xlsxir.ParseWorksheet{}
 
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, state) do
@@ -55,21 +53,18 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler({:endElement,_,'c',_}, %Xlsxir.ParseWorksheet{row: row} = state) do
     cell_value = format_cell_value([state.data_type, state.num_style, state.value])
-
-
     %{state | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]), cell_ref: "", data_type: "", num_style: "", value: ""} 
   end
 
   def sax_event_handler({:endElement,_,'row',_}, state) do
+    [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
+
     state.row
     |> Enum.reverse
-    |> Worksheet.add_row(Index.get)
-
-    Index.increment_1
+    |> Worksheet.add_row(row)
   end
 
   def sax_event_handler(:endDocument, _state) do 
-    Index.delete
     if SharedString.alive?, do: SharedString.delete
     if Style.alive?, do: Style.delete
   end

@@ -70,9 +70,9 @@ defmodule Xlsxir do
   def get_list do
     :ets.match(:worksheet, {:"$1", :"$2"})
     |> Enum.sort
-    |> Enum.map(fn [_, cells] -> cells
-                                   |> Enum.map(fn row -> Enum.at(row, 1) end)
-                                 end)
+    |> Enum.map(fn [_num, row] -> row
+                                  |> Enum.map(fn [_ref, val] -> val end)
+                                  end)
   end
 
   @doc """
@@ -96,9 +96,9 @@ defmodule Xlsxir do
   def get_map do
     :ets.match(:worksheet, {:"$1", :"$2"})
     |> Enum.sort
-    |> Enum.reduce(%{}, fn [_, cells], acc -> 
-         cells
-         |> Enum.reduce(%{}, fn [k, v], acc2 -> Map.put(acc2, k, v) end)
+    |> Enum.reduce(%{}, fn [_num, row], acc -> 
+         row
+         |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
          |> Enum.into(acc)
        end)
   end
@@ -129,7 +129,7 @@ defmodule Xlsxir do
     [[row]]     = :ets.match(:worksheet, {row_num, :"$1"})
 
     row
-    |> Enum.filter(fn [ref, _] -> ref == cell_ref end) 
+    |> Enum.filter(fn [ref, _val] -> ref == cell_ref end) 
     |> List.first
     |> Enum.at(1)
   end
@@ -159,7 +159,7 @@ defmodule Xlsxir do
     [[row]] = :ets.match(:worksheet, {to_string(row), :"$1"})
 
     row
-    |> Enum.map(fn [_, value] -> value end)
+    |> Enum.map(fn [_ref, val] -> val end)
   end
 
   @doc """
@@ -186,12 +186,12 @@ defmodule Xlsxir do
   def get_col(col) do
     :ets.match(:worksheet, {:"$1", :"$2"})
     |> Enum.sort
-    |> Enum.map(fn [_, cells] -> cells
-                                 |> Enum.filter_map(fn [k, _v] -> 
-                                      Regex.scan(~r/[A-Z]+/i, k) == [[col]] end, 
-                                      fn [_k, v] -> v 
-                                    end)
-                               end)
+    |> Enum.map(fn [_num, row] -> row
+                                  |> Enum.filter_map(fn [ref, _val] -> 
+                                       Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end, 
+                                       fn [_ref, val] -> val 
+                                     end)
+                                end)
     |> List.flatten
   end
 
@@ -221,13 +221,13 @@ defmodule Xlsxir do
 
   defp col_num do
     :ets.match(:worksheet, {:"$1", :"$2"})
-    |> Enum.scan(0, fn [_, cells], acc -> acc = Enum.count(cells) end)
+    |> Enum.scan(0, fn [_num, row], acc -> acc = Enum.count(row) end)
     |> Enum.max
   end
 
   defp cell_num do
     :ets.match(:worksheet, {:"$1", :"$2"})
-    |> Enum.reduce(0, fn [_, cells], acc -> acc + Enum.count(cells) end)
+    |> Enum.reduce(0, fn [_num, row], acc -> acc + Enum.count(row) end)
   end
 
   @doc """
@@ -244,9 +244,9 @@ defmodule Xlsxir do
   def close do
     Worksheet.delete
     |> case do
-      false -> raise "Unable to close worksheet"
-      true -> :ok
-    end
+         false -> raise "Unable to close worksheet"
+         true -> :ok
+       end
   end
 
 end

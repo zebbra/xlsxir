@@ -8,7 +8,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.0.0"} ]
+  [ {:xlsxir, "~> 1.1.0"} ]
 end
 ```
 
@@ -58,7 +58,7 @@ Once the table data is no longer needed, run the following function to delete th
 ```elixir
 Xlsxir.close 
 ```
-Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error.
+Be sure to [close an open ETS process before trying to parse another worksheet](https://hexdocs.pm/xlsxir/Xlsxir.html#close/0) in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error.
 
 Refer to [API Reference](https://hexdocs.pm/xlsxir/api-reference.html) for more detailed examples. 
 

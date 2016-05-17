@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.0
+
+- Modified the way rows are saved to the `:worksheet` ETS table. Replaced the generic index with the actual row number to allow for performance imporovement of supporting  `Xlsxir` access functions.
+- Refactored `Xlsxir` access functions to improve performance.
+- Created `Xlsxir.get_info/1` function which returns number of rows, columns and cells. 
+- Various minor modifications to docs. 
+
 ## 1.0.0
 
 Major changes in version 1.0.0 (non-backwards compatible) to improve performance and incorporate new functionality, including: 

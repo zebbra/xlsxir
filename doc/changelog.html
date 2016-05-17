@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>CHANGELOG – Xlsxir v1.0.0</title>
+    <title>CHANGELOG – Xlsxir v1.1.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.0.0
+        v1.1.0
       </h2>
     </div>
     
@@ -59,6 +59,17 @@
 
 
 <h1>Change Log</h1>
+<h2>1.1.0</h2>
+<ul>
+<li>Modified the way rows are saved to the <code class="inline">:worksheet</code> ETS table. Replaced the generic index with the actual row number to allow for performance imporovement of supporting  <a href="Xlsxir.html"><code class="inline">Xlsxir</code></a> access functions.
+</li>
+<li>Refactored <a href="Xlsxir.html"><code class="inline">Xlsxir</code></a> access functions to improve performance.
+</li>
+<li>Created <a href="Xlsxir.html#get_info/1"><code class="inline">Xlsxir.get_info/1</code></a> function which returns number of rows, columns and cells. 
+</li>
+<li>Various minor modifications to docs. 
+</li>
+</ul>
 <h2>1.0.0</h2>
 <p>Major changes in version 1.0.0 (non-backwards compatible) to improve performance and incorporate new functionality, including: </p>
 <ul>

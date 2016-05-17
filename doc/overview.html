@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>OVERVIEW – Xlsxir v1.0.0</title>
+    <title>OVERVIEW – Xlsxir v1.1.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.0.0
+        v1.1.0
       </h2>
     </div>
     
@@ -63,7 +63,7 @@
 <h2>Installation</h2>
 <p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
 <pre><code class="elixir">def deps do
-  [ {:xlsxir, &quot;~&gt; 1.0.0&quot;} ]
+  [ {:xlsxir, &quot;~&gt; 1.1.0&quot;} ]
 end</code></pre>
 <p>Or, you can directly reference the GitHub repo:</p>
 <pre><code class="elixir">def deps do
@@ -104,7 +104,7 @@ Xlsxir.get_info(num_type)</code></pre>
 <a href="Xlsxir.html#get_info/1"><code class="inline">Xlsxir.get_info/1</code></a> returns count data for <code class="inline">num_type</code> specified (i.e. <code class="inline">:rows</code>, <code class="inline">:cols</code>, <code class="inline">:cells</code>, <code class="inline">:all</code>)<br/></p>
 <p>Once the table data is no longer needed, run the following function to delete the ETS process and free memory:</p>
 <pre><code class="elixir">Xlsxir.close </code></pre>
-<p>Be sure to close an open ETS process before trying to parse another worksheet in the same session or process. If you try to open a new <code class="inline">:worksheet</code> ETS process when one already exists, you will get an error.</p>
+<p>Be sure to <a href="https://hexdocs.pm/xlsxir/Xlsxir.html#close/0">close an open ETS process before trying to parse another worksheet</a> in the same session or process. If you try to open a new <code class="inline">:worksheet</code> ETS process when one already exists, you will get an error.</p>
 <p>Refer to <a href="https://hexdocs.pm/xlsxir/api-reference.html">API Reference</a> for more detailed examples. </p>
 <h2>Considerations</h2>
 <p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>

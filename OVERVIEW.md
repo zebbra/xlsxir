@@ -8,7 +8,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.1.0"} ]
+  [ {:xlsxir, "~> 1.2"} ]
 end
 ```
 
@@ -42,6 +42,7 @@ The extracted worksheet data can be accessed using any of the following function
 ```elixir
 Xlsxir.get_list
 Xlsxir.get_map
+Xlsxir.get_mda
 Xlsxir.get_cell(cell_ref)
 Xlsxir.get_row(row_num)
 Xlsxir.get_col(col_ltr)
@@ -49,6 +50,7 @@ Xlsxir.get_info(num_type)
 ```
 `Xlsxir.get_list/0` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
 `Xlsxir.get_map/0` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
+`Xlsxir.get_mda/0` returns entire worksheet in an indexed map which can be accessed like a multi-dimensional array (i.e. `some_var[0][0]` for cell "A1")<br/>
 `Xlsxir.get_cell/1` returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)<br/>
 `Xlsxir.get_row/1` returns values of specified row (i.e. `1` returns the first row of data)<br/>
 `Xlsxir.get_col/1` returns values of specified column (i.e. `"A"` returns the first column of data)<br/>

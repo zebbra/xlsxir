@@ -1,5 +1,5 @@
 defmodule Xlsxir do
-  alias Xlsxir.{Unzip, SaxParser, Worksheet, Timer}
+  alias Xlsxir.{Unzip, SaxParser, Worksheet, Timer, Index}
 
   @moduledoc """
   Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.
@@ -102,6 +102,53 @@ defmodule Xlsxir do
          |> Enum.into(acc)
        end)
   end
+
+  @doc """
+  Accesses `:worksheet` ETS process and returns an indexed map which functions like a multi-dimensional array in other languages.
+
+  ## Example
+  An example file named `test.xlsx` located in `./test/test_data` containing the following:
+  - cell 'A1' -> "string one"
+  - cell 'B1' -> "string two"
+  - cell 'C1' -> integer of 10
+  - cell 'D1' -> formula of "4 * 5"
+  - cell 'E1' -> date of 1/1/2016 or Excel date serial of 42370
+
+          iex> Xlsxir.extract("./test/test_data/test.xlsx", 0)
+          :ok
+          iex> mda = Xlsxir.get_mda
+          %{0 => %{0 => "string one", 1 => "string two", 2 => 10, 3 => 20, 4 => {2016,1,1}}}
+          iex> mda[0][0]
+          "string one"
+          iex> mda[0][2]
+          10
+          iex> Xlsxir.close
+          :ok
+  """
+  def get_mda do
+    :ets.match(:worksheet, {:"$1", :"$2"})
+    |> convert_to_indexed_map(%{})
+  end
+
+  defp convert_to_indexed_map([], map), do: map
+
+  defp convert_to_indexed_map([h|t], map) do
+    Index.new
+    row_index = Enum.at(h, 0)
+                |> String.to_integer
+                |> Kernel.-(1)
+
+    add_row = Enum.at(h,1)
+              |> Enum.reduce(%{}, fn cell, acc ->
+                    Index.increment_1
+                    Map.put(acc, Index.get - 1, Enum.at(cell, 1))
+                  end)
+
+    Index.delete
+    updated_map = Map.put(map, row_index, add_row)
+    convert_to_indexed_map(t, updated_map)
+  end
+
 
   @doc """
   Accesses `:worksheet` ETS process and returns value of specified cell.

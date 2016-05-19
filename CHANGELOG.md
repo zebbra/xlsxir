@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0
+
+- Added `Xlsxir` access function `Xlsxir.get_mda/0` that accesses `:worksheet` ETS table and returns an indexed map which functions like a multi-dimensional array in other languages.
+
 ## 1.1.0
 
 - Modified the way rows are saved to the `:worksheet` ETS table. Replaced the generic index with the actual row number to allow for performance imporovement of supporting  `Xlsxir` access functions.

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.4">
-    <title>Xlsxir – Xlsxir v1.1.0</title>
+    <title>Xlsxir – Xlsxir v1.2.0</title>
     <link rel="stylesheet" href="dist/app-1e374caa3d.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.1.0
+        v1.2.0
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.1.0</small>
+        <small class="visible-xs">Xlsxir v1.2.0</small>
         Xlsxir
         
         
@@ -168,6 +168,15 @@ returns <code class="inline">:ok</code> with the timer argument set to false and
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#get_mda/0">get_mda()</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Accesses <code class="inline">:worksheet</code> ETS process and returns an indexed map which functions like a multi-dimensional array in other languages</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#get_row/1">get_row(row)</a>
   </div>
   
@@ -203,7 +212,7 @@ returns <code class="inline">:ok</code> with the timer argument set to false and
     </a>
     <span class="signature">close()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L244" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L291" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -266,7 +275,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
     </a>
     <span class="signature">get_cell(cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L127" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L174" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -309,7 +318,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L186" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L233" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -352,7 +361,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_info(num_type \\ :all)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L205" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L252" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -449,6 +458,48 @@ iex&gt; Xlsxir.close
 
   </section>
 </div>
+<div class="detail" id="get_mda/0">
+  <div class="detail-header">
+    <a href="#get_mda/0" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">get_mda()</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L128" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Accesses <code class="inline">:worksheet</code> ETS process and returns an indexed map which functions like a multi-dimensional array in other languages.</p>
+<h2>Example</h2>
+<p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
+<ul>
+<li>cell ‘A1’ -&gt; “string one”
+</li>
+<li>cell ‘B1’ -&gt; “string two”
+</li>
+<li>cell ‘C1’ -&gt; integer of 10
+</li>
+<li>cell ‘D1’ -&gt; formula of “4 * 5”
+</li>
+<li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok
+iex&gt; mda = Xlsxir.get_mda
+%{0 =&gt; %{0 =&gt; &quot;string one&quot;, 1 =&gt; &quot;string two&quot;, 2 =&gt; 10, 3 =&gt; 20, 4 =&gt; {2016,1,1}}}
+iex&gt; mda[0][0]
+&quot;string one&quot;
+iex&gt; mda[0][2]
+10
+iex&gt; Xlsxir.close
+:ok</code></pre>
+</li>
+</ul>
+
+  </section>
+</div>
 <div class="detail" id="get_row/1">
   <div class="detail-header">
     <a href="#get_row/1" class="detail-link" title="Link to this function">
@@ -456,7 +507,7 @@ iex&gt; Xlsxir.close
     </a>
     <span class="signature">get_row(row)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L158" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L205" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

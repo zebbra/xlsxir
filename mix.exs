@@ -51,7 +51,10 @@ defmodule Xlsxir.Mixfile do
     [
       maintainers: ["Jason Kennell", "Bryan Weatherly"],
       licenses: ["MIT License"],
-      links: %{"Github" => "https://github.com/kennellroxco/xlsxir"}
+      links: %{
+                "Github" => "https://github.com/kennellroxco/xlsxir",
+                "Change Log" => "https://hexdocs.pm/xlsxir/changelog.html"
+               }
     ]
   end
   

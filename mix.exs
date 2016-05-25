@@ -43,7 +43,7 @@ defmodule Xlsxir.Mixfile do
 
   defp description do
     """
-    Xlsx file parser. Supports large files and ISO 8601 date formats. Data is extracted to an Erlang Term Storage (ETS) table and is accessed through various functions.
+    Xlsx file parser. Supports large files and ISO 8601 date formats. Data is extracted to an Erlang Term Storage (ETS) table and is accessed through various functions. Tested with Excel and LibreOffice.
     """
   end
 

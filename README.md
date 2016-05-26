@@ -5,7 +5,7 @@
 [![Hex docs](http://img.shields.io/badge/hex.pm-docs-blue.svg?style=flat)](https://hexdocs.pm/xlsxir)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/kennellroxco/xlsxir/master/LICENSE)
 
-Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  
+Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 columns and 514K rows. Please submit any issues found and they will be addressed ASAP.  
 
 ## Installation
 
@@ -93,7 +93,7 @@ Please report any bugs or request future enhancements via the [Issues](https://g
 
 I'd like to thank the following people who were a big help in the development of this library:
 
-- Paulo Almeida (@pma) has been a big help with the testing of Xlsxir and has provided several great ideas for development
-- Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable. I don't know that I could have figured out SAX parsing in Erlang without it.
+- Paulo Almeida (@pma) was a big help with testing and has provided several great ideas for development
+- Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable.
 - Daniel Berkompas' (@danielberkompas) article [Multidimensional Arrays in Elixir](http://blog.danielberkompas.com/2016/04/23/multidimensional-arrays-in-elixir.html?utm_campaign=elixir_radar_48&utm_medium=email&utm_source=RD+Station) inspired `Xlsxir.get_mda/0`.
                            

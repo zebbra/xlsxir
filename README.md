@@ -1,5 +1,10 @@
 # Xlsxir
 
+[![Build Status](https://travis-ci.org/kennellroxco/xlsxir.svg?branch=master)](https://travis-ci.org/kennellroxco/xlsxir)
+[![Hex.pm Version](http://img.shields.io/hexpm/v/xlsxir.svg)](https://hex.pm/packages/xlsxir)
+[![Hex docs](http://img.shields.io/badge/hex.pm-docs-blue.svg?style=flat)](https://hexdocs.pm/xlsxir)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/kennellroxco/xlsxir/master/LICENSE)
+
 Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. Testing has been limited to various documents I have created or have access to and any issues submitted through GitHub, though I have succesfully parsed a worksheet containing 100 rows and 514K columns. Please submit any issues found and they will be addressed ASAP.  
 
 ## Installation

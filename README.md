@@ -95,7 +95,7 @@ Please report any bugs or request future enhancements via the [Issues](https://g
 
 I'd like to thank the following people who were a big help in the development of this library:
 
-- Paulo Almeida (@pma) was a big help with testing and has provided several great ideas for development
+- Paulo Almeida (@pma) was a big help with testing and has provided several great ideas for development.
 - Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable.
 - Daniel Berkompas' (@danielberkompas) article [Multidimensional Arrays in Elixir](http://blog.danielberkompas.com/2016/04/23/multidimensional-arrays-in-elixir.html?utm_campaign=elixir_radar_48&utm_medium=email&utm_source=RD+Station) inspired `Xlsxir.get_mda/0`.
                            

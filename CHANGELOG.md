@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.1
+
+- Removed Ex-Doc and Earmark dependencies from Hex.
+- Added Change Log link to Hex.
+- Minor doc changes and bug fixes.
+
 ## 1.2.0
 
 - Added `Xlsxir` access function `Xlsxir.get_mda/0` that accesses `:worksheet` ETS table and returns an indexed map which functions like a multi-dimensional array in other languages.

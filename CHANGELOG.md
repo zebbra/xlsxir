@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.3.0
+
+- Added ability to parse multiple worksheets via `Xlsxir.multi_extract/3` which returns a unique table identifier for each ETS process created, enabling the user to access parsed data from multiple worksheets simultaneously. 
+- Created an `Xlsxir.TableId` module which controls an agent process that temporarily holds a table identifier during the extraction process.
+- Refactored `Xlsxir` access functions to work with `Xlsxir.multi_extract/3` whereby a table identifier is passed through the various functions to specify which ETS process is to be accessed. 
+- Refactored `Xlsxir.SaxParser`, `Xlsxir.ParseWorksheet` and `Xlsxir.Worksheet` modules to support new functionality.
+- Refactored `Xlsxir.ParseWorksheet` to ignore empty cells.
+- Updated documentation and tests
+- Fixed a few minor bugs that were generating warning messages. 
+
 ## 1.2.1
 
 - Removed Ex-Doc and Earmark dependencies from Hex.

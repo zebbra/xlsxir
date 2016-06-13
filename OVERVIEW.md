@@ -10,7 +10,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.2.1"} ]
+  [ {:xlsxir, "~> 1.3"} ]
 end
 ```
 
@@ -24,11 +24,14 @@ end
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3` function:
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3` and `Xlsxir.multi_extract/3` functions:
 
 ```elixir
 Xlsxir.extract(path, index, timer \\ false)
+Xlsxir.multi_extract(path, index, timer \\ false)
 ```
+
+The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each.
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
@@ -36,39 +39,46 @@ Argument descriptions:
 - `timer` is a boolean flag that controls an extraction timer that returns time elapsed when set to `true`. Defalut value is `false`.
 
 Upon successful completion, the extraction process returns: 
-- `:ok` with `timer` set to `false`
-- `{:ok, time_elapsed}` with `timer` set to `true`
+- for `extract/3`:
+    * `:ok` with `timer` set to `false`
+    * `{:ok, time_elapsed}` with `timer` set to `true`
+- for `multi_extract/3`:
+    * `{:ok, table_id}` with `timer` set to `false`
+    * `{:ok, table_id, time_elapsed}` with `timer` set to `true`
 
 <br/>
 The extracted worksheet data can be accessed using any of the following functions:
 ```elixir
-Xlsxir.get_list
-Xlsxir.get_map
-Xlsxir.get_mda
-Xlsxir.get_cell(cell_ref)
-Xlsxir.get_row(row_num)
-Xlsxir.get_col(col_ltr)
-Xlsxir.get_info(num_type)
+Xlsxir.get_list(table_id)
+Xlsxir.get_map(table_id)
+Xlsxir.get_mda(table_id)
+Xlsxir.get_cell(table_id, cell_ref)
+Xlsxir.get_row(table_id, row_num)
+Xlsxir.get_col(table_id, col_ltr)
+Xlsxir.get_info(table_id, num_type)
 ```
-`Xlsxir.get_list/0` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
-`Xlsxir.get_map/0` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
-`Xlsxir.get_mda/0` returns entire worksheet in an indexed map which can be accessed like a multi-dimensional array (i.e. `some_var[0][0]` for cell "A1")<br/>
-`Xlsxir.get_cell/1` returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)<br/>
-`Xlsxir.get_row/1` returns values of specified row (i.e. `1` returns the first row of data)<br/>
-`Xlsxir.get_col/1` returns values of specified column (i.e. `"A"` returns the first column of data)<br/>
-`Xlsxir.get_info/1` returns count data for `num_type` specified (i.e. `:rows`, `:cols`, `:cells`, `:all`)<br/>
+**Note:** `table_id` defaults to `:worksheet` and is therefore not required when using `Xlsxir.extract/3` to parse a given worksheet. The `table_id` parameter is only used with `Xlsxir.multi_extract/3`.
+
+`Xlsxir.get_list/1` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
+`Xlsxir.get_map/1` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
+`Xlsxir.get_mda/1` returns entire worksheet in an indexed map which can be accessed like a multi-dimensional array (i.e. `some_var[0][0]` for cell "A1")<br/>
+`Xlsxir.get_cell/2` returns value of specified cell (i.e. `"A1"` returns value contained in cell A1)<br/>
+`Xlsxir.get_row/2` returns values of specified row (i.e. `1` returns the first row of data)<br/>
+`Xlsxir.get_col/2` returns values of specified column (i.e. `"A"` returns the first column of data)<br/>
+`Xlsxir.get_info/1` and `Xlsxir.get_multi_info/2` return count data for `num_type` specified (i.e. `:rows`, `:cols`, `:cells`, `:all`)<br/>
 
 Once the table data is no longer needed, run the following function to delete the ETS process and free memory:
 ```elixir
-Xlsxir.close 
+Xlsxir.close(table_id) 
 ```
-Be sure to [close an open ETS process before trying to parse another worksheet](https://hexdocs.pm/xlsxir/Xlsxir.html#close/0) in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error.
+When using `Xlsxir.extract/3`, be sure to [close an open ETS process before trying to parse another worksheet](https://hexdocs.pm/xlsxir/Xlsxir.html#close/0) in the same session or process. If you try to open a new `:worksheet` ETS process when one already exists, you will get an error. If the parsing of multiple worksheets is desired, use `Xlsxir.multi_extract/3` instead.
+
 
 Refer to [API Reference](https://hexdocs.pm/xlsxir/api-reference.html) for more detailed examples. 
 
 ## Considerations
 
-Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, and ISO 8601 date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Xlsxir does not currently support dates prior to 1/1/1900.
+Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, and ISO 8601 date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Xlsxir does not currently support dates prior to 1/1/1900. Empty cells are ignored, so be careful when accessing row or column data.
 
 ## Contributing
 

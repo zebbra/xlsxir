@@ -53,20 +53,27 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler({:endElement,_,'c',_}, %Xlsxir.ParseWorksheet{row: row} = state) do
     cell_value = format_cell_value([state.data_type, state.num_style, state.value])
-    %{state | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]), cell_ref: "", data_type: "", num_style: "", value: ""} 
+
+    if cell_value do
+      %{state | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]), cell_ref: "", data_type: "", num_style: "", value: ""}  
+    else
+      %{state | row: row, cell_ref: "", data_type: "", num_style: "", value: ""} 
+    end
   end
 
   def sax_event_handler({:endElement,_,'row',_}, state) do
-    [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
+    unless Enum.empty?(state.row) do
+      [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
 
-    if TableId.alive? do
-      state.row
-      |> Enum.reverse
-      |> Worksheet.add_row(row, TableId.get)
-    else
-      state.row
-      |> Enum.reverse
-      |> Worksheet.add_row(row)
+      if TableId.alive? do
+        state.row
+        |> Enum.reverse
+        |> Worksheet.add_row(row, TableId.get)
+      else
+        state.row
+        |> Enum.reverse
+        |> Worksheet.add_row(row)
+      end
     end
   end
 
@@ -80,7 +87,7 @@ defmodule Xlsxir.ParseWorksheet do
   defp format_cell_value(list) do
     case list do
       [   _,   _, nil]  -> nil                                                                 # Cell with no value attribute
-      [   _,   _,  ""]  -> ""                                                                  # Empty cell with assigned attribute
+      [   _,   _,  ""]  -> nil                                                                 # Empty cell with assigned attribute
       [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Type error
       [ 's',    _,  i]  -> SharedString.get_at(List.to_integer(i))                             # Type string
       [ nil,  nil,  n]  -> convert_char_number(n)                                              # Type number

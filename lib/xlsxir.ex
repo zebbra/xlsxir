@@ -2,7 +2,7 @@ defmodule Xlsxir do
   alias Xlsxir.{Unzip, SaxParser, Worksheet, Timer, Index}
 
   @moduledoc """
-  Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.
+  Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. **Warning:** empty cells are ignored.
   """
 
   @doc """
@@ -157,12 +157,12 @@ defmodule Xlsxir do
   """
   def get_map(table_id \\ :worksheet) do
     :ets.match(table_id, {:"$1", :"$2"})
-    |> Enum.sort
     |> Enum.reduce(%{}, fn [_num, row], acc -> 
          row
          |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
          |> Enum.into(acc)
        end)
+    |> Enum.sort
   end
 
   @doc """

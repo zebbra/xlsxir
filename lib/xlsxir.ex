@@ -162,7 +162,6 @@ defmodule Xlsxir do
          |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
          |> Enum.into(acc)
        end)
-    |> Enum.sort
   end
 
   @doc """

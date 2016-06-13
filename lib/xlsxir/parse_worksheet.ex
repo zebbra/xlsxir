@@ -1,5 +1,5 @@
 defmodule Xlsxir.ParseWorksheet do
-  alias Xlsxir.{Worksheet, SharedString, Style, ConvertDate}
+  alias Xlsxir.{Worksheet, SharedString, Style, ConvertDate, TableId}
   import Xlsxir.ConvertDate, only: [convert_char_number: 1]
 
   @moduledoc """
@@ -59,9 +59,15 @@ defmodule Xlsxir.ParseWorksheet do
   def sax_event_handler({:endElement,_,'row',_}, state) do
     [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
 
-    state.row
-    |> Enum.reverse
-    |> Worksheet.add_row(row)
+    if TableId.alive? do
+      state.row
+      |> Enum.reverse
+      |> Worksheet.add_row(row, TableId.get)
+    else
+      state.row
+      |> Enum.reverse
+      |> Worksheet.add_row(row)
+    end
   end
 
   def sax_event_handler(:endDocument, _state) do 

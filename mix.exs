@@ -4,7 +4,7 @@ defmodule Xlsxir.Mixfile do
   def project do
     [
      app: :xlsxir,
-     version: "1.2.1",
+     version: "1.3.0",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
      elixir: "~> 1.2",
@@ -31,7 +31,7 @@ defmodule Xlsxir.Mixfile do
 
   defp description do
     """
-    Xlsx file parser. Supports large files and ISO 8601 date formats. Data is extracted to an Erlang Term Storage (ETS) table and is accessed through various functions. Tested with Excel and LibreOffice.
+    Xlsx file parser. Supports large files, multiple worksheets and ISO 8601 date formats. Data is extracted to an Erlang Term Storage (ETS) table and is accessed through various functions. Tested with Excel and LibreOffice.
     """
   end
 

@@ -1,4 +1,48 @@
+defmodule Xlsxir.TableId do
+  @moduledoc """
+  An Agent process named `TableId` which temporarily holds the table id of an ETS process. Provides functions to create the process, assign a table id, retrieve the current table id 
+  and ultimately kill the process.
+  """
+
+  @doc """
+  Initiates a new `TableId` Agent process with a value of `0`.
+  """
+  def new do
+    Agent.start_link(fn -> 0 end, name: TableId)
+  end
+
+  @doc """
+  Assigns an ETS table id to the `TableId` Agent process.
+  """
+  def assign_id(id) do
+    Agent.update(TableId, &(&1 + id))
+  end
+
+  @doc """
+  Returns current value of `TableId` Agent process
+  """
+  def get do
+    Agent.get(TableId, &(&1))
+  end
+
+  @doc """
+  Deletes `TableId` Agent process
+  """
+  def delete do
+    Agent.stop(TableId)
+  end
+
+  def alive? do
+    case Process.whereis(TableId) do
+      pid when pid != nil -> Process.alive?(pid)
+      _                   -> false
+    end
+  end
+end
+
 defmodule Xlsxir.Worksheet do
+  alias Xlsxir.TableId
+  
   @moduledoc """
   An Erlang Term Storage (ETS) process named `:worksheet` which holds state for data parsed from `sheet\#{n}.xml` at index `n`. Provides functions to create the process, add 
   and retreive data, and ultimately kill the process. 
@@ -12,17 +56,28 @@ defmodule Xlsxir.Worksheet do
   end
 
   @doc """
+  Initializes new ETS process with `[:set, :protected]` options and assigns the associated table id to `Xlsxir.TableId`.
+  """
+
+  def new_multi do
+    TableId.new
+
+    :ets.new(:multi_worksheet, [:set, :protected])
+    |> TableId.assign_id
+  end
+
+  @doc """
   Stores a row at a given index in the ETS process.
   """
-  def add_row(row, index) do
-    :worksheet |> :ets.insert({index, row})
+  def add_row(row, index, id \\ :worksheet) do
+    id |> :ets.insert({index, row})
   end
 
   @doc """
   Returns a row at a given index of the ETS process. 
   """
-  def get_at(row_num) do
-    row = :ets.lookup(:worksheet, to_string(row_num))
+  def get_at(row_num, id \\ :worksheet) do
+    row = :ets.lookup(id, to_string(row_num))
 
     if row == [] do
       row
@@ -37,15 +92,15 @@ defmodule Xlsxir.Worksheet do
   @doc """
   Deletes the ETS process from memory.
   """
-  def delete do
-    if alive?, do: :ets.delete(:worksheet), else: true
+  def delete(id \\ :worksheet) do
+    if alive?, do: :ets.delete(id), else: true
   end
 
   @doc """
   Validates whether the ETS process is active, returning true or false. 
   """
-  def alive? do
-    Enum.member?(:ets.all, :worksheet)
+  def alive?(id \\ :worksheet) do
+    Enum.member?(:ets.all, id)
   end
 end
 

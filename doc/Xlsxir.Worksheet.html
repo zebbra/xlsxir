@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Worksheet – Xlsxir v1.2.1</title>
+    <title>Xlsxir.Worksheet – Xlsxir v1.3.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.2.1
+        v1.3.0
       </h2>
     </div>
     
@@ -60,11 +60,11 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.2.1</small>
+        <small class="visible-xs">Xlsxir v1.3.0</small>
         Xlsxir.Worksheet
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L43" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -95,7 +95,7 @@ and retreive data, and ultimately kill the process. </p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#add_row/2">add_row(row, index)</a>
+    <a href="#add_row/3">add_row(row, index, id \\ :worksheet)</a>
   </div>
   
     <div class="summary-synopsis"><p>Stores a row at a given index in the ETS process</p>
@@ -104,7 +104,7 @@ and retreive data, and ultimately kill the process. </p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#alive?/0">alive?()</a>
+    <a href="#alive?/1">alive?(id \\ :worksheet)</a>
   </div>
   
     <div class="summary-synopsis"><p>Validates whether the ETS process is active, returning true or false</p>
@@ -113,7 +113,7 @@ and retreive data, and ultimately kill the process. </p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#delete/0">delete()</a>
+    <a href="#delete/1">delete(id \\ :worksheet)</a>
   </div>
   
     <div class="summary-synopsis"><p>Deletes the ETS process from memory</p>
@@ -122,7 +122,7 @@ and retreive data, and ultimately kill the process. </p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#get_at/1">get_at(row_num)</a>
+    <a href="#get_at/2">get_at(row_num, id \\ :worksheet)</a>
   </div>
   
     <div class="summary-synopsis"><p>Returns a row at a given index of the ETS process</p>
@@ -135,6 +135,15 @@ and retreive data, and ultimately kill the process. </p>
   </div>
   
     <div class="summary-synopsis"><p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#new_multi/0">new_multi()</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Initializes new ETS process with <code class="inline">[:set, :protected]</code> options and assigns the associated table id to <a href="Xlsxir.TableId.html"><code class="inline">Xlsxir.TableId</code></a></p>
 </div>
   
 </div>
@@ -159,14 +168,14 @@ and retreive data, and ultimately kill the process. </p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="add_row/2">
+          <div class="detail" id="add_row/3">
   <div class="detail-header">
-    <a href="#add_row/2" class="detail-link" title="Link to this function">
+    <a href="#add_row/3" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">add_row(row, index)</span>
+    <span class="signature">add_row(row, index, id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L17" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L72" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -177,14 +186,14 @@ and retreive data, and ultimately kill the process. </p>
 
   </section>
 </div>
-<div class="detail" id="alive?/0">
+<div class="detail" id="alive?/1">
   <div class="detail-header">
-    <a href="#alive?/0" class="detail-link" title="Link to this function">
+    <a href="#alive?/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">alive?()</span>
+    <span class="signature">alive?(id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L47" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L102" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -195,14 +204,14 @@ and retreive data, and ultimately kill the process. </p>
 
   </section>
 </div>
-<div class="detail" id="delete/0">
+<div class="detail" id="delete/1">
   <div class="detail-header">
-    <a href="#delete/0" class="detail-link" title="Link to this function">
+    <a href="#delete/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">delete()</span>
+    <span class="signature">delete(id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L40" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L95" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -213,14 +222,14 @@ and retreive data, and ultimately kill the process. </p>
 
   </section>
 </div>
-<div class="detail" id="get_at/1">
+<div class="detail" id="get_at/2">
   <div class="detail-header">
-    <a href="#get_at/1" class="detail-link" title="Link to this function">
+    <a href="#get_at/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">get_at(row_num)</span>
+    <span class="signature">get_at(row_num, id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L24" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L79" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -238,7 +247,7 @@ and retreive data, and ultimately kill the process. </p>
     </a>
     <span class="signature">new()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L10" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L54" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -246,6 +255,24 @@ and retreive data, and ultimately kill the process. </p>
   
   <section class="docstring">
     <p>Initializes new ETS process with <code class="inline">[:set, :protected, :named_table]</code> options.</p>
+
+  </section>
+</div>
+<div class="detail" id="new_multi/0">
+  <div class="detail-header">
+    <a href="#new_multi/0" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">new_multi()</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L62" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Initializes new ETS process with <code class="inline">[:set, :protected]</code> options and assigns the associated table id to <a href="Xlsxir.TableId.html"><code class="inline">Xlsxir.TableId</code></a>.</p>
 
   </section>
 </div>

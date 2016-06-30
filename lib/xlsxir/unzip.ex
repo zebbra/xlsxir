@@ -25,7 +25,7 @@ defmodule Xlsxir.Unzip do
     path = to_string path
     cond do
       Regex.match?(~r/\.xlsx$/, path) -> {:ok, to_char_list path}
-      true -> {:error, "Invalid path. Currently only .xlsx file types are supported."}
+      true                            -> {:error, "Invalid path. Currently only .xlsx file types are supported."}
     end
   end
   

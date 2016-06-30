@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.3.1
+
+- Fixed issue where empty cells were skipped. Empty cells will now be represented as `nil`. For example, if cells "A1" = 1, "A2" = 2, and "A4" = 4, `Xlsxir.get_list/1` would return `[[1, 2, 4]]`. The same situation will now return `[[1, 2, nil, 4]]` to account for the fact that cell "A3" was empty. 
+- Minor updates to documentation to reflect change.
+
 ## 1.3.0
 
 - Added ability to parse multiple worksheets via `Xlsxir.multi_extract/3` which returns a unique table identifier for each ETS process created, enabling the user to access parsed data from multiple worksheets simultaneously. 

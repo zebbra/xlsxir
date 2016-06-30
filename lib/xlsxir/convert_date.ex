@@ -22,11 +22,11 @@ defmodule Xlsxir.ConvertDate do
                |> convert_char_number
                |> is_float
                |> case do
-                 false -> List.to_integer(serial)
-                 true  -> List.to_float(serial)
-                          |> Float.floor
-                          |> round
-               end
+                    false -> List.to_integer(serial)
+                    true  -> List.to_float(serial)
+                             |> Float.floor
+                             |> round
+                  end
                
     f_serial
     |> process_serial_int
@@ -63,7 +63,7 @@ defmodule Xlsxir.ConvertDate do
 
 
     {month, day} = if days <= 0 do
-                    {12, 31 + days}
+                     {12, 31 + days}
                    else
                      process_days(days, l)
                    end
@@ -97,8 +97,8 @@ defmodule Xlsxir.ConvertDate do
     |> List.to_string
     |> String.match?(~r/[.]/)
     |> case do
-        false -> List.to_integer(number)
-        true  -> List.to_float(number)
+         false -> List.to_integer(number)
+         true  -> List.to_float(number)
        end
   end
 end

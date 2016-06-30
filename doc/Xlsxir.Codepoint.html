@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Index – Xlsxir v1.3.1</title>
+    <title>Xlsxir.Codepoint – Xlsxir v1.3.1</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -61,10 +61,10 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.3.1</small>
-        Xlsxir.Index
+        Xlsxir.Codepoint
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L257" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L43" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -72,8 +72,8 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
-and ultimately kill the process.</p>
+          <p>An Agent process named <code class="inline">Codepoint</code> which temporarily holds the codepoint value of the last column letter of the most recently extracted cell. Provides functions to create the process, 
+update the codepoint value being held, retrieve the currently held codepoint and ultimately kill the process.</p>
 
         </section>
       
@@ -98,7 +98,7 @@ and ultimately kill the process.</p>
     <a href="#delete/0">delete()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Deletes <code class="inline">Index</code> Agent process</p>
+    <div class="summary-synopsis"><p>Deletes <code class="inline">Codepoint</code> Agent process</p>
 </div>
   
 </div>
@@ -107,16 +107,16 @@ and ultimately kill the process.</p>
     <a href="#get/0">get()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Returns current value of <code class="inline">Index</code> Agent process</p>
+    <div class="summary-synopsis"><p>Returns current codepoing being held by the Agent process</p>
 </div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#increment_1/0">increment_1()</a>
+    <a href="#hold/1">hold(codepoint)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Increments active <code class="inline">Index</code> Agent process by <code class="inline">1</code></p>
+    <div class="summary-synopsis"><p>Updates the Agent process to the given codepoint</p>
 </div>
   
 </div>
@@ -125,7 +125,7 @@ and ultimately kill the process.</p>
     <a href="#new/0">new()</a>
   </div>
   
-    <div class="summary-synopsis"><p>Initiates a new <code class="inline">Index</code> Agent process with a value of <code class="inline">0</code></p>
+    <div class="summary-synopsis"><p>Initiates a new <code class="inline">Codepoint</code> Agent process with a value of <code class="inline">0</code></p>
 </div>
   
 </div>
@@ -157,14 +157,14 @@ and ultimately kill the process.</p>
     </a>
     <span class="signature">delete()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L287" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L73" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Deletes <code class="inline">Index</code> Agent process</p>
+    <p>Deletes <code class="inline">Codepoint</code> Agent process</p>
 
   </section>
 </div>
@@ -175,32 +175,32 @@ and ultimately kill the process.</p>
     </a>
     <span class="signature">get()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L280" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L66" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Returns current value of <code class="inline">Index</code> Agent process</p>
+    <p>Returns current codepoing being held by the Agent process</p>
 
   </section>
 </div>
-<div class="detail" id="increment_1/0">
+<div class="detail" id="hold/1">
   <div class="detail-header">
-    <a href="#increment_1/0" class="detail-link" title="Link to this function">
+    <a href="#hold/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">increment_1()</span>
+    <span class="signature">hold(codepoint)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L273" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L59" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Increments active <code class="inline">Index</code> Agent process by <code class="inline">1</code>.</p>
+    <p>Updates the Agent process to the given codepoint</p>
 
   </section>
 </div>
@@ -211,14 +211,14 @@ and ultimately kill the process.</p>
     </a>
     <span class="signature">new()</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L266" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L52" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Initiates a new <code class="inline">Index</code> Agent process with a value of <code class="inline">0</code>.</p>
+    <p>Initiates a new <code class="inline">Codepoint</code> Agent process with a value of <code class="inline">0</code>.</p>
 
   </section>
 </div>

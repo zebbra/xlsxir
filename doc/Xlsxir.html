@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir – Xlsxir v1.3.0</title>
+    <title>Xlsxir – Xlsxir v1.3.1</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.3.0
+        v1.3.1
       </h2>
     </div>
     
@@ -60,7 +60,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.3.0</small>
+        <small class="visible-xs">Xlsxir v1.3.1</small>
         Xlsxir
         
         
@@ -72,7 +72,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. <strong>Warning:</strong> empty cells are ignored.</p>
+          <p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.</p>
 
         </section>
       
@@ -261,7 +261,7 @@ returns <code class="inline">{:ok, table_id}</code> with the timer argument set 
     </a>
     <span class="signature">close(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L432" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L431" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -328,7 +328,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
     </a>
     <span class="signature">get_cell(cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L256" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L255" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -379,7 +379,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_cell(table_id, cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L261" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L260" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -397,7 +397,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L343" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L342" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -448,7 +448,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(table_id, col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L348" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L347" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -466,7 +466,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_info(num_type \\ :all)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L365" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L364" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -582,7 +582,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_mda(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L203" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L202" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -639,7 +639,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_multi_info(table_id, num_type \\ :all)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L389" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L388" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -674,7 +674,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_row(row)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L301" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L300" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -725,7 +725,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_row(table_id, row)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L306" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L305" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

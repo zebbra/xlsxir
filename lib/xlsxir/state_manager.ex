@@ -40,6 +40,41 @@ defmodule Xlsxir.TableId do
   end
 end
 
+defmodule Xlsxir.Codepoint do
+  @moduledoc """
+  An Agent process named `Codepoint` which temporarily holds the codepoint value of the last column letter of the most recently extracted cell. Provides functions to create the process, 
+  update the codepoint value being held, retrieve the currently held codepoint and ultimately kill the process.
+  """
+
+  @doc """
+  Initiates a new `Codepoint` Agent process with a value of `0`.
+  """
+  def new do
+    Agent.start_link(fn -> 0 end, name: Codepoint)
+  end
+
+  @doc """
+  Updates the Agent process to the given codepoint
+  """
+  def hold(codepoint) do
+    Agent.update(Codepoint, &(&1 - &1 + codepoint))
+  end
+
+  @doc """
+  Returns current codepoing being held by the Agent process
+  """
+  def get do
+    Agent.get(Codepoint, &(&1))
+  end
+
+  @doc """
+  Deletes `Codepoint` Agent process
+  """
+  def delete do
+    Agent.stop(Codepoint)
+  end
+end
+
 defmodule Xlsxir.Worksheet do
   alias Xlsxir.TableId
   

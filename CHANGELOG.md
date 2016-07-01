@@ -2,7 +2,7 @@
 
 ## 1.3.1
 
-- Fixed issue where empty cells were skipped. Empty cells will now be represented as `nil`. For example, if cells "A1" = 1, "A2" = 2, and "A4" = 4, `Xlsxir.get_list/1` would return `[[1, 2, 4]]`. The same situation will now return `[[1, 2, nil, 4]]` to account for the fact that cell "A3" was empty. 
+- Fixed issue where empty cells were skipped. Empty cells will now be represented as `nil`. For example, if cells "A1" = 1, "B1" = 2, and "D1" = 4, `Xlsxir.get_list/1` would return `[[1, 2, 4]]`. The same situation will now return `[[1, 2, nil, 4]]` to account for the fact that cell "C1" was empty. 
 - Minor updates to documentation to reflect change.
 
 ## 1.3.0

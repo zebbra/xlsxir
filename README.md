@@ -82,7 +82,7 @@ Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more d
 
 ## Considerations
 
-Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, and ISO 8601 date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Xlsxir does not currently support dates prior to 1/1/1900. Empty cells are ignored, so be careful when accessing row or column data.
+Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, and ISO 8601 date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Xlsxir does not currently support dates prior to 1/1/1900.
 
 ## Planned Development
 

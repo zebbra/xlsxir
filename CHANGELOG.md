@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.3.2
+
+- Fixed bug where dates in the year 1900 were off by one day due to the fact that Excel erroneously considers the year 1900 a leap year. 
+- Minor documentation updates.
+
 ## 1.3.1
 
 - Fixed issue where empty cells were skipped. Empty cells will now be represented as `nil`. For example, if cells "A1" = 1, "B1" = 2, and "D1" = 4, `Xlsxir.get_list/1` would return `[[1, 2, 4]]`. The same situation will now return `[[1, 2, nil, 4]]` to account for the fact that cell "C1" was empty. 

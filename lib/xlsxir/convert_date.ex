@@ -41,6 +41,8 @@ defmodule Xlsxir.ConvertDate do
            |> Kernel.+(1900) 
            |> round
 
+    serial_int = if serial_int >= 60 && serial_int <= 364, do: serial_int - 1, else: serial_int
+
     days  = serial_int
             |> rem(365)
             |> Kernel.-(

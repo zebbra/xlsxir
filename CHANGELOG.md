@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.3
+
+- Minor bug fixes.
+
 ## 1.3.2
 
 - Fixed bug where dates in the year 1900 were off by one day due to the fact that Excel erroneously considers the year 1900 a leap year. 

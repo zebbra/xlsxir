@@ -34,4 +34,9 @@ defmodule XlsxirTest do
     assert get_list == [[-123.45, 67.89, {2015, 1, 1}, {2016, 12, 31}]]
     close
   end
+
+  test "able to parse with conditional formatting" do
+    extract(path, 6)
+    close
+  end
 end

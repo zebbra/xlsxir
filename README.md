@@ -86,7 +86,7 @@ Cell references are formatted as a string (i.e. "A1"). Strings will be returned 
 
 ## Planned Development
 
-- Additional performance improvement for larger files
+- Additional performance improvement for larger files via GenStage.Flow
 - Adding time support for dates (i.e. {{YYYY, MM, DD}, {h, m, s}})
 - Export functionality to .xlsx file type with formatting options
 - Implement Elixir 1.3 calendar datatypes support

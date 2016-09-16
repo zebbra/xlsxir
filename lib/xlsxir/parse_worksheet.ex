@@ -5,13 +5,13 @@ defmodule Xlsxir.ParseWorksheet do
   @moduledoc """
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
-  
+
   defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: ""
-  
+
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
-  worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the `Xlsxir.Worksheet` module 
-  which contains an ETS process that was started by `Xlsxir.SaxParser.parse/2`. 
+  worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the `Xlsxir.Worksheet` module
+  which contains an ETS process that was started by `Xlsxir.SaxParser.parse/2`.
 
   ## Parameters
 
@@ -27,12 +27,12 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, state) do
-    a = Enum.map(xml_attr, fn(attr) -> 
+    a = Enum.map(xml_attr, fn(attr) ->
           case attr do
             {:attribute,'r',_,_,ref}   -> {:r, ref  }
             {:attribute,'s',_,_,style} -> {:s, if Style.alive? do
                                                  Style.get_at(List.to_integer(style))
-                                               else 
+                                               else
                                                  nil
                                                end}
             {:attribute,'t',_,_,type}  -> {:t, type }
@@ -57,7 +57,7 @@ defmodule Xlsxir.ParseWorksheet do
   def sax_event_handler({:endElement,_,'c',_}, %Xlsxir.ParseWorksheet{row: row} = state) do
     cell_value = format_cell_value([state.data_type, state.num_style, state.value])
     new_cells  = compare_to_previous_cell(to_string(state.cell_ref), cell_value)
-    
+
     %{state | row: Enum.into(row, new_cells), cell_ref: "", data_type: "", num_style: "", value: ""}
   end
 
@@ -77,9 +77,10 @@ defmodule Xlsxir.ParseWorksheet do
         |> Worksheet.add_row(row)
       end
     end
+    state
   end
 
-  def sax_event_handler(:endDocument, _state) do 
+  def sax_event_handler(:endDocument, _state) do
     if SharedString.alive?, do: SharedString.delete
     if Style.alive?, do: Style.delete
   end
@@ -96,7 +97,7 @@ defmodule Xlsxir.ParseWorksheet do
       [ 'n',  nil,  n]  -> convert_char_number(n)
       [ nil,  'd',  d]  -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
       [ 'n',  'd',  d]  -> ConvertDate.from_serial(d)
-      ['str',   _,  s]  -> List.to_string(s)                                                   # Type formula w/ string 
+      ['str',   _,  s]  -> List.to_string(s)                                                   # Type formula w/ string
       _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
     end
   end
@@ -150,7 +151,7 @@ defmodule Xlsxir.ParseWorksheet do
                    head = post_z |> Enum.map(fn col_ltr -> [      <<second>> <> <<col_ltr>> <> row_num, nil] end)
                    Enum.into(tail, head)
            end
-           
+
       2 -> case [third, second] do
              [65, 65] -> tail = pre_z  |> Enum.map(fn col_ltr -> [                 <<90, col_ltr>> <> row_num, nil] end)
                          head = post_z |> Enum.map(fn col_ltr -> [<<third, second>> <> <<col_ltr>> <> row_num, nil] end)

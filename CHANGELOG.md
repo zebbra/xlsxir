@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.3.4
+
+- Fixed bug related to parsing a worksheet containing conditional formatting. Thanks to Justin Nauman (@jrnt30) for contribution.
+- Fixed bug where row number was erroneously represented as a string (instead of integer) in the ETS table causing `Enum.sort` to not work as expected on larger files.
+- Minor documentation updates.
+
 ## 1.3.3
 
 - Minor bug fixes.

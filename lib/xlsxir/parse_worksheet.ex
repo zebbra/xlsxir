@@ -66,6 +66,7 @@ defmodule Xlsxir.ParseWorksheet do
 
     unless Enum.empty?(state.row) do
       [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
+      row     = row |> String.to_integer
 
       if TableId.alive? do
         state.row

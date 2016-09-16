@@ -112,7 +112,7 @@ defmodule Xlsxir.Worksheet do
   Returns a row at a given index of the ETS process. 
   """
   def get_at(row_num, id \\ :worksheet) do
-    row = :ets.lookup(id, to_string(row_num))
+    row = :ets.lookup(id, row_num)
 
     if row == [] do
       row

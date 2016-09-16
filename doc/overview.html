@@ -5,10 +5,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir – Xlsxir v1.3.3</title>
+    <title>OVERVIEW – Xlsxir v1.3.4</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
-    
-      <link rel="canonical" href="https://hexdocs.pm/xlsxir/overview.html" />
     
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -30,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.3.3
+        v1.3.4
       </h2>
     </div>
     
@@ -64,15 +62,17 @@
 <h1>Xlsxir</h1>
 <p>Xlsxir is an Elixir library that parses <code class="inline">.xlsx</code> files using Simple API for XML (SAX) parsing via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. </p>
 <p>Testing has been limited to various documents in Microsoft Excel and LibreOffice as well as any issues submitted through GitHub. Only English and Portuguese languages have been tested. A large worksheet containing 100 columns and 514K rows has successfully been parsed. Please submit any issues found and they will be addressed ASAP.   </p>
-<h2 id="installation"> Installation</h2><p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
+<h2>Installation</h2>
+<p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
 <pre><code class="elixir">def deps do
-  [ {:xlsxir, &quot;~&gt; 1.3.3&quot;} ]
+  [ {:xlsxir, &quot;~&gt; 1.3.4&quot;} ]
 end</code></pre>
 <p>Or, you can directly reference the GitHub repo:</p>
 <pre><code class="elixir">def deps do
   [ {:xlsxir, github: &quot;kennellroxco/xlsxir&quot;} ]
 end</code></pre>
-<h2 id="basic-usage"> Basic Usage</h2><p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS process via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> and <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> functions:</p>
+<h2>Basic Usage</h2>
+<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS process via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> and <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> functions:</p>
 <pre><code class="elixir">Xlsxir.extract(path, index, timer \\ false)
 Xlsxir.multi_extract(path, index, timer \\ false)</code></pre>
 <p>The <code class="inline">multi_extract/3</code> function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each.</p>
@@ -124,9 +124,12 @@ Xlsxir.get_info(table_id, num_type)</code></pre>
 <pre><code class="elixir">Xlsxir.close(table_id) </code></pre>
 <p>When using <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a>, be sure to <a href="https://hexdocs.pm/xlsxir/Xlsxir.html#close/0">close an open ETS process before trying to parse another worksheet</a> in the same session or process. If you try to open a new <code class="inline">:worksheet</code> ETS process when one already exists, you will get an error. If the parsing of multiple worksheets is desired, use <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> instead.</p>
 <p>Refer to <a href="https://hexdocs.pm/xlsxir/api-reference.html">API Reference</a> for more detailed examples. </p>
-<h2 id="considerations"> Considerations</h2><p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>
-<h2 id="contributing"> Contributing</h2><p>Contributions are encouraged. Feel free to fork the <a href="https://github.com/kennellroxco/xlsxir">repo</a>, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
-<h2 id="bug-reporting"> Bug Reporting</h2><p>Please report any bugs or request future enhancements via the <a href="https://github.com/kennellroxco/xlsxir/issues">Issues</a> page. </p>
+<h2>Considerations</h2>
+<p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, and ISO 8601 date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>). Xlsxir does not currently support dates prior to 1/1/1900.</p>
+<h2>Contributing</h2>
+<p>Contributions are encouraged. Feel free to fork the <a href="https://github.com/kennellroxco/xlsxir">repo</a>, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
+<h2>Bug Reporting</h2>
+<p>Please report any bugs or request future enhancements via the <a href="https://github.com/kennellroxco/xlsxir/issues">Issues</a> page. </p>
 
     <footer class="footer">
       <p>

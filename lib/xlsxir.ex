@@ -209,14 +209,13 @@ defmodule Xlsxir do
   defp convert_to_indexed_map([h|t], map) do
     Index.new
     row_index = Enum.at(h, 0)
-                |> String.to_integer
                 |> Kernel.-(1)
 
-    add_row = Enum.at(h,1)
-              |> Enum.reduce(%{}, fn cell, acc ->
-                    Index.increment_1
-                    Map.put(acc, Index.get - 1, Enum.at(cell, 1))
-                  end)
+    add_row   = Enum.at(h,1)
+                |> Enum.reduce(%{}, fn cell, acc ->
+                      Index.increment_1
+                      Map.put(acc, Index.get - 1, Enum.at(cell, 1))
+                    end)
 
     Index.delete
     updated_map = Map.put(map, row_index, add_row)
@@ -261,6 +260,7 @@ defmodule Xlsxir do
 
   defp do_get_cell(cell_ref, table_id \\ :worksheet) do
     [[row_num]] = ~r/\d+/ |> Regex.scan(cell_ref)
+    row_num     = row_num |> String.to_integer
     [[row]]     = :ets.match(table_id, {row_num, :"$1"})
 
     row
@@ -305,7 +305,7 @@ defmodule Xlsxir do
   def get_row(table_id, row), do: do_get_row(row, table_id)
 
   defp do_get_row(row, table_id \\ :worksheet) do
-    [[row]] = :ets.match(table_id, {to_string(row), :"$1"})
+    [[row]] = :ets.match(table_id, {row, :"$1"})
 
     row
     |> Enum.map(fn [_ref, val] -> val end)

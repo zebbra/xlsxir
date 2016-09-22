@@ -111,22 +111,23 @@ defmodule Xlsxir.ParseWorksheet do
     prefix = col_ltr |> String.slice(0, String.length(col_ltr) - 1)
 
     cond do
-      Codepoint.get == 0 and codepoint == 65 -> Codepoint.hold(65)
-                                                [[ref, value]]
-
-      codepoint - Codepoint.get == 1         -> Codepoint.hold(codepoint)
-                                                [[ref, value]]
-
-      true                                   -> get_empty_cells(codepoint, row_num, prefix)
-                                                |> Enum.into([[ref, value]])
+      Codepoint.get == 0 and codepoint == 65  -> Codepoint.hold(65)
+                                                 [[ref, value]]
+      Codepoint.get == 90 and codepoint == 65 -> Codepoint.hold(65)
+                                                 [[ref, value]]
+      codepoint - Codepoint.get == 1          -> Codepoint.hold(codepoint)
+                                                 [[ref, value]]
+      true                                    -> get_empty_cells(codepoint, row_num, prefix)
+                                                 |> Enum.into([[ref, value]])
     end
   end
 
   defp get_empty_cells(codepoint, row_num, prefix) do
     range = cond do
               Codepoint.get == 0        -> (codepoint - 1)..65
+              codepoint == 65           -> 90..(Codepoint.get + 1)
               Codepoint.get == 90       -> (codepoint - 1)..65
-              Codepoint.get > codepoint -> [(90..Codepoint.get + 1), (codepoint - 1)..65]
+              Codepoint.get > codepoint -> [90..(Codepoint.get + 1), (codepoint - 1)..65]
               true                      -> (codepoint - 1)..(Codepoint.get + 1)
             end
 

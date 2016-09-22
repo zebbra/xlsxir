@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.5
+
+- Fixed bug where unnecessary cells with `nil` values were added to worksheets with rows containing data beyond column `"Z"`.
+
 ## 1.3.4
 
 - Fixed bug related to parsing a worksheet containing conditional formatting. Thanks to Justin Nauman (@jrnt30) for contribution.

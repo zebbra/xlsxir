@@ -23,8 +23,8 @@ defmodule Xlsxir.Mixfile do
 
   defp deps do
     [ 
-      { :ex_doc, github: "elixir-lang/ex_doc" },
-      { :earmark, github: "pragdave/earmark", override: true },
+      { :ex_doc, github: "elixir-lang/ex_doc", only: :dev },
+      { :earmark, github: "pragdave/earmark", only: :dev },
       { :erlsom, "~> 1.4" }
     ]
   end

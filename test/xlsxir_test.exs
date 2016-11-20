@@ -39,4 +39,9 @@ defmodule XlsxirTest do
     extract(path, 6)
     close
   end
+
+  test "able to parse with boolean values" do
+    extract(path, 7)
+    close
+  end
 end

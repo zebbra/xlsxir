@@ -99,6 +99,7 @@ defmodule Xlsxir.ParseWorksheet do
       [ nil,  'd',  d]  -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
       [ 'n',  'd',  d]  -> ConvertDate.from_serial(d)
       ['str',   _,  s]  -> List.to_string(s)                                                   # Type formula w/ string
+      ['b',   _,  s]  -> s == '1'                                                              # Type formula w/ string
       _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
     end
   end

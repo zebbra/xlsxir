@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Unzip – Xlsxir v1.3.5</title>
+    <title>Xlsxir.Unzip – Xlsxir v1.3.6</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.3.5
+        v1.3.6
       </h2>
     </div>
     
@@ -60,7 +60,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.3.5</small>
+        <small class="visible-xs">Xlsxir v1.3.6</small>
         Xlsxir.Unzip
         
         
@@ -72,7 +72,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Provides validation of accepted file extension types for file path, extracts required <code class="inline">.xlsx</code> contents to <code class="inline">./temp</code> and ultimately deletes the <code class="inline">./temp</code> directory and its contents.</p>
+          <p>Provides validation of accepted file types for file path, extracts required <code class="inline">.xlsx</code> contents to <code class="inline">./temp</code> and ultimately deletes the <code class="inline">./temp</code> directory and its contents.</p>
 
         </section>
       
@@ -94,7 +94,7 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#delete_dir/1">delete_dir(dir \\ [&quot;temp/xl/worksheets&quot;, &quot;temp/xl&quot;, &quot;temp&quot;])</a>
+    <a href="#delete_dir/1">delete_dir(dir \\ &quot;./temp&quot;)</a>
   </div>
   
     <div class="summary-synopsis"><p>Deletes all files and directories contained in specified directory</p>
@@ -112,10 +112,10 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#validate_path/1">validate_path(path)</a>
+    <a href="#validate_path/2">validate_path(path, index)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Validates given path is of extension type <code class="inline">.xlsx</code> and returns a tuple</p>
+    <div class="summary-synopsis"><p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple</p>
 </div>
   
 </div>
@@ -154,9 +154,9 @@
     <a href="#delete_dir/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">delete_dir(dir \\ [&quot;temp/xl/worksheets&quot;, &quot;temp/xl&quot;, &quot;temp&quot;])</span>
+    <span class="signature">delete_dir(dir \\ &quot;./temp&quot;)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L100" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L119" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -175,7 +175,7 @@
 iex&gt; file_list = [&#39;test.txt&#39;]
 iex&gt; Xlsxir.Unzip.extract_xml_to_file(file_list, path)
 {:ok, [&#39;temp/test.txt&#39;]}     
-iex&gt; Xlsxir.Unzip.delete_dir([&quot;./temp&quot;])
+iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 :ok</code></pre>
 
   </section>
@@ -187,7 +187,7 @@ iex&gt; Xlsxir.Unzip.delete_dir([&quot;./temp&quot;])
     </a>
     <span class="signature">extract_xml_to_file(file_list, path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L72" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L91" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -210,38 +210,42 @@ iex&gt; Xlsxir.Unzip.extract_xml_to_file(file_list, path)
 {:ok, [&#39;temp/test.txt&#39;]}
 iex&gt; File.ls(&quot;./temp&quot;)
 {:ok, [&quot;test.txt&quot;]}
-iex&gt; Xlsxir.Unzip.delete_dir([&quot;./temp&quot;])
+iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 :ok</code></pre>
 
   </section>
 </div>
-<div class="detail" id="validate_path/1">
+<div class="detail" id="validate_path/2">
   <div class="detail-header">
-    <a href="#validate_path/1" class="detail-link" title="Link to this function">
+    <a href="#validate_path/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">validate_path(path)</span>
+    <span class="signature">validate_path(path, index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L24" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L28" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Validates given path is of extension type <code class="inline">.xlsx</code> and returns a tuple.</p>
+    <p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple.</p>
 <h2>Parameters</h2>
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
 </li>
 </ul>
 <h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; path = &quot;Good_Example.xlsx&quot;
-   iex&gt; Xlsxir.Unzip.validate_path(path)
-   {:ok, &#39;Good_Example.xlsx&#39;}
+<pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
+   iex&gt; Xlsxir.Unzip.validate_path(path, 0)
+   {:ok, &#39;./test/test_data/test.xlsx&#39;}
 
-   iex&gt; path = &quot;bad_path.xml&quot;
-   iex&gt; Xlsxir.Unzip.validate_path(path)
+   iex&gt; path = &quot;./test/test_data/test.validfilebutnotxlsx&quot;
+   iex&gt; Xlsxir.Unzip.validate_path(path, 0)
+   {:ok, &#39;./test/test_data/test.validfilebutnotxlsx&#39;}
+
+   iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
+   iex&gt; Xlsxir.Unzip.validate_path(path, 100)
    {:error, &quot;Invalid path. Currently only .xlsx file types are supported.&quot;}</code></pre>
 
   </section>
@@ -253,7 +257,7 @@ iex&gt; Xlsxir.Unzip.delete_dir([&quot;./temp&quot;])
     </a>
     <span class="signature">xml_file_list(index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L44" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L63" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

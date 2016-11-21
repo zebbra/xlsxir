@@ -4,6 +4,9 @@
 
 - Added boolean value support. Thanks to Pikender Sharma (@pikender) for contribution.
 - Added support for data type `inlineStr`.
+- Changed the way file paths are validated prior to parsing. It no longer matters whether or not the extension is `.xlsx`. As long as it is a valid file, Xlsxir will attempt to parse it. 
+- Refactored `Unzip.delete_dir/1` for simplification.
+- Minor documentation updates.
 
 ## 1.3.5
 

@@ -43,7 +43,7 @@ defmodule Xlsxir.Unzip do
     |> Enum.any?(fn file -> 
          case file do
            {:zip_file, ^sheet, _, _, _, _} -> true
-           _                             -> false
+           _                               -> false
          end
        end)
   end
@@ -85,7 +85,7 @@ defmodule Xlsxir.Unzip do
       {:ok, ['temp/test.txt']}
       iex> File.ls("./temp")
       {:ok, ["test.txt"]}
-      iex> Xlsxir.Unzip.delete_dir(["./temp"])
+      iex> Xlsxir.Unzip.delete_dir("./temp")
       :ok
   """
   def extract_xml_to_file(file_list, path) do
@@ -113,25 +113,12 @@ defmodule Xlsxir.Unzip do
       iex> file_list = ['test.txt']
       iex> Xlsxir.Unzip.extract_xml_to_file(file_list, path)
       {:ok, ['temp/test.txt']}     
-      iex> Xlsxir.Unzip.delete_dir(["./temp"])
+      iex> Xlsxir.Unzip.delete_dir("./temp")
       :ok
   """
-  def delete_dir(dir \\ ["temp/xl/worksheets", "temp/xl", "temp"]) do
-    search_and_destroy(dir)
+  def delete_dir(dir \\ "./temp") do
+    File.rm_rf(dir)
+    :ok
   end
-
-  defp search_and_destroy([h|t]) do
-    {:ok, file_list} = File.ls(h)
-
-    case file_list do
-      [] -> File.rmdir!(h)
-      _  -> Enum.each(file_list, fn name -> File.rm!(h <> "/#{name}") end)
-            File.rmdir!(h)
-    end
-
-    search_and_destroy(t)
-  end
-
-  defp search_and_destroy([]), do: :ok
 
 end

@@ -432,7 +432,7 @@ defmodule Xlsxir do
     Worksheet.delete(table_id)
     |> case do
          false -> raise "Unable to close worksheet"
-         true -> :ok
+         true  -> :ok
        end
   end
 

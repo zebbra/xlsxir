@@ -31,7 +31,7 @@ defmodule Xlsxir do
   def extract(path, index, timer \\ false) do
     if timer, do: Timer.start
 
-    {:ok, file}       = Unzip.validate_path(path)
+    {:ok, file}       = Unzip.validate_path(path, index)
     {:ok, file_paths} = Unzip.xml_file_list(index)
                         |> Unzip.extract_xml_to_file(file)
 
@@ -75,7 +75,7 @@ defmodule Xlsxir do
   def multi_extract(path, index, timer \\ false) do
     if timer, do: Timer.start
 
-    {:ok, file}       = Unzip.validate_path(path)
+    {:ok, file}       = Unzip.validate_path(path, index)
     {:ok, file_paths} = Unzip.xml_file_list(index)
                         |> Unzip.extract_xml_to_file(file)
 

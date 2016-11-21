@@ -1,11 +1,11 @@
 defmodule Xlsxir.Unzip do
 
   @moduledoc """
-  Provides validation of accepted file extension types for file path, extracts required `.xlsx` contents to `./temp` and ultimately deletes the `./temp` directory and its contents.
+  Provides validation of accepted file types for file path, extracts required `.xlsx` contents to `./temp` and ultimately deletes the `./temp` directory and its contents.
   """
 
   @doc """
-  Validates given path is of extension type `.xlsx` and returns a tuple.
+  Checks if given path is a valid file type and contains the requested worksheet, returning a tuple.
 
   ## Parameters
 
@@ -13,20 +13,39 @@ defmodule Xlsxir.Unzip do
 
   ## Example
 
-         iex> path = "Good_Example.xlsx"
-         iex> Xlsxir.Unzip.validate_path(path)
-         {:ok, 'Good_Example.xlsx'}
+         iex> path = "./test/test_data/test.xlsx"
+         iex> Xlsxir.Unzip.validate_path(path, 0)
+         {:ok, './test/test_data/test.xlsx'}
+        
+         iex> path = "./test/test_data/test.validfilebutnotxlsx"
+         iex> Xlsxir.Unzip.validate_path(path, 0)
+         {:ok, './test/test_data/test.validfilebutnotxlsx'}
 
-         iex> path = "bad_path.xml"
-         iex> Xlsxir.Unzip.validate_path(path)
+         iex> path = "./test/test_data/test.xlsx"
+         iex> Xlsxir.Unzip.validate_path(path, 100)
          {:error, "Invalid path. Currently only .xlsx file types are supported."}
   """
-  def validate_path(path) do
-    path = to_string path
-    cond do
-      Regex.match?(~r/\.xlsx$/, path) -> {:ok, to_char_list path}
-      true                            -> {:error, "Invalid path. Currently only .xlsx file types are supported."}
+  def validate_path(path, index) do
+    path = String.to_char_list(path)
+    {:ok, file_list} = :zip.list_dir(path)
+
+    if search_file_list(file_list, index) do
+      {:ok, path}
+    else
+      {:error, "Invalid path. Currently only .xlsx file types are supported."}
     end
+  end
+
+  defp search_file_list(file_list, index) do
+    sheet = 'xl/worksheets/sheet#{index + 1}.xml'
+
+    file_list
+    |> Enum.any?(fn file -> 
+         case file do
+           {:zip_file, ^sheet, _, _, _, _} -> true
+           _                             -> false
+         end
+       end)
   end
   
   @doc """

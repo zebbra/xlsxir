@@ -90,17 +90,18 @@ defmodule Xlsxir.ParseWorksheet do
 
   defp format_cell_value(list) do
     case list do
-      [   _,   _, nil]  -> nil                                                                 # Cell with no value attribute
-      [   _,   _,  ""]  -> nil                                                                 # Empty cell with assigned attribute
-      [ 'e',  nil,  e]  -> List.to_string(e)                                                   # Type error
-      [ 's',    _,  i]  -> SharedString.get_at(List.to_integer(i))                             # Type string
-      [ nil,  nil,  n]  -> convert_char_number(n)                                              # Type number
-      [ 'n',  nil,  n]  -> convert_char_number(n)
-      [ nil,  'd',  d]  -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
-      [ 'n',  'd',  d]  -> ConvertDate.from_serial(d)
-      ['str',   _,  s]  -> List.to_string(s)                                                   # Type formula w/ string
-      ['b',   _,  s]  -> s == '1'                                                              # Type formula w/ string
-      _                 -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
+      [          _,   _, nil] -> nil                                                                 # Cell with no value attribute
+      [          _,   _,  ""] -> nil                                                                 # Empty cell with assigned attribute
+      [        'e', nil,   e] -> List.to_string(e)                                                   # Type error
+      [        's',   _,   i] -> SharedString.get_at(List.to_integer(i))                             # Type string
+      [        nil, nil,   n] -> convert_char_number(n)                                              # Type number
+      [        'n', nil,   n] -> convert_char_number(n)
+      [        nil, 'd',   d] -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
+      [        'n', 'd',   d] -> ConvertDate.from_serial(d)
+      [      'str',   _,   s] -> List.to_string(s)                                                   # Type formula w/ string
+      [        'b',   _,   s] -> s == '1'                                                            # Type boolean
+      ['inlineStr',   _,   s] -> List.to_string(s)                                                   # Type string
+      _                       -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
     end
   end
 

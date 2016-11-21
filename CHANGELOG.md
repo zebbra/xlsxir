@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.3.6
+
+- Added boolean value support. Thanks to Pikender Sharma (@pikender) for contribution.
+- Added support for data type `inlineStr`.
+
 ## 1.3.5
 
 - Fixed bug where unnecessary cells with `nil` values were added to worksheets with rows containing data beyond column `"Z"`.

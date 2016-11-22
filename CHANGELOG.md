@@ -4,6 +4,7 @@
 
 - Added boolean value support. Thanks to Pikender Sharma (@pikender) for contribution.
 - Added support for data type `inlineStr`.
+- `Xlsxir.extract/3` and `Xlsxir.multi_extract/3` now return `{:error, reason}` instead of throwing an exception when an invalid file type or worksheet index are provided as arguments.
 - Changed the way file paths are validated prior to parsing. It no longer matters whether or not the extension is `.xlsx`. As long as it is a valid file, Xlsxir will attempt to parse it. 
 - Refactored `Unzip.delete_dir/1` for simplification.
 - Minor documentation updates.

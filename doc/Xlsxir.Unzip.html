@@ -112,7 +112,7 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#validate_path/2">validate_path(path, index)</a>
+    <a href="#validate_path_and_index/2">validate_path_and_index(path, index)</a>
   </div>
   
     <div class="summary-synopsis"><p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple</p>
@@ -156,7 +156,7 @@
     </a>
     <span class="signature">delete_dir(dir \\ &quot;./temp&quot;)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L119" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L129" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -187,7 +187,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">extract_xml_to_file(file_list, path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L91" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L101" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -215,12 +215,12 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 
   </section>
 </div>
-<div class="detail" id="validate_path/2">
+<div class="detail" id="validate_path_and_index/2">
   <div class="detail-header">
-    <a href="#validate_path/2" class="detail-link" title="Link to this function">
+    <a href="#validate_path_and_index/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">validate_path(path, index)</span>
+    <span class="signature">validate_path_and_index(path, index)</span>
       
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L28" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
@@ -237,16 +237,16 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 </ul>
 <h2>Example</h2>
 <pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
-   iex&gt; Xlsxir.Unzip.validate_path(path, 0)
+   iex&gt; Xlsxir.Unzip.validate_path_and_index(path, 0)
    {:ok, &#39;./test/test_data/test.xlsx&#39;}
 
    iex&gt; path = &quot;./test/test_data/test.validfilebutnotxlsx&quot;
-   iex&gt; Xlsxir.Unzip.validate_path(path, 0)
+   iex&gt; Xlsxir.Unzip.validate_path_and_index(path, 0)
    {:ok, &#39;./test/test_data/test.validfilebutnotxlsx&#39;}
 
    iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
-   iex&gt; Xlsxir.Unzip.validate_path(path, 100)
-   {:error, &quot;Invalid path. Currently only .xlsx file types are supported.&quot;}</code></pre>
+   iex&gt; Xlsxir.Unzip.validate_path_and_index(path, 100)
+   {:error, &quot;Invalid worksheet index.&quot;}</code></pre>
 
   </section>
 </div>
@@ -257,7 +257,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">xml_file_list(index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L63" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L73" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

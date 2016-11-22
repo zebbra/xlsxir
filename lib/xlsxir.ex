@@ -31,10 +31,18 @@ defmodule Xlsxir do
   def extract(path, index, timer \\ false) do
     if timer, do: Timer.start
 
-    {:ok, file}       = Unzip.validate_path(path, index)
-    {:ok, file_paths} = Unzip.xml_file_list(index)
-                        |> Unzip.extract_xml_to_file(file)
+    case Unzip.validate_path_and_index(path, index) do
+      {:ok, file}      -> Unzip.xml_file_list(index)
+                          |> Unzip.extract_xml_to_file(file)
+                          |> case do
+                               {:ok, file_paths} -> do_extract(file_paths, index, timer)
+                               {:error, reason}  -> {:error, reason}
+                             end
+      {:error, reason} -> {:error, reason}
+    end
+  end
 
+  defp do_extract(file_paths, index, timer) do
     Enum.each(file_paths, fn file -> 
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
@@ -75,11 +83,19 @@ defmodule Xlsxir do
   def multi_extract(path, index, timer \\ false) do
     if timer, do: Timer.start
 
-    {:ok, file}       = Unzip.validate_path(path, index)
-    {:ok, file_paths} = Unzip.xml_file_list(index)
-                        |> Unzip.extract_xml_to_file(file)
+    case Unzip.validate_path_and_index(path, index) do
+      {:ok, file}      -> Unzip.xml_file_list(index)
+                          |> Unzip.extract_xml_to_file(file)
+                          |> case do
+                               {:ok, file_paths} -> do_multi_extract(file_paths, index, timer)
+                               {:error, reason}  -> {:error, reason}
+                             end
+      {:error, reason} -> {:error, reason}
+    end
+  end
 
-    Enum.each(file_paths, fn file -> 
+  defp do_multi_extract(file_paths, index, timer) do
+      Enum.each(file_paths, fn file -> 
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
         'temp/xl/styles.xml'        -> SaxParser.parse(to_string(file), :style)

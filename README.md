@@ -50,6 +50,7 @@ Upon successful completion, the extraction process returns:
 - for `multi_extract/3`:
     * `{:ok, table_id}` with `timer` set to `false`
     * `{:ok, table_id, time_elapsed}` with `timer` set to `true`
+
 Unsucessful completion returns `{:error, reason}`.
 
 <br/>

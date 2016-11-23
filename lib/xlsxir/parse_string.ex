@@ -1,5 +1,5 @@
 defmodule Xlsxir.ParseString do
-  alias Xlsxir.{SharedString, Index}
+  alias Xlsxir.{Index, SharedString}
 
   @moduledoc """
   Holds the SAX event instructions for parsing sharedString data via `Xlsxir.SaxParser.parse/2`

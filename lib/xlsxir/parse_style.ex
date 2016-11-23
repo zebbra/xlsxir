@@ -1,5 +1,5 @@
 defmodule Xlsxir.ParseStyle do
-  alias Xlsxir.{Style, Index}
+  alias Xlsxir.{Index, Style}
 
   @moduledoc """
   Holds the SAX event instructions for parsing style data via `Xlsxir.SaxParser.parse/2`

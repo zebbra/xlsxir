@@ -6,11 +6,11 @@ defmodule Xlsxir do
   """
 
   @doc """
-  Extracts worksheet data contained in the specified `.xlsx` file to an ETS process named `:worksheet` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction 
-  returns `:ok` with the timer argument set to false and returns a tuple of `{:ok, time}` where time is a list containing time elapsed during the extraction process 
-  (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true. 
+  Extracts worksheet data contained in the specified `.xlsx` file to an ETS process named `:worksheet` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction
+  returns `:ok` with the timer argument set to false and returns a tuple of `{:ok, time}` where time is a list containing time elapsed during the extraction process
+  (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true.
 
-  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell. 
+  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell.
   Cells containing an ISO 8601 date format are extracted and converted to Erlang `:calendar.date()` format (i.e. `{year, month, day}`).
 
   ## Parameters
@@ -43,7 +43,7 @@ defmodule Xlsxir do
   end
 
   defp do_extract(file_paths, index, timer) do
-    Enum.each(file_paths, fn file -> 
+    Enum.each(file_paths, fn file ->
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
         'temp/xl/styles.xml'        -> SaxParser.parse(to_string(file), :style)
@@ -58,12 +58,12 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Extracts worksheet data contained in the specified `.xlsx` file to an ETS process with a table identifier of `table_id` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction 
-  returns `{:ok, table_id}` with the timer argument set to false and returns a tuple of `{:ok, table_id, time}` where `time` is a list containing time elapsed during the extraction process 
-  (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true. The `table_id` is used to access data for that particular ETS process with the various access functions of the 
+  Extracts worksheet data contained in the specified `.xlsx` file to an ETS process with a table identifier of `table_id` which is accessed via the `Xlsxir.Worksheet` module. Successful extraction
+  returns `{:ok, table_id}` with the timer argument set to false and returns a tuple of `{:ok, table_id, time}` where `time` is a list containing time elapsed during the extraction process
+  (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true. The `table_id` is used to access data for that particular ETS process with the various access functions of the
   `Xlsxir` module.
 
-  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell. 
+  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell.
   Cells containing an ISO 8601 date format are extracted and converted to Erlang `:calendar.date()` format (i.e. `{year, month, day}`).
 
   ## Parameters
@@ -79,23 +79,54 @@ defmodule Xlsxir do
         true
         iex> table_id |> Xlsxir.close
         :ok
-  """
-  def multi_extract(path, index, timer \\ false) do
-    if timer, do: Timer.start
 
-    case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      -> Unzip.xml_file_list(index)
-                          |> Unzip.extract_xml_to_file(file)
-                          |> case do
-                               {:ok, file_paths} -> do_multi_extract(file_paths, index, timer)
-                               {:error, reason}  -> {:error, reason}
-                             end
-      {:error, reason} -> {:error, reason}
+  ## Example
+  Extract all worksheets in an example file named `test.xlsx` located in `./test/test_data`:
+
+        iex> results = Xlsxir.multi_extract("./test/test_data/test.xlsx")
+        iex> alive_ids = Enum.map(results, fn {:ok, table_id} -> table_id |> Xlsxir.Worksheet.alive? end)
+        iex> Enum.all?(alive_ids)
+        true
+        iex> Enum.map(alive_ids, &Xlsxir.close/1) |> Enum.all?(fn result -> result == :ok end)
+        true
+
+  ## Example
+  Extract all worksheets in an example file named `test.xlsx` located in `./test/test_data` with timer:
+
+        iex> results = Xlsxir.multi_extract("./test/test_data/test.xlsx", nil, true)
+        iex> alive_ids = Enum.map(results, fn {:ok, table_id, _timer} -> table_id |> Xlsxir.Worksheet.alive? end)
+        iex> Enum.all?(alive_ids)
+        true
+        iex> Enum.map(alive_ids, &Xlsxir.close/1) |> Enum.all?(fn result -> result == :ok end)
+        true
+  """
+  def multi_extract(path, index \\ nil, timer \\ false) do
+    case is_nil(index) do
+      true ->
+        case Unzip.validate_path_all_indexes(path) do
+          {:ok, indexes} ->
+            Enum.reduce(indexes, [], fn i, acc ->
+              acc ++ [multi_extract(path, i, timer)]
+            end)
+          {:error, reason} -> {:error, reason}
+        end
+      false ->
+        if timer, do: Timer.start
+
+        case Unzip.validate_path_and_index(path, index) do
+          {:ok, file}      -> Unzip.xml_file_list(index)
+          |> Unzip.extract_xml_to_file(file)
+          |> case do
+            {:ok, file_paths} -> do_multi_extract(file_paths, index, timer)
+            {:error, reason}  -> {:error, reason}
+          end
+          {:error, reason} -> {:error, reason}
+        end
     end
   end
 
   defp do_multi_extract(file_paths, index, timer) do
-      Enum.each(file_paths, fn file -> 
+      Enum.each(file_paths, fn file ->
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
         'temp/xl/styles.xml'        -> SaxParser.parse(to_string(file), :style)
@@ -173,7 +204,7 @@ defmodule Xlsxir do
   """
   def get_map(table_id \\ :worksheet) do
     :ets.match(table_id, {:"$1", :"$2"})
-    |> Enum.reduce(%{}, fn [_num, row], acc -> 
+    |> Enum.reduce(%{}, fn [_num, row], acc ->
          row
          |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
          |> Enum.into(acc)
@@ -280,7 +311,7 @@ defmodule Xlsxir do
     [[row]]     = :ets.match(table_id, {row_num, :"$1"})
 
     row
-    |> Enum.filter(fn [ref, _val] -> ref == cell_ref end) 
+    |> Enum.filter(fn [ref, _val] -> ref == cell_ref end)
     |> List.first
     |> Enum.at(1)
   end
@@ -366,9 +397,9 @@ defmodule Xlsxir do
     :ets.match(table_id, {:"$1", :"$2"})
     |> Enum.sort
     |> Enum.map(fn [_num, row] -> row
-                                  |> Enum.filter_map(fn [ref, _val] -> 
-                                       Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end, 
-                                       fn [_ref, val] -> val 
+                                  |> Enum.filter_map(fn [ref, _val] ->
+                                       Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end,
+                                       fn [_ref, val] -> val
                                      end)
                                 end)
     |> List.flatten
@@ -391,12 +422,12 @@ defmodule Xlsxir do
   end
 
   @doc """
-  Returns count data based on `num_type` specified: 
+  Returns count data based on `num_type` specified:
   - `:rows` - Returns number of rows contained in worksheet
   - `:cols` - Returns number of columns contained in worksheet
   - `:cells` - Returns number of cells contained in worksheet
   - `:all` - Returns a keyword list containing all of the above
-  
+
   ## Parameters
   - `table_id` - table identifier of ETS process to be accessed, defaults to `:worksheet`
   - `num_type` - type of count data to be returned (see above), defaults to `:all`

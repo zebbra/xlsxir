@@ -16,7 +16,7 @@ defmodule Xlsxir.Unzip do
          iex> path = "./test/test_data/test.xlsx"
          iex> Xlsxir.Unzip.validate_path_and_index(path, 0)
          {:ok, './test/test_data/test.xlsx'}
-        
+
          iex> path = "./test/test_data/test.validfilebutnotxlsx"
          iex> Xlsxir.Unzip.validate_path_and_index(path, 0)
          {:ok, './test/test_data/test.validfilebutnotxlsx'}
@@ -34,6 +34,50 @@ defmodule Xlsxir.Unzip do
     end
   end
 
+  @doc """
+  Checks if given path is a valid file type, returning a list of available worksheets.
+
+  ## Parameters
+
+  - `path` - file path of a `.xlsx` file type in `string` format
+
+  ## Example
+
+         iex> path = "./test/test_data/test.xlsx"
+         iex> Xlsxir.Unzip.validate_path_all_indexes(path)
+         {:ok, [3, 1, 2, 0, 7, 4, 5, 6]}
+
+         iex> path = "./test/test_data/test.zip"
+         iex> Xlsxir.Unzip.validate_path_all_indexes(path)
+         {:ok, []}
+  """
+
+  def validate_path_all_indexes(path) do
+    path = String.to_char_list(path)
+    case :zip.list_dir(path) do
+      {:ok, file_list}  ->
+        indexes = Enum.filter_map(file_list,
+        fn file ->
+          case file do
+            {:zip_file, filename, _, _, _, _} ->
+              filename |> to_string |> String.starts_with?("xl/worksheets/sheet")
+            _ ->
+              nil
+          end
+        end,
+        fn {:zip_file, filename, _, _, _, _} ->
+          index = filename
+          |> to_string
+          |> String.replace_prefix("xl/worksheets/sheet", "")
+          |> String.replace_suffix(".xml", "")
+          |> String.to_integer
+          index - 1
+        end)
+        {:ok, indexes}
+      {:error, _reason} -> {:error, "Invalid file type."}
+    end
+  end
+
   defp valid_extract_request?(path, index) do
     case :zip.list_dir(path) do
       {:ok, file_list}  -> search_file_list(file_list, index)
@@ -44,7 +88,7 @@ defmodule Xlsxir.Unzip do
   defp search_file_list(file_list, index) do
     sheet   = 'xl/worksheets/sheet#{index + 1}.xml'
     results = file_list
-              |> Enum.map(fn file -> 
+              |> Enum.map(fn file ->
                    case file do
                      {:zip_file, ^sheet, _, _, _, _} -> :ok
                      _                               -> nil
@@ -57,7 +101,7 @@ defmodule Xlsxir.Unzip do
       {:error, "Invalid worksheet index."}
     end
   end
-  
+
   @doc """
   List of files contained in the requested `.xlsx` file to be extracted.
 
@@ -102,7 +146,7 @@ defmodule Xlsxir.Unzip do
     path
     |> to_char_list
     |> :zip.extract([{:file_list, file_list}, {:cwd, 'temp/'}])
-    |> case do 
+    |> case do
         {:error, reason}  -> {:error, reason}
         {:ok, []}         -> {:error, "Invalid File. Required XML files not found."}
         {:ok, files_list} -> {:ok, files_list}
@@ -122,7 +166,7 @@ defmodule Xlsxir.Unzip do
       iex> path = "./test/test_data/test.zip"
       iex> file_list = ['test.txt']
       iex> Xlsxir.Unzip.extract_xml_to_file(file_list, path)
-      {:ok, ['temp/test.txt']}     
+      {:ok, ['temp/test.txt']}
       iex> Xlsxir.Unzip.delete_dir("./temp")
       :ok
   """

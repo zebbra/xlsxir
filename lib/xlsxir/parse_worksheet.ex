@@ -40,11 +40,11 @@ defmodule Xlsxir.ParseWorksheet do
           end
         end)
 
-    {cell_ref, num_style, data_type} = case Keyword.keys(a) do
+    {cell_ref, num_style, data_type} = case Keyword.keys(a) |> Enum.sort do
                                          [:r]         -> {a[:r],   nil,   nil}
-                                         [:s, :r]     -> {a[:r], a[:s],   nil}
-                                         [:t, :r]     -> {a[:r],   nil, a[:t]}
-                                         [:t, :s, :r] -> {a[:r], a[:s], a[:t]}
+                                         [:r, :s]     -> {a[:r], a[:s],   nil}
+                                         [:r, :t]     -> {a[:r],   nil, a[:t]}
+                                         [:r, :s, :t] -> {a[:r], a[:s], a[:t]}
                                          _            -> raise "Invalid attributes: #{a}"
                                        end
     %{state | cell_ref: cell_ref, num_style: num_style, data_type: data_type}

@@ -5,7 +5,7 @@ defmodule Xlsxir.ParseString do
   Holds the SAX event instructions for parsing sharedString data via `Xlsxir.SaxParser.parse/2`
   """
 
-  defstruct empty_string: true
+  defstruct empty_string: true, family: false, family_string: ""
 
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
@@ -25,20 +25,34 @@ defmodule Xlsxir.ParseString do
 
   def sax_event_handler({:startElement,_,'si',_,_}, _state), do: %Xlsxir.ParseString{}
 
-  def sax_event_handler({:characters, value}, state) do
-    value
-    |> to_string
-    |> SharedString.add_shared_string(Index.get)
-
-    Index.increment_1
-    %{state | empty_string: false}
+  def sax_event_handler({:startElement,_,'family',_,_}, state) do 
+    %{state | family: true}
   end
 
-  def sax_event_handler({:endElement,_,'si',_}, %Xlsxir.ParseString{empty_string: empty_string}) do
-    if empty_string do 
-      SharedString.add_shared_string("", Index.get)
-      Index.increment_1
-    end
+  def sax_event_handler({:characters, value}, 
+    %Xlsxir.ParseString{family: family, family_string: fam_str} = state) do
+      if family do
+        value = value |> to_string
+        %{state | family_string: fam_str <> value}
+      else
+        value
+        |> to_string
+        |> SharedString.add_shared_string(Index.get)
+
+        Index.increment_1
+        %{state | empty_string: false}
+      end
+  end
+
+  def sax_event_handler({:endElement,_,'si',_}, 
+    %Xlsxir.ParseString{empty_string: empty_string, family: family, family_string: fam_str}) do
+      cond do
+        family       -> SharedString.add_shared_string(fam_str, Index.get)
+                        Index.increment_1
+        empty_string -> SharedString.add_shared_string("", Index.get)
+                        Index.increment_1
+        true         -> nil
+      end
   end
 
   def sax_event_handler(:endDocument, _state), do: Index.delete

@@ -10,7 +10,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.3.6"} ]
+  [ {:xlsxir, "~> 1.4.0"} ]
 end
 ```
 
@@ -28,10 +28,11 @@ Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to 
 
 ```elixir
 Xlsxir.extract(path, index, timer \\ false)
-Xlsxir.multi_extract(path, index, timer \\ false)
+Xlsxir.multi_extract(path, index \\ nil, timer \\ false)
 ```
 
-The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each.
+The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default 
+(when `index == nil`), returning a list of tuple results. 
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
@@ -43,10 +44,12 @@ Upon successful completion, the extraction process returns:
     * `:ok` with `timer` set to `false`
     * `{:ok, time_elapsed}` with `timer` set to `true`
 - for `multi_extract/3`:
-    * `{:ok, table_id}` with `timer` set to `false`
-    * `{:ok, table_id, time_elapsed}` with `timer` set to `true`
+    * `[{:ok, table_1_id}, ...]` with `timer` set to `false`
+    * `{:ok, table_id}` when given a specific worksheet `index`
+    * `[{:ok, table_1_id, time_elapsed}, ...]` with `timer` set to `true`
+    * `{:ok, table_id, time_elapsed}` when given a specific worksheet `index`
 
-Unsucessful completion returns `{:error, reason}`.
+Unsucessful parsing of a specific worksheet returns `{:error, reason}`.
 
 <br/>
 The extracted worksheet data can be accessed using any of the following functions:

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Change Log – Xlsxir v1.3.6</title>
+    <title>Change Log – Xlsxir v1.4.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.3.6
+        v1.4.0
       </h2>
     </div>
     
@@ -60,6 +60,17 @@
 
 
 <h1>Change Log</h1>
+<h2>1.4.0</h2>
+<ul>
+<li><a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a> and <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> now parse all worksheets of the file given by default, returning a list of tuple results (i.e. <code class="inline">[{:ok, table_1_id}, {:ok, table_2_id}, ...]</code>). See <a href="https://hexdocs.pm/xlsxir/overview.html">updated docs</a> for more detail. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution. 
+</li>
+<li>Fixed bug where the string(s) from merged cells that contained multiple formatting leaked into other cells thereby corrupting other rows of data.
+</li>
+<li>Sorted cell attribute keys to ensure consistent pattern matching. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution.
+</li>
+<li>Updated documentation to reflect changes and added additional doc tests.
+</li>
+</ul>
 <h2 id="1-3-6"> 1.3.6</h2><ul>
 <li>Added boolean value support. Thanks to Pikender Sharma (@pikender) for contribution.
 </li>

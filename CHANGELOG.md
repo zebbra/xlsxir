@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.4.0
+- `Xlsxir.extract/3` and `Xlsxir.multi_extract/3` now parse all worksheets of the file given by default, returning a list of tuple results (i.e. `[{:ok, table_1_id}, {:ok, table_2_id}, ...]`). See [updated docs](https://hexdocs.pm/xlsxir/overview.html) for more detail. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution. 
+- Fixed bug where the string(s) from merged cells that contained multiple formatting leaked into other cells thereby corrupting other rows of data.
+- Sorted cell attribute keys to ensure consistent pattern matching. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution.
+- Updated documentation to reflect changes and added additional doc tests.
+
 ## 1.3.6
 
 - Added boolean value support. Thanks to Pikender Sharma (@pikender) for contribution.

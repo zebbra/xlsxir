@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Unzip – Xlsxir v1.3.6</title>
+    <title>Xlsxir.Unzip – Xlsxir v1.4.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.3.6
+        v1.4.0
       </h2>
     </div>
     
@@ -60,7 +60,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.3.6</small>
+        <small class="visible-xs">Xlsxir v1.4.0</small>
         Xlsxir.Unzip
         
         
@@ -112,6 +112,15 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#validate_path_all_indexes/1">validate_path_all_indexes(path)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Checks if given path is a valid file type, returning a list of available worksheets</p>
+</div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#validate_path_and_index/2">validate_path_and_index(path, index)</a>
   </div>
   
@@ -156,7 +165,7 @@
     </a>
     <span class="signature">delete_dir(dir \\ &quot;./temp&quot;)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L129" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L173" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -174,7 +183,7 @@
 <pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.zip&quot;
 iex&gt; file_list = [&#39;test.txt&#39;]
 iex&gt; Xlsxir.Unzip.extract_xml_to_file(file_list, path)
-{:ok, [&#39;temp/test.txt&#39;]}     
+{:ok, [&#39;temp/test.txt&#39;]}
 iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 :ok</code></pre>
 
@@ -187,7 +196,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">extract_xml_to_file(file_list, path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L101" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L145" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -212,6 +221,37 @@ iex&gt; File.ls(&quot;./temp&quot;)
 {:ok, [&quot;test.txt&quot;]}
 iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 :ok</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="validate_path_all_indexes/1">
+  <div class="detail-header">
+    <a href="#validate_path_all_indexes/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">validate_path_all_indexes(path)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L55" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Checks if given path is a valid file type, returning a list of available worksheets.</p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+</ul>
+<h2>Example</h2>
+<pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
+   iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
+   {:ok, [3, 1, 2, 0, 7, 4, 5, 6]}
+
+   iex&gt; path = &quot;./test/test_data/test.zip&quot;
+   iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
+   {:ok, []}</code></pre>
 
   </section>
 </div>
@@ -257,7 +297,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">xml_file_list(index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L73" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L117" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

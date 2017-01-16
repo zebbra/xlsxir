@@ -1,5 +1,6 @@
 defmodule Xlsxir.ParseWorksheet do
-  alias Xlsxir.{Codepoint, ConvertDate, SharedString, Style, TableId, Worksheet}
+  alias Xlsxir.{Codepoint, ConvertDate, ConvertTime,
+                SharedString, Style, TableId, Worksheet}
   import Xlsxir.ConvertDate, only: [convert_char_number: 1]
 
   @moduledoc """
@@ -96,12 +97,22 @@ defmodule Xlsxir.ParseWorksheet do
       [        's',   _,   i] -> SharedString.get_at(List.to_integer(i))                             # Type string
       [        nil, nil,   n] -> convert_char_number(n)                                              # Type number
       [        'n', nil,   n] -> convert_char_number(n)
-      [        nil, 'd',   d] -> ConvertDate.from_serial(d)                                          # ISO 8601 type date
-      [        'n', 'd',   d] -> ConvertDate.from_serial(d)
+      [        nil, 'd',   d] -> convert_date_or_time(d)                                             # ISO 8601 type date
+      [        'n', 'd',   d] -> convert_date_or_time(d)
       [      'str',   _,   s] -> List.to_string(s)                                                   # Type formula w/ string
       [        'b',   _,   s] -> s == '1'                                                            # Type boolean
       ['inlineStr',   _,   s] -> List.to_string(s)                                                   # Type string
       _                       -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
+    end
+  end
+
+  defp convert_date_or_time(value) do
+    str = List.to_string(value)
+
+    if str == "0" || String.match?(str, ~r/\d\.\d+/) do
+      ConvertTime.from_charlist(value)
+    else
+      ConvertDate.from_serial(value)
     end
   end
 

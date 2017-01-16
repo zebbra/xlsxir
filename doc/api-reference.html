@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>API Reference – Xlsxir v1.4.0</title>
+    <title>API Reference – Xlsxir v1.4.1</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.4.0
+        v1.4.1
       </h2>
     </div>
     
@@ -59,7 +59,7 @@
   <div id="content" class="content-inner">
 
   <h1>
-    <small class="visible-xs">Xlsxir v1.4.0</small>
+    <small class="visible-xs">Xlsxir v1.4.1</small>
     API Reference
   </h1>
 
@@ -85,7 +85,7 @@
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Codepoint.html">Xlsxir.Codepoint</a></div>
   
-    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Codepoint</code> which temporarily holds the codepoint value of the last column letter of the most recently extracted cell. Provides functions to create the process, 
+    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Codepoint</code> which temporarily holds the codepoint value of the last column letter of the most recently extracted cell. Provides functions to create the process,
 update the codepoint value being held, retrieve the currently held codepoint and ultimately kill the process</p>
 </div>
   
@@ -99,9 +99,18 @@ Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code clas
   
 </div>
 <div class="summary-row">
+  <div class="summary-signature"><a href="Xlsxir.ConvertTime.html">Xlsxir.ConvertTime</a></div>
+  
+    <div class="summary-synopsis"><p>Converts a time formatted as a decimal number that represents the fraction
+of the day in <code class="inline">char_list</code> form, to a tiem formatted in Erlang <code class="inline">:erlang.time()</code>
+format (i.e. <code class="inline">{hour, minute, second}</code>)</p>
+</div>
+  
+</div>
+<div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Index.html">Xlsxir.Index</a></div>
   
-    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index 
+    <div class="summary-synopsis"><p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index
 and ultimately kill the process</p>
 </div>
   
@@ -138,7 +147,7 @@ parsing algorithm for parsing large XML files in chunks, preventing the need to 
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.SharedString.html">Xlsxir.SharedString</a></div>
   
-    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:sharedstrings</code> which holds state for data parsed from <code class="inline">sharedStrings.xml</code>. Provides functions to create the process, add 
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:sharedstrings</code> which holds state for data parsed from <code class="inline">sharedStrings.xml</code>. Provides functions to create the process, add
 and retreive data, and ultimately kill the process</p>
 </div>
   
@@ -146,8 +155,8 @@ and retreive data, and ultimately kill the process</p>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Style.html">Xlsxir.Style</a></div>
   
-    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:styles</code> which holds state for data parsed from <code class="inline">styles.xml</code>. Provides functions to create the process, add and retreive data, 
-and ultimately kill the process. Also includes a temporary Agent process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily 
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:styles</code> which holds state for data parsed from <code class="inline">styles.xml</code>. Provides functions to create the process, add and retreive data,
+and ultimately kill the process. Also includes a temporary Agent process named <code class="inline">NumFmtIds</code> which is utilized during the parsing of the <code class="inline">styles.xml</code> file to temporarily
 hold state of each <code class="inline">NumFmtId</code> contained within the file</p>
 </div>
   
@@ -155,7 +164,7 @@ hold state of each <code class="inline">NumFmtId</code> contained within the fil
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.TableId.html">Xlsxir.TableId</a></div>
   
-    <div class="summary-synopsis"><p>An Agent process named <code class="inline">TableId</code> which temporarily holds the table id of an ETS process. Provides functions to create the process, assign a table id, retrieve the current table id 
+    <div class="summary-synopsis"><p>An Agent process named <code class="inline">TableId</code> which temporarily holds the table id of an ETS process. Provides functions to create the process, assign a table id, retrieve the current table id
 and ultimately kill the process</p>
 </div>
   
@@ -163,7 +172,7 @@ and ultimately kill the process</p>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Timer.html">Xlsxir.Timer</a></div>
   
-    <div class="summary-synopsis"><p>An <code class="inline">Agent</code> process named <code class="inline">Time</code> which holds state for time elapsed since execution. Provides functions to start and stop the process, with the stop function returning the time elapsed as a 
+    <div class="summary-synopsis"><p>An <code class="inline">Agent</code> process named <code class="inline">Time</code> which holds state for time elapsed since execution. Provides functions to start and stop the process, with the stop function returning the time elapsed as a
 list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>)</p>
 </div>
   
@@ -178,7 +187,7 @@ list (i.e. <code class="inline">[hour, minute, second, microsecond]</code>)</p>
 <div class="summary-row">
   <div class="summary-signature"><a href="Xlsxir.Worksheet.html">Xlsxir.Worksheet</a></div>
   
-    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:worksheet</code> which holds state for data parsed from <code class="inline">sheet#{n}.xml</code> at index <code class="inline">n</code>. Provides functions to create the process, add 
+    <div class="summary-synopsis"><p>An Erlang Term Storage (ETS) process named <code class="inline">:worksheet</code> which holds state for data parsed from <code class="inline">sheet#{n}.xml</code> at index <code class="inline">n</code>. Provides functions to create the process, add
 and retreive data, and ultimately kill the process</p>
 </div>
   

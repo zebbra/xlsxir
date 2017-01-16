@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.ParseWorksheet – Xlsxir v1.4.1</title>
+    <title>Xlsxir.ConvertTime – Xlsxir v1.4.1</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -61,10 +61,10 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.4.1</small>
-        Xlsxir.ParseWorksheet
+        Xlsxir.ConvertTime
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_worksheet.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_time.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -72,7 +72,9 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Holds the SAX event instructions for parsing worksheet data via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+          <p>Converts a time formatted as a decimal number that represents the fraction
+of the day in <code class="inline">char_list</code> form, to a tiem formatted in Erlang <code class="inline">:erlang.time()</code>
+format (i.e. <code class="inline">{hour, minute, second}</code>).</p>
 
         </section>
       
@@ -94,12 +96,11 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#sax_event_handler/2">sax_event_handler(arg1, state)</a>
+    <a href="#from_charlist/1">from_charlist(charlist)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
-worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module
-which contains an ETS process that was started by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+    <div class="summary-synopsis"><p>Given a charlist in the form of a fraction of the day, return the time
+formatted as <code class="inline">:erlang.time()</code></p>
 </div>
   
 </div>
@@ -124,32 +125,32 @@ which contains an ETS process that was started by <a href="Xlsxir.SaxParser.html
             </a>
             Functions
           </h1>
-          <div class="detail" id="sax_event_handler/2">
+          <div class="detail" id="from_charlist/1">
   <div class="detail-header">
-    <a href="#sax_event_handler/2" class="detail-link" title="Link to this function">
+    <a href="#from_charlist/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">sax_event_handler(arg1, state)</span>
+    <span class="signature">from_charlist(charlist)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/parse_worksheet.ex#L25" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_time.ex#L24" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>. Takes a pattern and the current state of a struct and recursivly parses the
-worksheet XML file, ultimately sending a keyword list of cell references and their assocated values to the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module
-which contains an ETS process that was started by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>.</p>
+    <p>Given a charlist in the form of a fraction of the day, return the time
+formatted as <code class="inline">:erlang.time()</code>.</p>
+<p>Note that the <code class="inline">float</code> representation of the input must be a number between
+<code class="inline">0</code> (inclusive) and <code class="inline">1</code> (exclusive).</p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">arg1</code> - the XML pattern of the event to match upon
-</li>
-<li><code class="inline">state</code> - the state of the <code class="inline">%Xlsxir.ParseWorksheet{}</code> struct which temporarily holds applicable data of the current row being parsed
+<li><code class="inline">charlist</code> - Character list in the form of a fractional number (i.e. <code class="inline">0.25</code>)
 </li>
 </ul>
 <h2>Example</h2>
-<p>Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. <code class="inline">[[&quot;A1&quot;, &quot;string one&quot;], ...]</code>).</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertTime.from_charlist(&#39;0.25&#39;)
+{6, 0, 0}</code></pre>
 
   </section>
 </div>

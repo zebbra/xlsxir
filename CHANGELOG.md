@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.4.1
+- Added parsing support for time values. Thanks to Edgar Cabrera (@aleandros) for contribution.
+- Fixed bug that prevented worksheet ETS tables from closing. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution.
+- Minor documentation updates.
+
 ## 1.4.0
 - `Xlsxir.extract/3` and `Xlsxir.multi_extract/3` now parse all worksheets of the file given by default, returning a list of tuple results (i.e. `[{:ok, table_1_id}, {:ok, table_2_id}, ...]`). See [updated docs](https://hexdocs.pm/xlsxir/overview.html) for more detail. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution. 
 - Fixed bug where the string(s) from merged cells that contained multiple formatting leaked into other cells thereby corrupting other rows of data.

@@ -1,6 +1,6 @@
 defmodule Xlsxir.ConvertDate do
   @moduledoc """
-  Converts an ISO 8601 date format serial number, in `char_list` format, to a date formatted in 
+  Converts an ISO 8601 date format serial number, in `char_list` format, to a date formatted in
   Erlang `:calendar.date()` type format (i.e. `{year, month, day}`).
   """
 
@@ -27,7 +27,7 @@ defmodule Xlsxir.ConvertDate do
                              |> Float.floor
                              |> round
                   end
-               
+
     f_serial
     |> process_serial_int
     |> determine_year
@@ -35,10 +35,10 @@ defmodule Xlsxir.ConvertDate do
   end
 
   defp process_serial_int(serial_int) do
-    year = serial_int 
-           |> Kernel./(365) 
+    year = serial_int
+           |> Kernel./(365)
            |> Float.floor
-           |> Kernel.+(1900) 
+           |> Kernel.+(1900)
            |> round
 
     serial_int = if serial_int >= 60 && serial_int <= 364, do: serial_int - 1, else: serial_int
@@ -57,7 +57,7 @@ defmodule Xlsxir.ConvertDate do
   end
 
   defp determine_year({year, days}) do
-    if days <= 0, do: {year - 1, days}, else: {year, days}  
+    if days <= 0, do: {year - 1, days}, else: {year, days}
   end
 
   defp determine_month_and_day({year, days}) do
@@ -95,12 +95,13 @@ defmodule Xlsxir.ConvertDate do
   Converts extracted number in `char_list` format to either `integer` or `float`.
   """
   def convert_char_number(number) do
-    number
-    |> List.to_string
-    |> String.match?(~r/[.]/)
+    s = List.to_string(number)
+    s
+    |> String.match?(~r/[.eE]/)
     |> case do
          false -> List.to_integer(number)
-         true  -> List.to_float(number)
+         true  -> {f, ""} = Float.parse(s)
+                  f
        end
   end
 end

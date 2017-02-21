@@ -95,13 +95,16 @@ defmodule Xlsxir.ConvertDate do
   Converts extracted number in `char_list` format to either `integer` or `float`.
   """
   def convert_char_number(number) do
-    s = List.to_string(number)
-    s
+    str = List.to_string(number)
+    
+    str
     |> String.match?(~r/[.eE]/)
     |> case do
          false -> List.to_integer(number)
-         true  -> {f, ""} = Float.parse(s)
-                  f
+         true  -> case Float.parse(str) do
+                    {f, _} -> f
+                        _  -> raise "Invalid Float"
+                  end
        end
   end
 end

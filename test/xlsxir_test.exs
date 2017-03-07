@@ -44,4 +44,11 @@ defmodule XlsxirTest do
     extract(path, 7)
     close
   end
+
+  test "peek file contents" do
+    peek(path, 8, 10)
+    assert get_cell("G10") == 8437
+    assert get_info(:rows) == 10
+    close
+  end
 end

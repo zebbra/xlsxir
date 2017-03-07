@@ -18,13 +18,14 @@ defmodule Xlsxir.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :timex]]
   end
 
   defp deps do
     [ 
       { :ex_doc, github: "elixir-lang/ex_doc", only: :dev },
       { :earmark, github: "pragdave/earmark", override: true, only: :dev },
+      { :timex, "~> 3.0"},
       { :erlsom, "~> 1.4" }
     ]
   end

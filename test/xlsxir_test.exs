@@ -31,7 +31,7 @@ defmodule XlsxirTest do
 
   test "able to parse custom formats" do
     extract(path, 5)
-    assert get_list == [[-123.45, 67.89, {2015, 1, 1}, {2016, 12, 31}, {15, 12, 45}]]
+    assert get_list == [[-123.45, 67.89, {2015, 1, 1}, {2016, 12, 31}, {15, 12, 45}, ~N[2012-12-18 14:26:00]]]
     close
   end
 

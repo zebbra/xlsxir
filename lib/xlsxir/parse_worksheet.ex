@@ -1,8 +1,8 @@
 defmodule Xlsxir.ParseWorksheet do
-  alias Xlsxir.{Codepoint, ConvertDate, ConvertTime,
+  alias Xlsxir.{Codepoint, ConvertDate, ConvertDateTime,
                 SharedString, Style, TableId, Worksheet}
   import Xlsxir.ConvertDate, only: [convert_char_number: 1]
-
+require Logger
   @moduledoc """
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
@@ -107,10 +107,11 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   defp convert_date_or_time(value) do
+    # Logger.debug "parse for #{inspect value}"
     str = List.to_string(value)
 
     if str == "0" || String.match?(str, ~r/\d\.\d+/) do
-      ConvertTime.from_charlist(value)
+      ConvertDateTime.from_charlist(value)
     else
       ConvertDate.from_serial(value)
     end

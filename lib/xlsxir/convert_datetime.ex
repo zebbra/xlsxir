@@ -46,13 +46,6 @@ defmodule Xlsxir.ConvertDateTime do
     |> Timex.shift(minutes: mins)
     |> Timex.shift(seconds: secs)
     |> Timex.to_naive_datetime
-    # {whole_days, fraction_day_mins_float} = split_float(n)
-    # minutes_in_day_offset = round(fraction_day_mins_float * 1440.0)
-    # {{1899, 12, 31}, {0, 0, 0}}
-    # |> Timex.to_naive_datetime
-    # |> Timex.shift(days: whole_days)
-    # |> Timex.shift(minutes: minutes_in_day_offset)
-    # |> Timex.to_naive_datetime
   end
 
   defp split_float(f) do

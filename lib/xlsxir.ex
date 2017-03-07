@@ -16,7 +16,7 @@ defmodule Xlsxir do
   ## Parameters
   - `path` - file path of a `.xlsx` file type in `string` format
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
-  - `timer` - boolean flag that tracks extraction process time and returns it when set to `true`. Defalut value is `false`.
+  - `timer` - boolean flag that tracks extraction process time and returns it when set to `true`. Default value is `false`.
 
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:

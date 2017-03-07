@@ -7,7 +7,7 @@ defmodule Xlsxir.Mixfile do
      version: "1.4.1",
      name: "Xlsxir",
      source_url: "https://github.com/kennellroxco/xlsxir",
-     elixir: "~> 1.2",
+     elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description,

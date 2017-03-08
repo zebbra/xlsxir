@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir – Xlsxir v1.4.1</title>
+    <title>Xlsxir – Xlsxir v1.5.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.4.1
+        v1.5.0
       </h2>
     </div>
     
@@ -47,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -60,7 +62,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.4.1</small>
+        <small class="visible-xs">Xlsxir v1.5.0</small>
         Xlsxir
         
         
@@ -233,6 +235,16 @@ returns <code class="inline">{:ok, table_id}</code> with the timer argument set 
 </div>
   
 </div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#peek/3">peek(path, index, rows)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Extracts the first n number of rows from the specified worksheet contained in the specified <code class="inline">.xlsx</code> file to an ETS process
+named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction returns <code class="inline">:ok</code></p>
+</div>
+  
+</div>
 
   </div>
 
@@ -261,7 +273,7 @@ returns <code class="inline">{:ok, table_id}</code> with the timer argument set 
     </a>
     <span class="signature">close(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L478" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L528" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -307,7 +319,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
 </li>
 <li><code class="inline">index</code> - index of worksheet from within the Excel workbook to be parsed (zero-based index)
 </li>
-<li><code class="inline">timer</code> - boolean flag that tracts extraction process time and returns it when set to <code class="inline">true</code>. Defalut value is <code class="inline">false</code>.
+<li><code class="inline">timer</code> - boolean flag that tracks extraction process time and returns it when set to <code class="inline">true</code>. Default value is <code class="inline">false</code>.
 </li>
 </ul>
 <h2>Example</h2>
@@ -328,7 +340,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
     </a>
     <span class="signature">get_cell(cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L301" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L351" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -379,7 +391,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_cell(table_id, cell_ref)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L306" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L356" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -397,7 +409,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L389" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L439" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -448,7 +460,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_col(table_id, col)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L394" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L444" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -466,7 +478,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_info(num_type \\ :all)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L411" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L461" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -484,7 +496,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_list(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L170" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L220" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -533,7 +545,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_map(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L205" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L255" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -582,7 +594,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_mda(table_id \\ :worksheet)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L249" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L299" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -639,7 +651,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_multi_info(table_id, num_type \\ :all)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L435" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L485" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -674,7 +686,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_row(row)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L347" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L397" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -725,7 +737,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">get_row(table_id, row)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L352" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L402" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -743,7 +755,7 @@ iex&gt; table_id |&gt; Xlsxir.close
     </a>
     <span class="signature">multi_extract(path, index \\ nil, timer \\ false)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L103" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L153" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -788,6 +800,42 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   true
   iex&gt; Enum.map(alive_ids, &amp;Xlsxir.close/1) |&gt; Enum.all?(fn result -&gt; result == :ok end)
   true</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="peek/3">
+  <div class="detail-header">
+    <a href="#peek/3" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">peek(path, index, rows)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L77" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    <p>Extracts the first n number of rows from the specified worksheet contained in the specified <code class="inline">.xlsx</code> file to an ETS process
+named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction returns <code class="inline">:ok</code></p>
+<h2>Parameters</h2>
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+<li><code class="inline">index</code> - index of worksheet from within the Excel workbook to be parsed (zero-based index)
+</li>
+<li><code class="inline">rows</code> - the number of rows to fetch from within the specified worksheet
+</li>
+</ul>
+<h2>Example</h2>
+<p>Peek at the first 10 rows of the 9th worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
+<pre><code class="iex elixir">iex&gt; Xlsxir.peek(&quot;./test/test_data/test.xlsx&quot;, 8, 10)
+  :ok
+  iex&gt; Xlsxir.Worksheet.alive?
+  true
+  iex&gt; Xlsxir.close
+  :ok</code></pre>
 
   </section>
 </div>

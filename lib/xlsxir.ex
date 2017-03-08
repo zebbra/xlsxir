@@ -1,5 +1,5 @@
 defmodule Xlsxir do
-  alias Xlsxir.{Index, SaxParser, Timer, Unzip, Worksheet}
+  alias Xlsxir.{Index, SaxParser, SharedString, Style, Timer, Unzip, Worksheet}
 
   @moduledoc """
   Extracts and parses data from a `.xlsx` file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.
@@ -78,7 +78,7 @@ defmodule Xlsxir do
     case Unzip.validate_path_and_index(path, index) do
       {:ok, file}      -> 
         case extract_xml(file, index) do
-          {:ok, file_paths} -> do_extract(file_paths, index, false, rows)
+          {:ok, file_paths} -> do_peek_extract(file_paths, index, false, rows)
           {:error, reason}  -> {:error, reason}
         end
       {:error, reason} -> {:error, reason}
@@ -90,7 +90,7 @@ defmodule Xlsxir do
     |> Unzip.extract_xml_to_file(file)
   end
 
-  defp do_extract(file_paths, index, timer, max_rows \\ nil) do
+  defp do_peek_extract(file_paths, index, timer, max_rows) do
     Enum.each(file_paths, fn file ->
       case file do
         'temp/xl/sharedStrings.xml' -> SaxParser.parse(to_string(file), :string)
@@ -102,6 +102,8 @@ defmodule Xlsxir do
     SaxParser.parse("temp/xl/worksheets/sheet#{index + 1}.xml", :worksheet, max_rows)
     Unzip.delete_dir
 
+    if SharedString.alive?, do: SharedString.delete
+    if Style.alive?, do: Style.delete
     if timer, do: {:ok, Timer.stop}, else: :ok
   end
 
@@ -458,13 +460,13 @@ defmodule Xlsxir do
   """
   def get_info(num_type \\ :all) do
     case num_type do
-      :rows  -> row_num
-      :cols  -> col_num
-      :cells -> cell_num
+      :rows  -> row_num()
+      :cols  -> col_num()
+      :cells -> cell_num()
       _      -> [
-                  rows:  row_num,
-                  cols:  col_num,
-                  cells: cell_num
+                  rows:  row_num(),
+                  cols:  col_num(),
+                  cells: cell_num()
                 ]
     end
   end

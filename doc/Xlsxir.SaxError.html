@@ -5,12 +5,12 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Index – Xlsxir v1.5.0</title>
+    <title>Xlsxir.SaxError – Xlsxir v1.5.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
   </head>
-  <body data-type="modules">
+  <body data-type="exceptions">
 
     <div class="main">
 <button class="sidebar-toggle">
@@ -63,21 +63,17 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.5.0</small>
-        Xlsxir.Index
+        Xlsxir.SaxError
+        
+          <small>exception</small>
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L257" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
       </h1>
 
-      
-        <section id="moduledoc" class="docstring">
-          <p>An Agent process named <code class="inline">Index</code> which holds state of an index. Provides functions to create the process, increment the index by 1, retrieve the current index
-and ultimately kill the process.</p>
-
-        </section>
       
 
       
@@ -97,38 +93,14 @@ and ultimately kill the process.</p>
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#delete/0">delete()</a>
+    <a href="#exception/1">exception(msg)</a>
   </div>
-  
-    <div class="summary-synopsis"><p>Deletes <code class="inline">Index</code> Agent process</p>
-</div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#get/0">get()</a>
+    <a href="#message/1">message(exception)</a>
   </div>
-  
-    <div class="summary-synopsis"><p>Returns current value of <code class="inline">Index</code> Agent process</p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#increment_1/0">increment_1()</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Increments active <code class="inline">Index</code> Agent process by <code class="inline">1</code></p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#new/0">new()</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Initiates a new <code class="inline">Index</code> Agent process with a value of <code class="inline">0</code></p>
-</div>
   
 </div>
 
@@ -152,76 +124,58 @@ and ultimately kill the process.</p>
             </a>
             Functions
           </h1>
-          <div class="detail" id="delete/0">
+          <div class="detail" id="exception/1">
   <div class="detail-header">
-    <a href="#delete/0" class="detail-link" title="Link to this function">
+    <a href="#exception/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">delete()</span>
+    <span class="signature">exception(msg)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L287" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L2" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">exception(<a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a>) :: <a href="http://elixir-lang.org/docs/stable/elixir/Exception.html#t:t/0">Exception.t</a></code></pre>
+        
+          <pre><code class="elixir">exception(<a href="http://elixir-lang.org/docs/stable/elixir/Keyword.html#t:t/0">Keyword.t</a>) :: <a href="http://elixir-lang.org/docs/stable/elixir/Exception.html#t:t/0">Exception.t</a></code></pre>
+        
+      </div>
+    </div>
+  
   <section class="docstring">
-    <p>Deletes <code class="inline">Index</code> Agent process</p>
-
+    
   </section>
 </div>
-<div class="detail" id="get/0">
+<div class="detail" id="message/1">
   <div class="detail-header">
-    <a href="#get/0" class="detail-link" title="Link to this function">
+    <a href="#message/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">get()</span>
+    <span class="signature">message(exception)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L280" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L2" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
-  <section class="docstring">
-    <p>Returns current value of <code class="inline">Index</code> Agent process</p>
-
-  </section>
-</div>
-<div class="detail" id="increment_1/0">
-  <div class="detail-header">
-    <a href="#increment_1/0" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">increment_1()</span>
-      
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L273" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-  </div>
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">message(<a href="http://elixir-lang.org/docs/stable/elixir/Exception.html#t:t/0">Exception.t</a>) :: <a href="http://elixir-lang.org/docs/stable/elixir/String.html#t:t/0">String.t</a></code></pre>
+        
+      </div>
+    </div>
   
   <section class="docstring">
-    <p>Increments active <code class="inline">Index</code> Agent process by <code class="inline">1</code>.</p>
-
-  </section>
-</div>
-<div class="detail" id="new/0">
-  <div class="detail-header">
-    <a href="#new/0" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">new()</span>
-      
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/state_manager.ex#L266" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
     
-  </div>
-  
-  <section class="docstring">
-    <p>Initiates a new <code class="inline">Index</code> Agent process with a value of <code class="inline">0</code>.</p>
-
   </section>
 </div>
 

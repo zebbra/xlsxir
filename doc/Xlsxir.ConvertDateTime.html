@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.ConvertTime – Xlsxir v1.4.1</title>
+    <title>Xlsxir.ConvertDateTime – Xlsxir v1.5.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.4.1
+        v1.5.0
       </h2>
     </div>
     
@@ -47,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -60,11 +62,11 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.4.1</small>
-        Xlsxir.ConvertTime
+        <small class="visible-xs">Xlsxir v1.5.0</small>
+        Xlsxir.ConvertDateTime
         
         
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_time.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_datetime.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -72,9 +74,8 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>Converts a time formatted as a decimal number that represents the fraction
-of the day in <code class="inline">char_list</code> form, to a tiem formatted in Erlang <code class="inline">:erlang.time()</code>
-format (i.e. <code class="inline">{hour, minute, second}</code>).</p>
+          <p>Converts a datetime formatted as a decimal number that represents the fraction
+of the day in <code class="inline">char_list</code> form, to an elixir naive datetime</p>
 
         </section>
       
@@ -99,9 +100,15 @@ format (i.e. <code class="inline">{hour, minute, second}</code>).</p>
     <a href="#from_charlist/1">from_charlist(charlist)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Given a charlist in the form of a fraction of the day, return the time
-formatted as <code class="inline">:erlang.time()</code></p>
+    <div class="summary-synopsis"><p>Given a charlist in the form of a serial date float representing fraction of the day
+return a naive datetime</p>
 </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#from_float/1">from_float(n)</a>
+  </div>
   
 </div>
 
@@ -132,26 +139,41 @@ formatted as <code class="inline">:erlang.time()</code></p>
     </a>
     <span class="signature">from_charlist(charlist)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_time.ex#L24" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_datetime.ex#L20" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
   
   <section class="docstring">
-    <p>Given a charlist in the form of a fraction of the day, return the time
-formatted as <code class="inline">:erlang.time()</code>.</p>
-<p>Note that the <code class="inline">float</code> representation of the input must be a number between
-<code class="inline">0</code> (inclusive) and <code class="inline">1</code> (exclusive).</p>
+    <p>Given a charlist in the form of a serial date float representing fraction of the day
+return a naive datetime</p>
 <h2>Parameters</h2>
 <ul>
-<li><code class="inline">charlist</code> - Character list in the form of a fractional number (i.e. <code class="inline">0.25</code>)
+<li><code class="inline">charlist</code> - Character list in the form of a date serial with a fractional number (i.e. <code class="inline">41261.6013888889</code>)
 </li>
 </ul>
 <h2>Example</h2>
-<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertTime.from_charlist(&#39;0.25&#39;)
-{6, 0, 0}</code></pre>
+<pre><code class="iex elixir">iex&gt; Xlsxir.ConvertDateTime.from_charlist(&#39;41261.6013888889&#39;)
+~N[2012-12-18 14:26:00]</code></pre>
 
+  </section>
+</div>
+<div class="detail" id="from_float/1">
+  <div class="detail-header">
+    <a href="#from_float/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">from_float(n)</span>
+      
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/convert_datetime.ex#L27" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
   </section>
 </div>
 

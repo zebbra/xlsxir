@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir.Unzip – Xlsxir v1.4.1</title>
+    <title>Xlsxir.Unzip – Xlsxir v1.5.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.4.1
+        v1.5.0
       </h2>
     </div>
     
@@ -47,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -60,7 +62,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.4.1</small>
+        <small class="visible-xs">Xlsxir v1.5.0</small>
         Xlsxir.Unzip
         
         
@@ -165,7 +167,7 @@
     </a>
     <span class="signature">delete_dir(dir \\ &quot;./temp&quot;)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L173" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L174" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -196,7 +198,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">extract_xml_to_file(file_list, path)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L145" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L146" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -247,7 +249,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 <h2>Example</h2>
 <pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
    iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
-   {:ok, [0, 1, 2, 3, 4, 5, 6, 7]}
+   {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8]}
 
    iex&gt; path = &quot;./test/test_data/test.zip&quot;
    iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
@@ -297,7 +299,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
     </a>
     <span class="signature">xml_file_list(index)</span>
       
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L117" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L118" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

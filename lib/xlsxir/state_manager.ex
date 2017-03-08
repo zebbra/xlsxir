@@ -128,7 +128,7 @@ defmodule Xlsxir.Worksheet do
   Deletes the ETS process from memory.
   """
   def delete(id \\ :worksheet) do
-    if alive?(id), do: :ets.delete(id), else: true
+    if alive?(id), do: :ets.delete(id), else: false 
   end
 
   @doc """

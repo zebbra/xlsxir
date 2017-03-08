@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.5">
-    <title>Change Log – Xlsxir v1.4.1</title>
+    <title>Change Log – Xlsxir v1.5.0</title>
     <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
     
     <script src="dist/sidebar_items.js"></script>
@@ -28,7 +28,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.4.1
+        v1.5.0
       </h2>
     </div>
     
@@ -47,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -60,6 +62,19 @@
 
 
 <h1>Change Log</h1>
+<h2>1.5.0</h2>
+<ul>
+<li><strong><em>Xlsxir requires Elixir v1.4+ with this update</em></strong>
+</li>
+<li>Added ability to extract only a given number of rows from a worksheet via <a href="Xlsxir.html#peek/3"><code class="inline">Xlsxir.peek/3</code></a>. Thanks to Ali Tahbaz (@tahbaza) for contribution.
+</li>
+<li><code class="inline">DateTime</code> type values are now converted to an Elixir <code class="inline">Naive DateTime</code> type upon extraction. Regular <code class="inline">Date</code> types are still converted to Erlang <code class="inline">:calendar.date()</code> type. Thanks to Ali Tahbaz (@tahbaza) for contribution.
+</li>
+<li>A bug in <code class="inline">convert_char_number/1</code> was fixed to allow support for floats with scientific notation in them. Thanks to Daniel Parnell (@dparnell) for contribution.
+</li>
+<li>Minor bug fixes and documentation updates. 
+</li>
+</ul>
 <h2>1.4.1</h2>
 <ul>
 <li>Added parsing support for time values. Thanks to Edgar Cabrera (@aleandros) for contribution.

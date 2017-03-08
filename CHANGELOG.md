@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.5.0
+- ***Xlsxir requires Elixir v1.4+ with this update***
+- Added ability to extract only a given number of rows from a worksheet via `Xlsxir.peek/3`. Thanks to Ali Tahbaz (@tahbaza) for contribution.
+- `DateTime` type values are now converted to an Elixir `Naive DateTime` type upon extraction. Regular `Date` types are still converted to Erlang `:calendar.date()` type. Thanks to Ali Tahbaz (@tahbaza) for contribution.
+- A bug in `convert_char_number/1` was fixed to allow support for floats with scientific notation in them. Thanks to Daniel Parnell (@dparnell) for contribution.
+- Minor bug fixes and documentation updates. 
+
 ## 1.4.1
 - Added parsing support for time values. Thanks to Edgar Cabrera (@aleandros) for contribution.
 - Fixed bug that prevented worksheet ETS tables from closing. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution.

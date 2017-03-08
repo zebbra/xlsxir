@@ -5,6 +5,7 @@ defmodule Xlsxir.SaxParser do
   """
 
   alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, SharedString, Style, TableId, Worksheet, SaxError}
+  require Logger
 
   @chunk 10000
 
@@ -69,7 +70,7 @@ defmodule Xlsxir.SaxParser do
           _          -> raise "Invalid file type for sax_event_handler/2"
         end,
         [{:continuation_function, &continue_file/2, c_state}])
-      rescue e in SaxError -> nil # Logger.debug "SaxError thrown: #{inspect e}"
+    rescue SaxError -> nil 
       after
         Agent.stop(MaxRows)
         File.close(pid)

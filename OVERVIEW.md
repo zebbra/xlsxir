@@ -10,7 +10,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.4.1"} ]
+  [ {:xlsxir, "~> 1.5.0"} ]
 end
 ```
 
@@ -24,20 +24,22 @@ end
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3` and `Xlsxir.multi_extract/3` functions:
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3`, `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
 
 ```elixir
 Xlsxir.extract(path, index, timer \\ false)
 Xlsxir.multi_extract(path, index \\ nil, timer \\ false)
+Xlsxir.peek(path, index, rows)
 ```
 
-The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default 
+The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default 
 (when `index == nil`), returning a list of tuple results. 
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
 - `index` is the position of the worksheet you wish to parse (zero-based index)
 - `timer` is a boolean flag that controls an extraction timer that returns time elapsed when set to `true`. Defalut value is `false`.
+- `rows` is an integer representing the number of rows to be extracted from the given worksheet. 
 
 Upon successful completion, the extraction process returns: 
 - for `extract/3`:
@@ -48,6 +50,7 @@ Upon successful completion, the extraction process returns:
     * `{:ok, table_id}` when given a specific worksheet `index`
     * `[{:ok, table_1_id, time_elapsed}, ...]` with `timer` set to `true`
     * `{:ok, table_id, time_elapsed}` when given a specific worksheet `index`
+- for `peek/3`: `:ok`			
 
 Unsucessful parsing of a specific worksheet returns `{:error, reason}`.
 
@@ -62,7 +65,7 @@ Xlsxir.get_row(table_id, row_num)
 Xlsxir.get_col(table_id, col_ltr)
 Xlsxir.get_info(table_id, num_type)
 ```
-**Note:** `table_id` defaults to `:worksheet` and is therefore not required when using `Xlsxir.extract/3` to parse a given worksheet. The `table_id` parameter is only used with `Xlsxir.multi_extract/3`.
+**Note:** `table_id` defaults to `:worksheet` and is therefore not required when using `Xlsxir.extract/3` and `Xlsxir.peek/3` to parse a given worksheet. The `table_id` parameter is only used with `Xlsxir.multi_extract/3`.
 
 `Xlsxir.get_list/1` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
 `Xlsxir.get_map/1` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
@@ -83,7 +86,7 @@ Refer to [API Reference](https://hexdocs.pm/xlsxir/api-reference.html) for more 
 
 ## Considerations
 
-Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, and ISO 8601 date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`). Xlsxir does not currently support dates prior to 1/1/1900.
+Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`), and datetime values will be returned as an Elixir `naive datetime`. Xlsxir does not currently support dates prior to 1/1/1900.
 
 ## Contributing
 

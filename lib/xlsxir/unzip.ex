@@ -45,7 +45,7 @@ defmodule Xlsxir.Unzip do
 
          iex> path = "./test/test_data/test.xlsx"
          iex> Xlsxir.Unzip.validate_path_all_indexes(path)
-         {:ok, [0, 1, 2, 3, 4, 5, 6, 7]}
+         {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8]}
 
          iex> path = "./test/test_data/test.zip"
          iex> Xlsxir.Unzip.validate_path_all_indexes(path)

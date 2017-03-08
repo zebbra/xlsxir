@@ -137,7 +137,7 @@ defmodule Xlsxir do
         iex> alive_ids = Enum.map(results, fn {:ok, table_id} -> table_id |> Xlsxir.Worksheet.alive? end)
         iex> Enum.all?(alive_ids)
         true
-        iex> Enum.map(alive_ids, &Xlsxir.close/1) |> Enum.all?(fn result -> result == :ok end)
+        iex> Enum.map(results, fn {:ok, id} -> Xlsxir.close(id) end) |> Enum.all?(fn result -> result == :ok end)
         true
 
   ## Example
@@ -147,7 +147,7 @@ defmodule Xlsxir do
         iex> alive_ids = Enum.map(results, fn {:ok, table_id, _timer} -> table_id |> Xlsxir.Worksheet.alive? end)
         iex> Enum.all?(alive_ids)
         true
-        iex> Enum.map(alive_ids, &Xlsxir.close/1) |> Enum.all?(fn result -> result == :ok end)
+        iex> Enum.map(results, fn {:ok, id, _timer} -> Xlsxir.close(id) end) |> Enum.all?(fn result -> result == :ok end)
         true
   """
   def multi_extract(path, index \\ nil, timer \\ false) do

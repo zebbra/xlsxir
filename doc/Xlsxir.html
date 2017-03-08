@@ -790,7 +790,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   iex&gt; alive_ids = Enum.map(results, fn {:ok, table_id} -&gt; table_id |&gt; Xlsxir.Worksheet.alive? end)
   iex&gt; Enum.all?(alive_ids)
   true
-  iex&gt; Enum.map(alive_ids, &amp;Xlsxir.close/1) |&gt; Enum.all?(fn result -&gt; result == :ok end)
+  iex&gt; Enum.map(results, fn {:ok, id} -&gt; Xlsxir.close(id) end) |&gt; Enum.all?(fn result -&gt; result == :ok end)
   true</code></pre>
 <h2>Example</h2>
 <p>Extract all worksheets in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> with timer:</p>
@@ -798,7 +798,7 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   iex&gt; alive_ids = Enum.map(results, fn {:ok, table_id, _timer} -&gt; table_id |&gt; Xlsxir.Worksheet.alive? end)
   iex&gt; Enum.all?(alive_ids)
   true
-  iex&gt; Enum.map(alive_ids, &amp;Xlsxir.close/1) |&gt; Enum.all?(fn result -&gt; result == :ok end)
+  iex&gt; Enum.map(results, fn {:ok, id, _timer} -&gt; Xlsxir.close(id) end) |&gt; Enum.all?(fn result -&gt; result == :ok end)
   true</code></pre>
 
   </section>

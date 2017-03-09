@@ -96,7 +96,7 @@ defmodule Xlsxir.ConvertDate do
   """
   def convert_char_number(number) do
     str = List.to_string(number)
-    
+
     str
     |> String.match?(~r/[.eE]/)
     |> case do

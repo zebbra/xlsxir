@@ -4,22 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.11.5">
-    <title>Xlsxir – Xlsxir v1.5.0</title>
-    <link rel="stylesheet" href="dist/app-f9b4ee049e.css" />
+    <meta name="generator" content="ExDoc v0.15.0">
+    <title>Xlsxir – Xlsxir v1.5.1</title>
+    <link rel="stylesheet" href="dist/app-5f4a88fed9.css" />
     
-    <script src="dist/sidebar_items.js"></script>
+    <script src="dist/sidebar_items-029b60730d.js"></script>
   </head>
   <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
 
     <div class="main">
 <button class="sidebar-toggle">
   <i class="icon-menu"></i>
 </button>
 <section class="sidebar">
-  <button class="sidebar-toggle">
-    <i class="icon-menu"></i>
-  </button>
 
   
   <a href="overview.html" class="sidebar-projectLink">
@@ -28,7 +26,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.5.0
+        v1.5.1
       </h2>
     </div>
     
@@ -52,17 +50,17 @@
 
     
   </ul>
-
+  <div class="gradient"></div>
   <ul id="full-list" class="sidebar-fullList"></ul>
-  <div class="sidebar-noResults"></div>
 </section>
 
 <section class="content">
-  <div id="content" class="content-inner">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.5.0</small>
+        <small class="visible-xs">Xlsxir v1.5.1</small>
         Xlsxir
         
         
@@ -73,7 +71,7 @@
       </h1>
 
       
-        <section id="moduledoc" class="docstring">
+        <section id="moduledoc">
           <p>Extracts and parses data from a <code class="inline">.xlsx</code> file to an Erlang Term Storage (ETS) process and provides various functions for accessing the data.</p>
 
         </section>
@@ -251,8 +249,6 @@ named <code class="inline">:worksheet</code> which is accessed via the <a href="
 
           
 
-          
-
         </section>
       
 
@@ -267,21 +263,29 @@ named <code class="inline">:worksheet</code> which is accessed via the <a href="
             Functions
           </h1>
           <div class="detail" id="close/1">
+  
+    <span id="close/0" />
+  
   <div class="detail-header">
     <a href="#close/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">close(table_id \\ :worksheet)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L528" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Deletes ETS process <code class="inline">:worksheet</code> and returns <code class="inline">:ok</code> if successful.</p>
-<h2>Example</h2>
+<h2 id="close/1-example" class="section-heading">
+  <a href="#close/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Extract first worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
 :ok
@@ -295,25 +299,33 @@ iex&gt; Xlsxir.close(table_id)
   </section>
 </div>
 <div class="detail" id="extract/3">
+  
+    <span id="extract/2" />
+  
   <div class="detail-header">
     <a href="#extract/3" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">extract(path, index, timer \\ false)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L31" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS process named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction
 returns <code class="inline">:ok</code> with the timer argument set to false and returns a tuple of <code class="inline">{:ok, time}</code> where time is a list containing time elapsed during the extraction process
 (i.e. <code class="inline">[hour, minute, second, microsecond]</code>) when the timer argument is set to true.</p>
 <p>Cells containing formulas in the worksheet are extracted as either a <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the resulting value of the cell.
 Cells containing an ISO 8601 date format are extracted and converted to Erlang <code class="inline">:calendar.date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
-<h2>Parameters</h2>
+<h2 id="extract/3-parameters" class="section-heading">
+  <a href="#extract/3-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
 </li>
@@ -322,7 +334,11 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
 <li><code class="inline">timer</code> - boolean flag that tracks extraction process time and returns it when set to <code class="inline">true</code>. Default value is <code class="inline">false</code>.
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="extract/3-example" class="section-heading">
+  <a href="#extract/3-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Extract first worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
   :ok
@@ -334,28 +350,38 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   </section>
 </div>
 <div class="detail" id="get_cell/1">
+  
   <div class="detail-header">
     <a href="#get_cell/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_cell(cell_ref)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L351" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses ETS process and returns value of specified cell.</p>
-<h2>Parameters</h2>
+<h2 id="get_cell/1-parameters" class="section-heading">
+  <a href="#get_cell/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 <li><code class="inline">cell_ref</code> - Reference name of cell to be returned in <code class="inline">string</code> format (i.e. <code class="inline">&quot;A1&quot;</code>)
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_cell/1-example" class="section-heading">
+  <a href="#get_cell/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -367,64 +393,75 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
-iex&gt; Xlsxir.get_cell(&quot;A1&quot;)
-&quot;string one&quot;
+iex&gt; Xlsxir.get_cell(“A1”)
+“string one”
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
-iex&gt; table_id |&gt; Xlsxir.get_cell(&quot;A1&quot;)
-&quot;string one&quot;
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
+iex&gt; table_id |&gt; Xlsxir.get_cell(“A1”)
+“string one”
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_cell/2">
+  
   <div class="detail-header">
     <a href="#get_cell/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_cell(table_id, cell_ref)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L356" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>See <a href="#get_cell/1"><code class="inline">get_cell/1</code></a> documentation.</p>
 
   </section>
 </div>
 <div class="detail" id="get_col/1">
+  
   <div class="detail-header">
     <a href="#get_col/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_col(col)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L439" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified column in a <code class="inline">list</code>.</p>
-<h2>Parameters</h2>
+<h2 id="get_col/1-parameters" class="section-heading">
+  <a href="#get_col/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 <li><code class="inline">col</code> - Reference name of column to be returned in <code class="inline">string</code> format (i.e. <code class="inline">&quot;A&quot;</code>)
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_col/1-example" class="section-heading">
+  <a href="#get_col/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -436,80 +473,97 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
-iex&gt; Xlsxir.get_col(&quot;A&quot;)
-[&quot;string one&quot;]
+iex&gt; Xlsxir.get_col(“A”)
+[“string one”]
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
-iex&gt; table_id |&gt; Xlsxir.get_col(&quot;A&quot;)
-[&quot;string one&quot;]
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
+iex&gt; table_id |&gt; Xlsxir.get_col(“A”)
+[“string one”]
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_col/2">
+  
   <div class="detail-header">
     <a href="#get_col/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_col(table_id, col)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L444" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>See <a href="#get_col/1"><code class="inline">get_col/1</code></a> documentation.</p>
 
   </section>
 </div>
 <div class="detail" id="get_info/1">
+  
+    <span id="get_info/0" />
+  
   <div class="detail-header">
     <a href="#get_info/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_info(num_type \\ :all)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L461" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>See <code class="inline">get_multi_info2</code> documentation.</p>
 
   </section>
 </div>
 <div class="detail" id="get_list/1">
+  
+    <span id="get_list/0" />
+  
   <div class="detail-header">
     <a href="#get_list/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_list(table_id \\ :worksheet)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L220" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses ETS process and returns data formatted as a list of row value lists.</p>
-<h2>Parameters</h2>
+<h2 id="get_list/1-parameters" class="section-heading">
+  <a href="#get_list/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_list/1-example" class="section-heading">
+  <a href="#get_list/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -521,44 +575,55 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
 iex&gt; Xlsxir.get_list
-[[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]]
+[[“string one”, “string two”, 10, 20, {2016, 1, 1}]]
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
 iex&gt; table_id |&gt; Xlsxir.get_list
-[[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]]
+[[“string one”, “string two”, 10, 20, {2016, 1, 1}]]
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_map/1">
+  
+    <span id="get_map/0" />
+  
   <div class="detail-header">
     <a href="#get_map/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_map(table_id \\ :worksheet)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L255" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses ETS process and returns data formatted as a map of cell references and values.</p>
-<h2>Parameters</h2>
+<h2 id="get_map/1-parameters" class="section-heading">
+  <a href="#get_map/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_map/1-example" class="section-heading">
+  <a href="#get_map/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -570,44 +635,55 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
 iex&gt; Xlsxir.get_map
-%{ &quot;A1&quot; =&gt; &quot;string one&quot;, &quot;B1&quot; =&gt; &quot;string two&quot;, &quot;C1&quot; =&gt; 10, &quot;D1&quot; =&gt; 20, &quot;E1&quot; =&gt; {2016,1,1}}
+%{ “A1” =&gt; “string one”, “B1” =&gt; “string two”, “C1” =&gt; 10, “D1” =&gt; 20, “E1” =&gt; {2016,1,1}}
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
 iex&gt; table_id |&gt; Xlsxir.get_map
-%{ &quot;A1&quot; =&gt; &quot;string one&quot;, &quot;B1&quot; =&gt; &quot;string two&quot;, &quot;C1&quot; =&gt; 10, &quot;D1&quot; =&gt; 20, &quot;E1&quot; =&gt; {2016,1,1}}
+%{ “A1” =&gt; “string one”, “B1” =&gt; “string two”, “C1” =&gt; 10, “D1” =&gt; 20, “E1” =&gt; {2016,1,1}}
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_mda/1">
+  
+    <span id="get_mda/0" />
+  
   <div class="detail-header">
     <a href="#get_mda/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_mda(table_id \\ :worksheet)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L299" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses ETS process and returns an indexed map which functions like a multi-dimensional array in other languages.</p>
-<h2>Parameters</h2>
+<h2 id="get_mda/1-parameters" class="section-heading">
+  <a href="#get_mda/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_mda/1-example" class="section-heading">
+  <a href="#get_mda/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -619,44 +695,47 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
 iex&gt; mda = Xlsxir.get_mda
-%{0 =&gt; %{0 =&gt; &quot;string one&quot;, 1 =&gt; &quot;string two&quot;, 2 =&gt; 10, 3 =&gt; 20, 4 =&gt; {2016,1,1}}}
+%{0 =&gt; %{0 =&gt; “string one”, 1 =&gt; “string two”, 2 =&gt; 10, 3 =&gt; 20, 4 =&gt; {2016,1,1}}}
 iex&gt; mda[0][0]
-&quot;string one&quot;
+“string one”
 iex&gt; mda[0][2]
 10
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
 iex&gt; mda = table_id |&gt; Xlsxir.get_mda
-%{0 =&gt; %{0 =&gt; &quot;string one&quot;, 1 =&gt; &quot;string two&quot;, 2 =&gt; 10, 3 =&gt; 20, 4 =&gt; {2016,1,1}}}
+%{0 =&gt; %{0 =&gt; “string one”, 1 =&gt; “string two”, 2 =&gt; 10, 3 =&gt; 20, 4 =&gt; {2016,1,1}}}
 iex&gt; mda[0][0]
-&quot;string one&quot;
+“string one”
 iex&gt; mda[0][2]
 10
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_multi_info/2">
+  
+    <span id="get_multi_info/1" />
+  
   <div class="detail-header">
     <a href="#get_multi_info/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_multi_info(table_id, num_type \\ :all)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L485" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Returns count data based on <code class="inline">num_type</code> specified:</p>
 <ul>
@@ -669,7 +748,11 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li><code class="inline">:all</code> - Returns a keyword list containing all of the above
 </li>
 </ul>
-<h2>Parameters</h2>
+<h2 id="get_multi_info/2-parameters" class="section-heading">
+  <a href="#get_multi_info/2-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
@@ -680,28 +763,38 @@ iex&gt; table_id |&gt; Xlsxir.close
   </section>
 </div>
 <div class="detail" id="get_row/1">
+  
   <div class="detail-header">
     <a href="#get_row/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_row(row)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L397" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Accesses <code class="inline">:worksheet</code> ETS process and returns values of specified row in a <code class="inline">list</code>.</p>
-<h2>Parameters</h2>
+<h2 id="get_row/1-parameters" class="section-heading">
+  <a href="#get_row/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">table_id</code> - table identifier of ETS process to be accessed, defaults to <code class="inline">:worksheet</code>
 </li>
 <li><code class="inline">row</code> - Reference name of row to be returned in <code class="inline">integer</code> format (i.e. <code class="inline">1</code>)
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="get_row/1-example" class="section-heading">
+  <a href="#get_row/1-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>An example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> containing the following:</p>
 <ul>
 <li>cell ‘A1’ -&gt; “string one”
@@ -713,54 +806,61 @@ iex&gt; table_id |&gt; Xlsxir.close
 <li>cell ‘D1’ -&gt; formula of “4 * 5”
 </li>
 <li><p>cell ‘E1’ -&gt; date of 1/1/2016 or Excel date serial of 42370</p>
-<pre><code class="iex elixir">iex&gt; Xlsxir.extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+<p>iex&gt; Xlsxir.extract(“./test/test_data/test.xlsx”, 0)
 :ok
 iex&gt; Xlsxir.get_row(1)
-[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]
+[“string one”, “string two”, 10, 20, {2016, 1, 1}]
 iex&gt; Xlsxir.close
-:ok
-
-iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
+:ok</p>
+<p>iex&gt; {:ok, table_id} = Xlsxir.multi_extract(“./test/test_data/test.xlsx”, 0)
 iex&gt; table_id |&gt; Xlsxir.get_row(1)
-[&quot;string one&quot;, &quot;string two&quot;, 10, 20, {2016, 1, 1}]
+[“string one”, “string two”, 10, 20, {2016, 1, 1}]
 iex&gt; table_id |&gt; Xlsxir.close
-:ok</code></pre>
+:ok</p>
 </li>
 </ul>
 
   </section>
 </div>
 <div class="detail" id="get_row/2">
+  
   <div class="detail-header">
     <a href="#get_row/2" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">get_row(table_id, row)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L402" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>See <a href="#get_row/1"><code class="inline">get_row/1</code></a> documentation.</p>
 
   </section>
 </div>
 <div class="detail" id="multi_extract/3">
+  
+    <span id="multi_extract/1" />
+  
+    <span id="multi_extract/2" />
+  
   <div class="detail-header">
     <a href="#multi_extract/3" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">multi_extract(path, index \\ nil, timer \\ false)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L153" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Extracts worksheet data contained in the specified <code class="inline">.xlsx</code> file to an ETS process with a table identifier of <code class="inline">table_id</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction
 returns <code class="inline">{:ok, table_id}</code> with the timer argument set to false and returns a tuple of <code class="inline">{:ok, table_id, time}</code> where <code class="inline">time</code> is a list containing time elapsed during the extraction process
@@ -768,7 +868,11 @@ returns <code class="inline">{:ok, table_id}</code> with the timer argument set 
 <a href="Xlsxir.html#content"><code class="inline">Xlsxir</code></a> module.</p>
 <p>Cells containing formulas in the worksheet are extracted as either a <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the resulting value of the cell.
 Cells containing an ISO 8601 date format are extracted and converted to Erlang <code class="inline">:calendar.date()</code> format (i.e. <code class="inline">{year, month, day}</code>).</p>
-<h2>Parameters</h2>
+<h2 id="multi_extract/3-parameters" class="section-heading">
+  <a href="#multi_extract/3-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
 </li>
@@ -777,14 +881,22 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
 <li><code class="inline">timer</code> - boolean flag that tracts extraction process time and returns it when set to <code class="inline">true</code>. Defalut value is <code class="inline">false</code>.
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="multi_extract/3-example" class="section-heading">
+  <a href="#multi_extract/3-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Extract first worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; {:ok, table_id} = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, 0)
   iex&gt; table_id |&gt; Xlsxir.Worksheet.alive?
   true
   iex&gt; table_id |&gt; Xlsxir.close
   :ok</code></pre>
-<h2>Example</h2>
+<h2 id="multi_extract/3-example" class="section-heading">
+  <a href="#multi_extract/3-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Extract all worksheets in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; results = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;)
   iex&gt; alive_ids = Enum.map(results, fn {:ok, table_id} -&gt; table_id |&gt; Xlsxir.Worksheet.alive? end)
@@ -792,7 +904,11 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   true
   iex&gt; Enum.map(results, fn {:ok, id} -&gt; Xlsxir.close(id) end) |&gt; Enum.all?(fn result -&gt; result == :ok end)
   true</code></pre>
-<h2>Example</h2>
+<h2 id="multi_extract/3-example" class="section-heading">
+  <a href="#multi_extract/3-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Extract all worksheets in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code> with timer:</p>
 <pre><code class="iex elixir">iex&gt; results = Xlsxir.multi_extract(&quot;./test/test_data/test.xlsx&quot;, nil, true)
   iex&gt; alive_ids = Enum.map(results, fn {:ok, table_id, _timer} -&gt; table_id |&gt; Xlsxir.Worksheet.alive? end)
@@ -804,22 +920,28 @@ Cells containing an ISO 8601 date format are extracted and converted to Erlang <
   </section>
 </div>
 <div class="detail" id="peek/3">
+  
   <div class="detail-header">
     <a href="#peek/3" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">peek(path, index, rows)</span>
-      
+    
       <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir.ex#L77" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
+    
   </div>
-  
   <section class="docstring">
     <p>Extracts the first n number of rows from the specified worksheet contained in the specified <code class="inline">.xlsx</code> file to an ETS process
 named <code class="inline">:worksheet</code> which is accessed via the <a href="Xlsxir.Worksheet.html"><code class="inline">Xlsxir.Worksheet</code></a> module. Successful extraction returns <code class="inline">:ok</code></p>
-<h2>Parameters</h2>
+<h2 id="peek/3-parameters" class="section-heading">
+  <a href="#peek/3-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
 <ul>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
 </li>
@@ -828,7 +950,11 @@ named <code class="inline">:worksheet</code> which is accessed via the <a href="
 <li><code class="inline">rows</code> - the number of rows to fetch from within the specified worksheet
 </li>
 </ul>
-<h2>Example</h2>
+<h2 id="peek/3-example" class="section-heading">
+  <a href="#peek/3-example" class="hover-link"><i class="icon-link"></i></a>
+  Example
+</h2>
+
 <p>Peek at the first 10 rows of the 9th worksheet in an example file named <code class="inline">test.xlsx</code> located in <code class="inline">./test/test_data</code>:</p>
 <pre><code class="iex elixir">iex&gt; Xlsxir.peek(&quot;./test/test_data/test.xlsx&quot;, 8, 10)
   :ok
@@ -844,25 +970,24 @@ named <code class="inline">:worksheet</code> which is accessed via the <a href="
       
 
       
-
-      
-        <footer class="footer">
-      <p>
-        <span class="line">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.5),
-        </span>
-        <span class="line">
-          designed by
-          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.15.0),
           </span>
-      </p>
-      <button class="night-mode-toggle" />
-    </footer>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-918614602f.js"></script>
+  <script src="dist/app-22a6d4638c.js"></script>
   </body>
 </html>
 

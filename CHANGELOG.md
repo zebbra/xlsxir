@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.5.1
+- Removed `Timex` dependency. Thanks to Paulo Almeida (@pma) for contribution.
+
 ## 1.5.0
 - ***Xlsxir requires Elixir v1.4+ with this update***
 - Added ability to extract only a given number of rows from a worksheet via `Xlsxir.peek/3`. Thanks to Ali Tahbaz (@tahbaza) for contribution.

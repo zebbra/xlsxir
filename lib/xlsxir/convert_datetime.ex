@@ -38,14 +38,13 @@ defmodule Xlsxir.ConvertDateTime do
   end
   defp convert_from_serial(n) when is_float(n) do
     {whole_days, fractional_day} = split_float(n)
-    {hrs, mins, secs} = convert_from_serial(fractional_day)
+    {hours, minutes, seconds} = convert_from_serial(fractional_day)
+
     {{1899, 12, 31}, {0, 0, 0}}
-    |> Timex.to_naive_datetime
-    |> Timex.shift(days: whole_days)
-    |> Timex.shift(hours: hrs)
-    |> Timex.shift(minutes: mins)
-    |> Timex.shift(seconds: secs)
-    |> Timex.to_naive_datetime
+    |> :calendar.datetime_to_gregorian_seconds()
+    |> Kernel.+(whole_days * 86400 + hours * 3600 + minutes * 60 + seconds)
+    |> :calendar.gregorian_seconds_to_datetime()
+    |> NaiveDateTime.from_erl!()
   end
 
   defp split_float(f) do

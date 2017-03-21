@@ -76,7 +76,7 @@ defmodule Xlsxir do
   """
   def peek(path, index, rows) do
     case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      -> 
+      {:ok, file}      ->
         case extract_xml(file, index) do
           {:ok, file_paths} -> do_peek_extract(file_paths, index, false, rows)
           {:error, reason}  -> {:error, reason}
@@ -402,10 +402,10 @@ defmodule Xlsxir do
   def get_row(table_id, row), do: do_get_row(row, table_id)
 
   defp do_get_row(row, table_id \\ :worksheet) do
-    [[row]] = :ets.match(table_id, {row, :"$1"})
-
-    row
-    |> Enum.map(fn [_ref, val] -> val end)
+    case :ets.match(table_id, {row, :"$1"}) do
+      [[row]] -> row |> Enum.map(fn [_ref, val] -> val end)
+      [] -> []
+    end
   end
 
   @doc """

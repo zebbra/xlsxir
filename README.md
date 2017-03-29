@@ -60,8 +60,9 @@ Upon successful completion, the extraction process returns:
 Unsucessful parsing of a specific worksheet returns `{:error, reason}`.
 
 <br/>
-The extracted worksheet data can be accessed using any of the following functions:
-```elixir
+The extracted worksheet data can be accessed using any of the following functions:  
+
+```
 Xlsxir.get_list(table_id)
 Xlsxir.get_map(table_id)
 Xlsxir.get_mda(table_id)
@@ -69,7 +70,8 @@ Xlsxir.get_cell(table_id, cell_ref)
 Xlsxir.get_row(table_id, row_num)
 Xlsxir.get_col(table_id, col_ltr)
 Xlsxir.get_info(table_id, num_type)
-```
+``` 
+
 **Note:** `table_id` defaults to `:worksheet` and is therefore not required when using `Xlsxir.extract/3` to parse a given worksheet. The `table_id` parameter is only used with `Xlsxir.multi_extract/3`.
 
 `Xlsxir.get_list/1` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>

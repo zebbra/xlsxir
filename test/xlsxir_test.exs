@@ -53,4 +53,10 @@ defmodule XlsxirTest do
     assert get_info(:rows) == 10
     close()
   end
+
+  test "get_cell returns nil for non-existent cells" do
+    extract(path(), 3)
+    assert get_cell("A1") == nil
+    close()
+  end
 end

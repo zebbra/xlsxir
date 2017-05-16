@@ -358,12 +358,13 @@ defmodule Xlsxir do
   defp do_get_cell(cell_ref, table_id \\ :worksheet) do
     [[row_num]] = ~r/\d+/ |> Regex.scan(cell_ref)
     row_num     = row_num |> String.to_integer
-    [[row]]     = :ets.match(table_id, {row_num, :"$1"})
-
-    row
-    |> Enum.filter(fn [ref, _val] -> ref == cell_ref end)
-    |> List.first
-    |> Enum.at(1)
+    case :ets.match(table_id, {row_num, :"$1"}) do
+      [[row]] -> row
+                  |> Enum.filter(fn [ref, _val] -> ref == cell_ref end)
+                  |> List.first
+                  |> Enum.at(1)
+      _       -> nil
+    end
   end
 
   @doc """

@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.5.2
+- Fixed bug that occured when a worksheet was empty. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution. 
+- Changed `get_cell/1` to return `nil` if the requested cell doesn't exist. Thanks to Peter Sumskas (@brushbox) for contribution.
+
 ## 1.5.1
 - Removed `Timex` dependency. Thanks to Paulo Almeida (@pma) for contribution.
 

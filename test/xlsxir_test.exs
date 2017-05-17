@@ -55,8 +55,8 @@ defmodule XlsxirTest do
   end
 
   test "get_cell returns nil for non-existent cells" do
-    extract(path(), 3)
-    assert get_cell("A1") == nil
-    close()
+    {:ok, pid} = extract(path(), 3)
+    assert get_cell(pid, "A1") == nil
+    close(pid)
   end
 end

@@ -249,6 +249,10 @@ defmodule Xlsxir do
           iex> Xlsxir.close(tid)
           :ok
 
+          iex> {:ok, tid} = Xlsxir.extract("./test/test_data/test.xlsx", 2)
+          iex> Xlsxir.get_list(tid) |> List.first |> Enum.count
+          16384
+
           iex> {:ok, tid} = Xlsxir.multi_extract("./test/test_data/test.xlsx", 0)
           iex> Xlsxir.get_list(tid)
           [["string one", "string two", 10, 20, {2016, 1, 1}]]
@@ -443,23 +447,32 @@ defmodule Xlsxir do
     |> elem(0)
   end
 
+  defp column_from_index(index, column) when index > 0 do
+    modulo = rem(index - 1, 26)
+    column = [65 + modulo | column]
+    column_from_index(div(index - modulo, 26), column)
+  end
+
+  defp column_from_index(_, column), do: to_string(column)
+
   defp is_next_col(current, previous) do
-    String.to_charlist(current) == next_col(previous)
+    current == next_col(previous)
   end
 
   defp next_col(ref) do
-    chars = Regex.run(~r/^[A-Z]+/, ref) |> List.first |> String.to_charlist
-    case List.last(chars) do
-      # The last letter is "Z"
-      90 -> (String.duplicate("A", Enum.count(chars)) |> String.to_charlist) ++ [65]
-      char -> Enum.take(chars, Enum.count(chars) - 1) ++ [char + 1]
-    end
+    [chars, line] = Regex.run(~r/^([A-Z]+)(\d+)/, ref, capture: :all_but_first)
+    chars = chars |> String.to_charlist
+    col_index = Enum.reduce(chars, 0, fn char, acc ->
+      acc = acc * 26
+      acc + char - 65 + 1
+    end)
+    "#{column_from_index(col_index + 1, '')}#{line}"
   end
 
   defp fill_empty_cells(from, from, _line, cells), do: Enum.reverse(cells)
 
   defp fill_empty_cells(from, to, line, cells) do
-    next_ref = "#{next_col(from)}#{line}"
+    next_ref = next_col(from)
     if next_ref == to do
       fill_empty_cells(to, to, line, cells)
     else

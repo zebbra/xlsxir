@@ -98,12 +98,11 @@ defmodule Xlsxir.ParseWorksheet do
       [        's',   _,   i] -> SharedString.get_at(List.to_integer(i))                             # Type string
       [        nil, nil,   n] -> convert_char_number(n)                                              # Type number
       [        'n', nil,   n] -> convert_char_number(n)
-      [        nil, 'd',   d] -> convert_date_or_time(d)                                             # ISO 8601 type date
-      [        'n', 'd',   d] -> convert_date_or_time(d)
+      [        _,   'd',   d] -> convert_date_or_time(d)                                             # ISO 8601 type date
       [      'str',   _,   s] -> List.to_string(s)                                                   # Type formula w/ string
       [        'b',   _,   s] -> s == '1'                                                            # Type boolean
       ['inlineStr',   _,   s] -> List.to_string(s)                                                   # Type string
-      _                       -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
+      _                       -> raise "Unmapped attribute #{inspect(list)}. Unable to process"      # Unmapped type
     end
   end
 

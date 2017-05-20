@@ -11,8 +11,7 @@ defmodule Xlsxir.SaxParser do
 
   @doc """
   Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data
-  parsed. Name of ETS process modules that hold data for the aforementioned XML files are `Worksheet`, `Style` and `SharedString` respectively. The style and sharedstring XML files (if they
-  exist) must be parsed first in order for the worksheet parser to sucessfully complete.
+  parsed. The style and sharedstring XML files (if they exist) must be parsed first in order for the worksheet parser to sucessfully complete.
 
   ## Parameters
 
@@ -71,4 +70,3 @@ defmodule Xlsxir.SaxParser do
   end
 
 end
-

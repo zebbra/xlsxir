@@ -70,10 +70,10 @@ defmodule Xlsxir do
         case extract_xml(file, index) do
           {:ok, file_paths} ->
             {excel, result} = do_extract(excel, file_paths, index)
-            :ets.delete(excel.styles)
-            :ets.delete(excel.shared_strings)
+            if excel.styles, do: :ets.delete(excel.styles)
+            if excel.shared_strings, do: :ets.delete(excel.shared_strings)
             result
-          {:error, reason}  -> {:error, reason}
+          {:error, reason} -> {:error, reason}
         end
       {:error, reason} -> {:error, reason}
     end

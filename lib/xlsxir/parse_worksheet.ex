@@ -100,11 +100,16 @@ defmodule Xlsxir.ParseWorksheet do
       [        'n', nil,   n] -> convert_char_number(n)
       [        nil, 'd',   d] -> convert_date_or_time(d)                                             # ISO 8601 type date
       [        'n', 'd',   d] -> convert_date_or_time(d)
+      [        'd', 'd',   d] -> convert_iso_date(d)
       [      'str',   _,   s] -> List.to_string(s)                                                   # Type formula w/ string
       [        'b',   _,   s] -> s == '1'                                                            # Type boolean
       ['inlineStr',   _,   s] -> List.to_string(s)                                                   # Type string
       _                       -> raise "Unmapped attribute #{Enum.at(list, 0)}. Unable to process"   # Unmapped type
     end
+  end
+
+  defp convert_iso_date(value) do
+    List.to_string(value) |> Date.from_iso8601() |> elem(1) |> Date.to_erl()
   end
 
   defp convert_date_or_time(value) do

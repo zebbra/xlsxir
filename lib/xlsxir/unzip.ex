@@ -3,6 +3,9 @@ defmodule Xlsxir.Unzip do
   @moduledoc """
   Provides validation of accepted file types for file path, extracts required `.xlsx` contents to `./temp` and ultimately deletes the `./temp` directory and its contents.
   """
+  @filetype_error "Invalid file type (expected xlsx)."
+  @xml_not_found_error "Invalid File. Required XML files not found."
+  @worksheet_index_error "Invalid worksheet index."
 
   @doc """
   Checks if given path is a valid file type and contains the requested worksheet, returning a tuple.
@@ -75,14 +78,15 @@ defmodule Xlsxir.Unzip do
         end)
         |> Enum.sort
         {:ok, indexes}
-      {:error, _reason} -> {:error, "Invalid file type."}
+      {:error, _reason} ->
+	{:error, @filetype_error}
     end
   end
 
   defp valid_extract_request?(path, index) do
     case :zip.list_dir(path) do
       {:ok, file_list}  -> search_file_list(file_list, index)
-      {:error, _reason} -> {:error, "Invalid file type."}
+      {:error, _reason} -> {:error, @filetype_error}
     end
   end
 
@@ -99,7 +103,7 @@ defmodule Xlsxir.Unzip do
     if Enum.member?(results, :ok) do
       :ok
     else
-      {:error, "Invalid worksheet index."}
+      {:error, @worksheet_index_error}
     end
   end
 
@@ -149,7 +153,7 @@ defmodule Xlsxir.Unzip do
     |> :zip.extract([{:file_list, file_list}, {:cwd, 'temp/'}])
     |> case do
         {:error, reason}  -> {:error, reason}
-        {:ok, []}         -> {:error, "Invalid File. Required XML files not found."}
+        {:ok, []}         -> {:error, @xml_not_found_error}
         {:ok, files_list} -> {:ok, files_list}
        end
   end

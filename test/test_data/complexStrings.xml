@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><sst uniqueCount="2" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><si><r><rPr><sz val="10"/><color indexed="9"/><rFont val="Arial"/></rPr><t>FOO</t></r><r><rPr><sz val="10"/><color indexed="8"/><rFont val="Arial"/></rPr><t>: BAR</t></r></si><si><t>BAZ</t></si></sst>

@@ -31,28 +31,14 @@ defmodule Xlsxir.ParseString do
 
   def sax_event_handler({:characters, value}, 
     %Xlsxir.ParseString{family: family, family_string: fam_str} = state) do
-      if family do
-        value = value |> to_string
-        %{state | family_string: fam_str <> value}
-      else
-        value
-        |> to_string
-        |> SharedString.add_shared_string(Index.get)
-
-        Index.increment_1
-        %{state | empty_string: false}
-      end
+      value = value |> to_string
+      %{state | family_string: fam_str <> value}
   end
 
   def sax_event_handler({:endElement,_,'si',_}, 
     %Xlsxir.ParseString{empty_string: empty_string, family: family, family_string: fam_str}) do
-      cond do
-        family       -> SharedString.add_shared_string(fam_str, Index.get)
-                        Index.increment_1
-        empty_string -> SharedString.add_shared_string("", Index.get)
-                        Index.increment_1
-        true         -> nil
-      end
+      SharedString.add_shared_string(fam_str, Index.get)
+      Index.increment_1
   end
 
   def sax_event_handler(:endDocument, _state), do: Index.delete

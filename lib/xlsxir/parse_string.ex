@@ -48,8 +48,18 @@ defmodule Xlsxir.ParseString do
                         %{state | index: index + 1}
         true         -> state
       end
-  end
+
+      #  def sax_event_handler({:characters, value}, 
+      #    %Xlsxir.ParseString{family: family, family_string: fam_str} = state) do
+      #      value = value |> to_string
+      #      %{state | family_string: fam_str <> value}
+      #  end
+
+      #  def sax_event_handler({:endElement,_,'si',_}, 
+      #    %Xlsxir.ParseString{empty_string: empty_string, family: family, family_string: fam_str}) do
+      #      SharedString.add_shared_string(fam_str, Index.get)
+      #      Index.increment_1
+      #  end
 
   def sax_event_handler(_, state), do: state
-
 end

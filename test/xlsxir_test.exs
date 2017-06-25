@@ -62,9 +62,9 @@ defmodule XlsxirTest do
   end
 
   test "get_cell returns correct content even with rich text" do
-    extract(rb_path(), 0)
-    assert get_cell("A1") == "RED: BLACK"
-    assert get_cell("A2") == "Data"
-    close()
+    {:ok, pid} = extract(rb_path(), 0)
+    assert get_cell(pid, "A1") == "RED: BLACK"
+    assert get_cell(pid, "A2") == "Data"
+    close(pid)
   end
 end

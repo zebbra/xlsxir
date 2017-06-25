@@ -29,37 +29,16 @@ defmodule Xlsxir.ParseString do
   end
 
   def sax_event_handler({:characters, value},
-    %__MODULE__{family: family, family_string: fam_str, index: index, tid: tid} = state) do
-      if family do
-        value = value |> to_string
-        %{state | family_string: fam_str <> value}
-      else
-        :ets.insert(tid, {index, value |> to_string})
-        %{state | empty_string: false, index: index + 1}
-      end
+    %__MODULE__{family_string: fam_str} = state) do
+      value = value |> to_string
+      %{state | family_string: fam_str <> value}
   end
 
   def sax_event_handler({:endElement,_,'si',_},
-    %__MODULE__{empty_string: empty_string, family: family, family_string: fam_str, tid: tid, index: index} = state) do
-      cond do
-        family       -> :ets.insert(tid, {index, fam_str})
-                        %{state | index: index + 1}
-        empty_string -> :ets.insert(tid, {index, ""})
-                        %{state | index: index + 1}
-        true         -> state
-      end
-
-      #  def sax_event_handler({:characters, value}, 
-      #    %Xlsxir.ParseString{family: family, family_string: fam_str} = state) do
-      #      value = value |> to_string
-      #      %{state | family_string: fam_str <> value}
-      #  end
-
-      #  def sax_event_handler({:endElement,_,'si',_}, 
-      #    %Xlsxir.ParseString{empty_string: empty_string, family: family, family_string: fam_str}) do
-      #      SharedString.add_shared_string(fam_str, Index.get)
-      #      Index.increment_1
-      #  end
+    %__MODULE__{family_string: fam_str, tid: tid, index: index} = state) do
+      :ets.insert(tid, {index, fam_str})
+      %{state | index: index + 1}
+  end
 
   def sax_event_handler(_, state), do: state
 end

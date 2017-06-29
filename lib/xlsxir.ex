@@ -105,6 +105,108 @@ defmodule Xlsxir do
     end
   end
 
+
+  @doc """
+  Stream worksheet rows contained in the specified `.xlsx` file.
+
+  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell.
+  Cells containing an ISO 8601 date format are extracted and converted to Erlang `:calendar.date()` format (i.e. `{year, month, day}`).
+
+  ## Parameters
+  - `path` - file path of a `.xlsx` file type in `string` format
+  - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
+
+  ## Example
+  Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
+
+        iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(2)
+        [[1, 2], [3, 4]]
+
+  """
+  def stream_list(path, index) do
+    stream(path, index)
+    |> Stream.map(&row_data_to_list/1)
+  end
+
+  defp stream(path, index) do
+    Stream.resource(
+      fn -> prepare_stream(path, index) end,
+      &stream_next_row/1,
+      &clean_stream/1
+    )
+  end
+
+  defp row_data_to_list(row_data) do
+    row_data # [["A1", 1], ["C1", 2]]
+    |> do_get_row() # [["A1", 1], ["A1", nil], ["C1", 2]]
+    |> Enum.map(fn [_ref, val] -> val end) # [1, nil, 2]
+  end
+
+  defp prepare_stream(path, index) do
+    with  {:ok, file} <- Unzip.validate_path_and_index(path, index),
+          {:ok, file_paths} <- extract_xml(file, index),
+          excel <- extract_commons(file_paths, %__MODULE__{}),
+          {:ok, content} <- open_worksheet(file_paths, index) do
+
+      xml_parser_pid = spawn(__MODULE__, :parse_loop, [content, excel])
+      {xml_parser_pid, excel}
+    end
+  end
+
+  def parse_loop(content, excel) do
+    SaxParser.parse(content, :stream_worksheet, excel)
+  end
+
+  defp stream_next_row(stream_state)
+  defp stream_next_row({xml_parser_pid, _excel} = stream_state) do
+    # Ask next row to the xml parser process
+    send(xml_parser_pid, {:get_next_row, self()})
+
+    # And wait for a response, ie a next row or end of file
+    receive do
+      {:next_row, row} ->
+        {[row], stream_state}
+      {:end} ->
+        {:halt, stream_state}
+    end
+  end
+
+  defp clean_stream(stream_state)
+  defp clean_stream({xml_parser_pid, excel}) do
+    # Kill parser loop process
+    Process.exit(xml_parser_pid, :kill)
+
+    # Removes ETS tables after worksheet streaming ends
+    if excel.styles, do: :ets.delete(excel.styles)
+    if excel.shared_strings, do: :ets.delete(excel.shared_strings)
+  end
+
+  defp extract_commons(file_paths, excel) do
+    file_paths
+    |> Enum.reduce(excel, &extract_common/2)
+  end
+
+  defp extract_common({'xl/sharedStrings.xml', content}, excel) do
+    {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(content, :string)
+    %{excel | shared_strings: tid}
+  end
+
+  defp extract_common({'xl/styles.xml', content}, excel) do
+    {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(content, :style)
+    %{excel | styles: tid}
+  end
+
+  # ignore other files and worksheets
+  defp extract_common(_, excel), do: excel
+
+  defp open_worksheet(file_paths, index) do
+    {_, content} = Enum.find(file_paths, fn {path, _} ->
+      path == 'xl/worksheets/sheet#{index + 1}.xml'
+    end)
+    {:ok, content}
+  end
+
+
   @doc """
   Extracts the first n number of rows from the specified worksheet contained in the specified `.xlsx` file to an ETS process.
   Successful extraction returns `{:ok, tid}` where tid - is ETS table id.

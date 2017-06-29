@@ -4,7 +4,7 @@ defmodule Xlsxir.SaxParser do
   parsing algorithm for parsing large XML files in chunks, preventing the need to load the entire DOM into memory. Current chunk size is set to 10,000.
   """
 
-  alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, SaxError}
+  alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, StreamWorksheet, SaxError}
   require Logger
 
   @chunk 10000
@@ -50,6 +50,7 @@ defmodule Xlsxir.SaxParser do
         nil,
         case type do
           :worksheet -> &(ParseWorksheet.sax_event_handler(&1, &2, excel))
+          :stream_worksheet -> &(StreamWorksheet.sax_event_handler(&1, &2, excel))
           :style     -> &(ParseStyle.sax_event_handler(&1, &2))
           :string    -> &(ParseString.sax_event_handler(&1, &2))
           _          -> raise "Invalid file type for sax_event_handler/2"
@@ -68,5 +69,4 @@ defmodule Xlsxir.SaxParser do
       :eof        -> {tail, {pid, offset, chunk}}
     end
   end
-
 end

@@ -1,6 +1,12 @@
 # Change Log
 
-## 1.5.2
+## 1.6.0 (to be published on Hex)
+- Huge parsing performance improvement thanks to Alex Kovalevych's (@AlexKovalevych) contribution. 
+- Code improved to better handle complex multi-formatted strings. Thanks to Peter Sumskas (@brushbox) for contribution.
+- Bug fix to handle additional date format. Thanks to Sudhir Rao (@sudrao) for contribution.
+- Various error message improvements. Thanks to Craig Lyons (@craiglyons) for contribution. 
+
+## 1.5.2 (not published on Hex)
 - Fixed bug that occured when a worksheet was empty. Thanks to Alex Kovalevych (@AlexKovalevych) for contribution. 
 - Changed `get_cell/1` to return `nil` if the requested cell doesn't exist. Thanks to Peter Sumskas (@brushbox) for contribution.
 

@@ -4,6 +4,7 @@ defmodule XlsxirTest do
   import Xlsxir
 
   def path(), do: "./test/test_data/test.xlsx"
+  def rb_path(), do: "./test/test_data/red_black.xlsx"
 
   test "second worksheet is parsed with index argument of 1" do
     {:ok, pid} = extract(path(), 1)
@@ -57,6 +58,13 @@ defmodule XlsxirTest do
   test "get_cell returns nil for non-existent cells" do
     {:ok, pid} = extract(path(), 3)
     assert get_cell(pid, "A1") == nil
+    close(pid)
+  end
+
+  test "get_cell returns correct content even with rich text" do
+    {:ok, pid} = extract(rb_path(), 0)
+    assert get_cell(pid, "A1") == "RED: BLACK"
+    assert get_cell(pid, "A2") == "Data"
     close(pid)
   end
 end

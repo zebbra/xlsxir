@@ -23,7 +23,7 @@ Or, you can directly reference the GitHub repo:
 
 ```elixir
 def deps do
-  [ {:xlsxir, github: "kennellroxco/xlsxir"} ]
+  [ {:xlsxir, github: "jsonkennell/xlsxir"} ]
 end
 ```
 
@@ -37,16 +37,16 @@ end
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3`, `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
+**Xlsxir.extract/3 is deprecated, please use Xlsxir.multi_extract/4 going forward.**
+
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
 
 ```elixir
-Xlsxir.extract(path, index, timer \\ false)
-Xlsxir.multi_extract(path, index \\ nil, timer \\ false)
+Xlsxir.multi_extract(path, index \\ nil, timer \\ nil, excel \\ nil)
 Xlsxir.peek(path, index, rows)
 ```
 
-The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default
-(when `index == nil`), returning a list of tuple results.
+The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default (when `index == nil`), returning a list of tuple results.
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
@@ -55,9 +55,6 @@ Argument descriptions:
 - `rows` is an integer representing the number of rows to be extracted from the given worksheet.
 
 Upon successful completion, the extraction process returns:
-- for `extract/3`:
-    * `:ok` with `timer` set to `false`
-    * `{:ok, time_elapsed}` with `timer` set to `true`
 - for `multi_extract/3`:
     * `[{:ok, table_1_id}, ...]` with `timer` set to `false`
     * `{:ok, table_id}` when given a specific worksheet `index`
@@ -80,8 +77,6 @@ Xlsxir.get_col(table_id, col_ltr)
 Xlsxir.get_info(table_id, num_type)
 ```
 
-**Note:** `table_id` defaults to `:worksheet` and is therefore not required when using `Xlsxir.extract/3` to parse a given worksheet. The `table_id` parameter is only used with `Xlsxir.multi_extract/3`.
-
 `Xlsxir.get_list/1` returns entire worksheet in a list of row lists (i.e. `[[row 1 values], ...]`)<br/>
 `Xlsxir.get_map/1` returns entire worksheet in a map of cell names and values (i.e. `%{"A1" => value, ...}`)<br/>
 `Xlsxir.get_mda/1` returns entire worksheet in an indexed map which can be accessed like a multi-dimensional array (i.e. `some_var[0][0]` for cell "A1")<br/>
@@ -92,9 +87,8 @@ Xlsxir.get_info(table_id, num_type)
 
 Once the table data is no longer needed, run the following function to delete the ETS process and free memory:
 ```elixir
-Xlsxir.close(table*id)
+Xlsxir.close(table_id)
 ```
-When using `Xlsxir.extract/3`, be sure to [close an open ETS process when you're done working with the file to free the memory](https://hexdocs.pm/xlsxir/Xlsxir.html#close/0) in the same session or process. If the parsing of multiple worksheets is desired, use `Xlsxir.multi*extract/3` instead.
 
 Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more detailed examples.
 
@@ -122,3 +116,4 @@ I'd like to thank the following people who were a big help in the development of
 - Paulo Almeida (@pma) was a big help with testing and has provided several great ideas for development.
 - Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable.
 - Daniel Berkompas' (@danielberkompas) article [Multidimensional Arrays in Elixir](http://blog.danielberkompas.com/2016/04/23/multidimensional-arrays-in-elixir.html?utm_campaign=elixir_radar_48&utm_medium=email&utm_source=RD+Station) inspired `Xlsxir.get_mda/0`.
+- Alex Kovalevych

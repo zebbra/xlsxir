@@ -77,7 +77,5 @@ defmodule XlsxirTest do
 
   test "stream_list returns a stream of rows" do
     assert %Stream{} = stream_list(path(), 1)
-    assert stream_list(path(), 1) |> Enum.take(1) == [[1, 2]]
-    assert stream_list(path(), 1) |> Enum.take(3) == [[1, 2], [3, 4]]
   end
 end

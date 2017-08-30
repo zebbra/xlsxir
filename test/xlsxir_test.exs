@@ -74,8 +74,4 @@ defmodule XlsxirTest do
     assert 9 == Enum.count(res)
     assert [["string one", "string two", 10, 20, {2016, 1, 1}]] == get_list(tid)
   end
-
-  test "stream_list returns a stream of rows" do
-    assert %Stream{} = stream_list(path(), 1)
-  end
 end

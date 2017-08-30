@@ -67,8 +67,4 @@ defmodule XlsxirTest do
     assert get_cell(pid, "A2") == "Data"
     close(pid)
   end
-
-  test "stream_list returns a stream of rows" do
-    assert %Stream{} = stream_list(path(), 1)
-  end
 end

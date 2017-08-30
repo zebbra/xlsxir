@@ -119,6 +119,8 @@ defmodule Xlsxir do
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
+        iex> with %Stream{} <- Xlsxir.stream_list("./test/test_data/test.xlsx", 1), do: true
+        true
         iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(1)
         [[1, 2]]
         iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(3)

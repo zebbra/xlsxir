@@ -30,7 +30,7 @@ defmodule Xlsxir.StreamWorksheet do
   """
   def sax_event_handler(sax_pattern, state, excel)
 
-  def sax_event_handler(:startDocument, _state, %Xlsxir{}) do
+  def sax_event_handler(:startDocument, _state, %Xlsxir.XlsxFile{}) do
     %ParseWorksheet{}
   end
 

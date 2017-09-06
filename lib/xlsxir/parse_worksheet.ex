@@ -20,15 +20,15 @@ defmodule Xlsxir.ParseWorksheet do
   ## Example
   Each entry in the list created consists of a list containing a cell reference string and the associated value (i.e. `[["A1", "string one"], ...]`).
   """
-  def sax_event_handler(:startDocument, _state, %Xlsxir{max_rows: max_rows}) do
+  def sax_event_handler(:startDocument, _state, %{max_rows: max_rows}) do
     %__MODULE__{tid: GenServer.call(Xlsxir.StateManager, :new_table), max_rows: max_rows}
   end
 
-  def sax_event_handler({:startElement,_,'row',_,_}, %{tid: tid, max_rows: max_rows}, _excel) do
+  def sax_event_handler({:startElement,_,'row',_,_}, %__MODULE__{tid: tid, max_rows: max_rows}, _excel) do
     %__MODULE__{tid: tid, max_rows: max_rows}
   end
 
-  def sax_event_handler({:startElement,_,'c',_,xml_attr}, state, %Xlsxir{styles: styles_tid}) do
+  def sax_event_handler({:startElement,_,'c',_,xml_attr}, state, %{styles: styles_tid}) do
     a = Enum.map(xml_attr, fn(attr) ->
           case attr do
             {:attribute,'r',_,_,ref}   -> {:r, ref  }
@@ -52,12 +52,12 @@ defmodule Xlsxir.ParseWorksheet do
     if state == nil, do: nil, else: %{state | value: value}
   end
 
-  def sax_event_handler({:endElement,_,'c',_}, %{row: row} = state, %Xlsxir{} = excel) do
+  def sax_event_handler({:endElement,_,'c',_}, %__MODULE__{row: row} = state, excel) do
     cell_value = format_cell_value(excel, [state.data_type, state.num_style, state.value])
     %{state | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]), cell_ref: "", data_type: "", num_style: "", value: ""}
   end
 
-  def sax_event_handler({:endElement,_,'row',_}, %{tid: tid, max_rows: max_rows} = state, _excel) do
+  def sax_event_handler({:endElement,_,'row',_}, %__MODULE__{tid: tid, max_rows: max_rows} = state, _excel) do
     unless Enum.empty?(state.row) do
       [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
       row     = row |> String.to_integer
@@ -70,7 +70,7 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler(_, state, _), do: state
 
-  defp format_cell_value(%Xlsxir{shared_strings: strings_tid}, list) do
+  defp format_cell_value(%{shared_strings: strings_tid}, list) do
     case list do
       [          _,   _, nil] -> nil                                                                 # Cell with no value attribute
       [          _,   _,  ""] -> nil                                                                 # Empty cell with assigned attribute

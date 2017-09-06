@@ -35,7 +35,7 @@ defmodule Xlsxir.SaxParser do
           iex> {:ok, %Xlsxir.ParseString{tid: tid2}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/sharedStrings.xml")}, :string)
           iex> :ets.lookup(tid2, 0)
           [{0, "string one"}]
-          iex> {:ok, %Xlsxir.ParseWorksheet{tid: tid3}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/worksheets/sheet1.xml")}, :worksheet, %Xlsxir{shared_strings: tid2, styles: tid1})
+          iex> {:ok, %Xlsxir.ParseWorksheet{tid: tid3}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/worksheets/sheet1.xml")}, :worksheet, %Xlsxir.XlsxFile{shared_strings: tid2, styles: tid1})
           iex> :ets.lookup(tid3, 1)
           [{1, [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]}]
   """

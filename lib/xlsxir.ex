@@ -1,7 +1,5 @@
 defmodule Xlsxir do
-  alias Xlsxir.{SaxParser, Unzip, XmlFile}
-
-  defstruct [styles: nil, shared_strings: nil, worksheets: [], max_rows: nil, timer: nil]
+  alias Xlsxir.{XlsxFile}
 
   use Application
 
@@ -42,6 +40,18 @@ defmodule Xlsxir do
         iex> Xlsxir.close(tid)
         :ok
 
+        iex> {:ok, tid} = Xlsxir.extract("./test/test_data/test.xlsx", 0, false, [extract_to: :file])
+        iex> Enum.member?(:ets.all, tid)
+        true
+        iex> Xlsxir.close(tid)
+        :ok
+
+        iex> {:ok, tid, _timer} = Xlsxir.extract("./test/test_data/test.xlsx", 0, true)
+        iex> Enum.member?(:ets.all, tid)
+        true
+        iex> Xlsxir.close(tid)
+        :ok
+
   ## Test parallel parsing
         iex> task1 = Task.async(fn -> Xlsxir.extract("./test/test_data/test.xlsx", 0) end)
         iex> task2 = Task.async(fn -> Xlsxir.extract("./test/test_data/test.xlsx", 0) end)
@@ -57,52 +67,11 @@ defmodule Xlsxir do
         :ok
 
   """
-  def extract(path, index, timer \\ false) do
-    excel = if timer do
-      {_, s, ms} = :erlang.timestamp
-      %__MODULE__{timer: [s, ms]}
-    else
-      %__MODULE__{}
-    end
-
-    case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      ->
-        case extract_xml(file, index) do
-          {:ok, xml_files} ->
-            {excel, result} = do_extract(excel, xml_files, index)
-            if excel.styles, do: :ets.delete(excel.styles)
-            if excel.shared_strings, do: :ets.delete(excel.shared_strings)
-            result
-          {:error, reason} -> {:error, reason}
-        end
-      {:error, reason} -> {:error, reason}
-    end
-  end
-
-  defp do_extract(%__MODULE__{timer: timer} = excel, xml_files, index) do
-    excel = Enum.reduce(xml_files, excel, fn xml_file, acc ->
-      cond do
-        xml_file.name == "sharedStrings.xml" && is_nil(excel.shared_strings) ->
-          {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(xml_file, :string)
-          %{acc | shared_strings: tid}
-        xml_file.name == "styles.xml" && is_nil(excel.styles) ->
-          {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(xml_file, :style)
-          %{acc | styles: tid}
-        true -> acc
-      end
-    end)
-
-    worksheet_xml_file = Enum.find(xml_files, fn xml_file ->
-      xml_file.name == "sheet#{index + 1}.xml"
-    end)
-
-    {:ok, %Xlsxir.ParseWorksheet{tid: tid}, _} = SaxParser.parse(worksheet_xml_file, :worksheet, excel)
-
-    if !is_nil(timer) do
-      {excel, {:ok, tid, stop_timer(excel.timer)}}
-    else
-      {excel, {:ok, tid}}
-    end
+  def extract(path, index, timer \\ false, options \\ []) do
+    xlsx_file = XlsxFile.initialize(path, options)
+    result = XlsxFile.parse_to_ets(xlsx_file, index, timer)
+    XlsxFile.clean(xlsx_file)
+    result
   end
 
 
@@ -119,8 +88,6 @@ defmodule Xlsxir do
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
-        iex> with %Stream{} <- Xlsxir.stream_list("./test/test_data/test.xlsx", 1), do: true
-        true
         iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(1)
         [[1, 2]]
         iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(3)
@@ -132,100 +99,16 @@ defmodule Xlsxir do
   end
 
   defp stream(path, index) do
-    Stream.resource(
-      fn -> initialize_stream(path, index) end,
-      &stream_next_row/1,
-      &clean_stream/1
-    )
+    path
+    |> XlsxFile.initialize([extract_to: :file])
+    |> XlsxFile.stream(index)
   end
 
   defp row_data_to_list(row_data) do
     row_data # [["A1", 1], ["C1", 2]]
-    |> do_get_row() # [["A1", 1], ["A1", nil], ["C1", 2]]
+    |> do_get_row() # [["A1", 1], ["B1", nil], ["C1", 2]]
     |> Enum.map(fn [_ref, val] -> val end) # [1, nil, 2]
   end
-
-  defp initialize_stream(xls_file_path, index) do
-    with  {:ok, xls_file_path} <- Unzip.validate_path_and_index(xls_file_path, index),
-          {:ok, xml_files} <- extract_xml(xls_file_path, index, :file),
-          excel <- parse_commons(xml_files, %__MODULE__{}),
-          {:ok, worksheet_xml_file} <- get_worksheet_xml_file(xml_files, index) do
-
-      sax_parser_pid = spawn(__MODULE__, :parse_worksheet_loop, [worksheet_xml_file, excel])
-      {sax_parser_pid, excel}
-    else
-      {:error, details} -> raise "Error during stream initialization: #{inspect details}"
-      _ -> raise "Error during stream initialization"
-    end
-  end
-
-  @doc false
-  def parse_worksheet_loop(worksheet_xml_file, excel) do
-    SaxParser.parse(worksheet_xml_file, :stream_worksheet, excel)
-  end
-
-  defp stream_next_row({sax_parser_pid, _excel} = stream_state) do
-    # Ask next row to the xml parser process
-    send(sax_parser_pid, {:get_next_row, self()})
-
-    # And wait for a response, ie a next row or end of file
-    receive do
-      {:next_row, row} ->
-        {[row], stream_state}
-      {:end} ->
-        {:halt, stream_state}
-    end
-  end
-
-  defp clean_stream({sax_parser_pid, excel}) do
-    # Kill parser loop process and remove common ETS tables
-    Process.exit(sax_parser_pid, :kill)
-    clean_commons(excel)
-    clean_temp_folder()
-  end
-
-  defp parse_commons(xml_files, excel) do
-    xml_files
-    |> Enum.reduce(excel, &parse_common/2)
-  end
-
-  defp parse_common(%XmlFile{name: "sharedStrings.xml"} = xml_file, excel) do
-    {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(xml_file, :string)
-    %{excel | shared_strings: tid}
-  end
-
-  defp parse_common(%XmlFile{name: "styles.xml"} = xml_file, excel) do
-    {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(xml_file, :style)
-    %{excel | styles: tid}
-  end
-
-  # ignore other files and worksheets
-  defp parse_common(_, excel), do: excel
-
-  defp get_worksheet_xml_file(xml_files, index) do
-    xml_file = Enum.find(xml_files, fn %XmlFile{name: name} ->
-      name == "sheet#{index + 1}.xml"
-    end)
-
-    case xml_file do
-      nil -> {:error, "Worksheet not found"}
-      xml_file -> {:ok, xml_file}
-    end
-  end
-
-  defp clean_commons(excel) do
-    # Removes ETS tables
-    if excel.styles, do: :ets.delete(excel.styles)
-    if excel.shared_strings, do: :ets.delete(excel.shared_strings)
-  end
-
-  # When xls file are extracted to temp folder
-  # TODO: temporary solution
-  defp clean_temp_folder do
-    File.rm_rf("./temp")
-    :ok
-  end
-
 
   @doc """
   Extracts the first n number of rows from the specified worksheet contained in the specified `.xlsx` file to an ETS process.
@@ -245,26 +128,10 @@ defmodule Xlsxir do
         iex> Xlsxir.close(tid)
         :ok
   """
-  def peek(path, index, rows) do
-    excel = %__MODULE__{max_rows: rows}
-    case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      ->
-        case extract_xml(file, index) do
-          {:ok, xml_files} ->
-            {excel, result} = do_extract(excel, xml_files, index)
-            :ets.delete(excel.styles)
-            :ets.delete(excel.shared_strings)
-            result
-          {:error, reason}  -> {:error, reason}
-        end
-      {:error, reason} -> {:error, reason}
-    end
+  def peek(path, index, rows, options \\ []) do
+    extract(path, index, false, Keyword.merge(options, [max_rows: rows]))
   end
 
-  defp extract_xml(file, index, to \\ :memory) do
-    Unzip.xml_file_list(index)
-    |> Unzip.extract_xml(file, to)
-  end
 
   @doc """
   Extracts worksheet data contained in the specified `.xlsx` file to an ETS process. Successful extraction
@@ -309,49 +176,16 @@ defmodule Xlsxir do
         iex> Enum.map(results, fn {:ok, tid, _timer} -> Xlsxir.close(tid) end) |> Enum.all?(fn result -> result == :ok end)
         true
   """
-  def multi_extract(path, index \\ nil, timer \\ nil) do
-    do_multi_extract(path, index, timer, %__MODULE__{}, true)
+  def multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+  def multi_extract(path, nil, timer, _excel, options) do
+    xlsx_file = XlsxFile.initialize(path, options)
+    results = XlsxFile.parse_all_to_ets(xlsx_file, timer)
+    XlsxFile.clean(xlsx_file)
+    results
   end
 
-  defp do_multi_extract(path, index, timer, excel, initial_parse) do
-    case is_nil(index) do
-      true ->
-        case Unzip.validate_path_all_indexes(path) do
-          {:ok, indexes} ->
-            {excel, result} = Enum.reduce(indexes, {excel, []}, fn i, {acc_excel, acc} ->
-              {new_excel, result} = do_multi_extract(path, i, timer, acc_excel, false)
-              {new_excel, acc ++ [result]}
-            end)
-            :ets.delete(excel.styles)
-            :ets.delete(excel.shared_strings)
-            result
-          {:error, reason} -> {:error, reason}
-        end
-      false ->
-        excel = if timer do
-          {_, s, ms} = :erlang.timestamp
-          %{excel | timer: [s, ms]}
-        else
-          excel
-        end
-
-        case Unzip.validate_path_and_index(path, index) do
-          {:ok, file}      -> extract_xml(file, index)
-                              |> case do
-                                {:ok, xml_files} ->
-                                  {excel, result} = do_extract(excel, xml_files, index)
-                                  if initial_parse do
-                                    :ets.delete(excel.styles)
-                                    :ets.delete(excel.shared_strings)
-                                    result
-                                  else
-                                    {excel, result}
-                                  end
-                                {:error, reason}  -> {:error, reason}
-                              end
-          {:error, reason} -> {:error, reason}
-        end
-    end
+  def multi_extract(path, index, timer, _excel, options) when is_integer(index) do
+    extract(path, index, timer, options)
   end
 
   @doc """
@@ -712,26 +546,5 @@ defmodule Xlsxir do
     else
       :ok
     end
-  end
-
-  defp stop_timer(timer) do
-    {_, s, ms} = :erlang.timestamp
-
-    seconds      = s  |> Kernel.-(timer |> Enum.at(0))
-    microseconds = ms |> Kernel.+(timer |> Enum.at(1))
-
-    [add_s, micro] = if microseconds > 1_000_000 do
-                       [1, microseconds - 1_000_000]
-                     else
-                       [0, microseconds]
-                     end
-
-    [h, m, s] = [
-                  seconds / 3600 |> Float.floor |> round,
-                  rem(seconds, 3600) / 60 |> Float.floor |> round,
-                  rem(seconds, 60)
-                ]
-
-    [h, m, s + add_s, micro]
   end
 end

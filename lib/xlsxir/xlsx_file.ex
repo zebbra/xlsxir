@@ -38,7 +38,7 @@ defmodule Xlsxir.XlsxFile do
 
   ## Options
   - `:max_rows` - the number of rows to fetch from within the worksheet
-  - `:extract_to` - Specify where how the `.xlsx` content (i.e. sharedStrings.xml,
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
      style.xml and worksheets xml files) will be be extracted before being parsed.
     `:memory` will extract files to memory, and `:file` to files in the file system
   - `:extract_base_dir` - when extracting to file, files will be extracted

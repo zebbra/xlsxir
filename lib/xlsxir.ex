@@ -31,6 +31,15 @@ defmodule Xlsxir do
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `timer` - boolean flag that tracks extraction process time and returns it when set to `true`. Default value is `false`.
 
+  ## Options
+  - `:max_rows` - the number of rows to fetch from within the worksheet
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
@@ -126,6 +135,14 @@ defmodule Xlsxir do
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `rows` - the number of rows to fetch from within the specified worksheet
 
+  ## Options
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
   ## Example
   Peek at the first 10 rows of the 9th worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
@@ -153,6 +170,15 @@ defmodule Xlsxir do
   - `path` - file path of a `.xlsx` file type in `string` format
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `timer` - boolean flag that tracts extraction process time and returns it when set to `true`. Defalut value is `false`.
+
+  ## Options
+  - `:max_rows` - the number of rows to fetch from within the worksheets
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
 
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:

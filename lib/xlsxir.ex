@@ -66,6 +66,13 @@ defmodule Xlsxir do
         iex> Xlsxir.close(tid2)
         :ok
 
+  ## Example (errors)
+
+        iex> Xlsxir.extract("./test/test_data/test.invalidfile", 0)
+        {:error, "Invalid file type (expected xlsx)."}
+
+        iex> Xlsxir.extract("./test/test_data/test.xlsx", 100)
+        {:error, "Invalid worksheet index."}
   """
   def extract(path, index, timer \\ false, options \\ []) do
     xlsx_file = XlsxFile.initialize(path, options)
@@ -175,6 +182,14 @@ defmodule Xlsxir do
         true
         iex> Enum.map(results, fn {:ok, tid, _timer} -> Xlsxir.close(tid) end) |> Enum.all?(fn result -> result == :ok end)
         true
+
+  ## Example (errors)
+
+        iex> Xlsxir.multi_extract("./test/test_data/test.invalidfile", 0)
+        {:error, "Invalid file type (expected xlsx)."}
+
+        iex> Xlsxir.multi_extract("./test/test_data/test.xlsx", 100)
+        {:error, "Invalid worksheet index."}
   """
   def multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
   def multi_extract(path, nil, timer, _excel, options) do

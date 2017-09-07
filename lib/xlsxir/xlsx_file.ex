@@ -63,9 +63,11 @@ defmodule Xlsxir.XlsxFile do
   and `{:ok, table_id, time}` when `timer` is `true`
   """
   def parse_to_ets(xlsx_file, worksheet_index_or_file, timer \\ false)
+  def parse_to_ets({:error, _} = error, _worksheet_index_or_file, _timer), do: error
   def parse_to_ets(%__MODULE__{} = xlsx_file, worksheet_index, timer) when is_integer(worksheet_index) do
-    worksheet_xml_file = get_worksheet(xlsx_file, worksheet_index)
-    parse_to_ets(xlsx_file, worksheet_xml_file, timer)
+    with {:ok, worksheet_xml_file} <- get_worksheet(xlsx_file, worksheet_index) do
+      parse_to_ets(xlsx_file, worksheet_xml_file, timer)
+    end
   end
 
   def parse_to_ets(%__MODULE__{} = xlsx_file, %XmlFile{} = worksheet_xml_file, true) do
@@ -106,6 +108,8 @@ defmodule Xlsxir.XlsxFile do
 
     :ok
   end
+  def clean({:error, _} = error), do: error
+
 
   @doc """
   Parse a worksheet of the XlsxFile as a stream
@@ -137,7 +141,8 @@ defmodule Xlsxir.XlsxFile do
   end
 
   defp initialize_stream(%__MODULE__{} = xlsx_file, worksheet_index) do
-    sax_parser_pid = spawn(__MODULE__, :parse_worksheet_loop, [get_worksheet(xlsx_file, worksheet_index), xlsx_file])
+    {:ok, worksheet_xml_file} = get_worksheet(xlsx_file, worksheet_index)
+    sax_parser_pid = spawn(__MODULE__, :parse_worksheet_loop, [worksheet_xml_file, xlsx_file])
     {sax_parser_pid, xlsx_file}
   end
 
@@ -166,16 +171,17 @@ defmodule Xlsxir.XlsxFile do
   end
 
   defp extract_all_xml_files(%__MODULE__{} = xlsx_file, xlsx_filepath) do
-    {:ok, worksheet_indexes} = Unzip.validate_path_all_indexes(xlsx_filepath)
-    xml_paths_list = zip_paths_list(worksheet_indexes)
-    {:ok, xml_files} = Unzip.extract_xml(xml_paths_list, xlsx_filepath, unzip_options(xlsx_file))
+    with {:ok, worksheet_indexes} <- Unzip.validate_path_all_indexes(xlsx_filepath),
+         xml_paths_list <- zip_paths_list(worksheet_indexes),
+        {:ok, xml_files} <- Unzip.extract_xml(xml_paths_list, xlsx_filepath, unzip_options(xlsx_file)) do
 
-    %{
-      xlsx_file |
-        worksheet_xml_files: xml_files |> Enum.filter(fn %XmlFile{name: name} -> String.starts_with?(name, "sheet") end),
-        shared_strings_xml_file: xml_files |> Enum.find(fn %XmlFile{name: name} -> name == "sharedStrings.xml" end),
-        styles_xml_file: xml_files |> Enum.find(fn %XmlFile{name: name} -> name == "styles.xml" end)
-    }
+      %{
+        xlsx_file |
+          worksheet_xml_files: xml_files |> Enum.filter(fn %XmlFile{name: name} -> String.starts_with?(name, "sheet") end),
+          shared_strings_xml_file: xml_files |> Enum.find(fn %XmlFile{name: name} -> name == "sharedStrings.xml" end),
+          styles_xml_file: xml_files |> Enum.find(fn %XmlFile{name: name} -> name == "styles.xml" end)
+      }
+    end
   end
 
   defp unzip_options(xlsx_file) do
@@ -195,16 +201,20 @@ defmodule Xlsxir.XlsxFile do
     {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(xlsx_file.styles_xml_file, :style)
     %{xlsx_file | styles: tid}
   end
+  defp parse_styles_to_ets({:error, _} = error), do: error
 
   defp parse_shared_strings_to_ets(%__MODULE__{} = xlsx_file) do
     {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(xlsx_file.shared_strings_xml_file, :string)
     %{xlsx_file | shared_strings: tid}
   end
+  defp parse_shared_strings_to_ets({:error, _} = error), do: error
 
   defp get_worksheet(%__MODULE__{} = xlsx_file, index) do
-    Enum.find(xlsx_file.worksheet_xml_files, fn xml_file ->
-      xml_file.name == "sheet#{index + 1}.xml"
-    end)
+    xml_file = Enum.find(xlsx_file.worksheet_xml_files, fn xml_file -> xml_file.name == "sheet#{index + 1}.xml" end)
+    case xml_file do
+      nil -> {:error, "Invalid worksheet index."}
+      %XmlFile{} -> {:ok, xml_file}
+    end
   end
 
   defp duration(start_timestamp, end_timestamp) do

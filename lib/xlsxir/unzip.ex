@@ -30,6 +30,10 @@ defmodule Xlsxir.Unzip do
          iex> path = "./test/test_data/test.xlsx"
          iex> Xlsxir.Unzip.validate_path_and_index(path, 100)
          {:error, "Invalid worksheet index."}
+
+         iex> path = "./test/test_data/test.invalidfile"
+         iex> Xlsxir.Unzip.validate_path_and_index(path, 0)
+         {:error, "Invalid file type (expected xlsx)."}
   """
   def validate_path_and_index(path, index) do
     path = String.to_char_list(path)
@@ -56,6 +60,10 @@ defmodule Xlsxir.Unzip do
          iex> path = "./test/test_data/test.zip"
          iex> Xlsxir.Unzip.validate_path_all_indexes(path)
          {:ok, []}
+
+         iex> path = "./test/test_data/test.invalidfile"
+         iex> Xlsxir.Unzip.validate_path_all_indexes(path)
+         {:error, "Invalid file type (expected xlsx)."}
   """
 
   def validate_path_all_indexes(path) do

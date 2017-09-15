@@ -24,7 +24,7 @@ defmodule Xlsxir.ParseWorksheet do
     %__MODULE__{tid: GenServer.call(Xlsxir.StateManager, :new_table), max_rows: max_rows}
   end
 
-  def sax_event_handler({:startElement,_,'row',_,_}, %{tid: tid, max_rows: max_rows}, _excel) do
+  def sax_event_handler({:startElement,_,'row',_,_}, %__MODULE__{tid: tid, max_rows: max_rows}, _excel) do
     %__MODULE__{tid: tid, max_rows: max_rows}
   end
 
@@ -52,12 +52,12 @@ defmodule Xlsxir.ParseWorksheet do
     if state == nil, do: nil, else: %{state | value: value}
   end
 
-  def sax_event_handler({:endElement,_,'c',_}, %{row: row} = state, %Xlsxir{} = excel) do
+  def sax_event_handler({:endElement,_,'c',_}, %__MODULE__{row: row} = state, %Xlsxir{} = excel) do
     cell_value = format_cell_value(excel, [state.data_type, state.num_style, state.value])
     %{state | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]), cell_ref: "", data_type: "", num_style: "", value: ""}
   end
 
-  def sax_event_handler({:endElement,_,'row',_}, %{tid: tid, max_rows: max_rows} = state, _excel) do
+  def sax_event_handler({:endElement,_,'row',_}, %__MODULE__{tid: tid, max_rows: max_rows} = state, _excel) do
     unless Enum.empty?(state.row) do
       [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first |> List.first)
       row     = row |> String.to_integer

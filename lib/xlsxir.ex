@@ -309,14 +309,17 @@ defmodule Xlsxir do
         iex> Enum.map(results, fn {:ok, tid, _timer} -> Xlsxir.close(tid) end) |> Enum.all?(fn result -> result == :ok end)
         true
   """
-  def multi_extract(path, index \\ nil, timer \\ nil, excel \\ nil) do
-    {excel, initial_parse} = if is_nil(excel), do: {%__MODULE__{}, true}, else: {excel, false}
+  def multi_extract(path, index \\ nil, timer \\ nil) do
+    do_multi_extract(path, index, timer, %__MODULE__{}, true)
+  end
+
+  defp do_multi_extract(path, index, timer, excel, initial_parse) do
     case is_nil(index) do
       true ->
         case Unzip.validate_path_all_indexes(path) do
           {:ok, indexes} ->
             {excel, result} = Enum.reduce(indexes, {excel, []}, fn i, {acc_excel, acc} ->
-              {new_excel, result} = multi_extract(path, i, timer, acc_excel)
+              {new_excel, result} = do_multi_extract(path, i, timer, acc_excel, false)
               {new_excel, acc ++ [result]}
             end)
             :ets.delete(excel.styles)
@@ -635,10 +638,10 @@ defmodule Xlsxir do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.sort
     |> Enum.map(fn [_num, row] ->
-      row |> do_get_row() |> Enum.filter_map(
-        fn [ref, _val] -> Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end,
-        fn [_ref, val] -> val end
-      )
+      row
+      |> do_get_row()
+      |> Enum.filter(fn [ref, _val] -> Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end)
+      |> Enum.map(fn [_ref, val] -> val end)
     end)
     |> List.flatten
   end

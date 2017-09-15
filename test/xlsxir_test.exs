@@ -67,4 +67,11 @@ defmodule XlsxirTest do
     assert get_cell(pid, "A2") == "Data"
     close(pid)
   end
+
+  test "multi_extract/4" do
+    res = multi_extract(path())
+    {:ok, tid} = hd(res)
+    assert 9 == Enum.count(res)
+    assert [["string one", "string two", 10, 20, {2016, 1, 1}]] == get_list(tid)
+  end
 end

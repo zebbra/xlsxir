@@ -27,7 +27,7 @@ defmodule ConvertDateTest do
     assert Enum.map(test_one_data(), &from_serial/1) == test_one_results()
   end
 
-  def test_two_data(), do: ['42035', '42063', '42094', '42124', '42155', '42185', '42216', '42247', '42277', '42308', '42338', '42369']
+  def test_two_data(), do: ['42035', '42063', '42094', '42124', '42155', '42185', '42216', '42247', '42277', '42308', '42338', '42369', '44530']
 
   def test_two_results() do 
     [
@@ -42,11 +42,12 @@ defmodule ConvertDateTest do
       {2015,9,30},
       {2015,10,31},
       {2015,11,30},
-      {2015,12,31}
+      {2015,12,31},
+      {2021,11,30}
     ]
   end
 
-  test "last day of every month in non-leap year (2015)" do
+  test "last day of every month in non-leap year (2015, 2021)" do
     assert Enum.map(test_two_data(), &from_serial/1) == test_two_results()
   end
 

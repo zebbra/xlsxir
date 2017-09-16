@@ -101,6 +101,14 @@ defmodule Xlsxir do
   - `path` - file path of a `.xlsx` file type in `string` format
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
 
+  ## Options
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
@@ -109,14 +117,14 @@ defmodule Xlsxir do
         iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(3)
         [[1, 2], [3, 4]]
   """
-  def stream_list(path, index) do
-    stream(path, index)
+  def stream_list(path, index, options \\ []) do
+    stream(path, index, options)
     |> Stream.map(&row_data_to_list/1)
   end
 
-  defp stream(path, index) do
+  defp stream(path, index, options) do
     path
-    |> XlsxFile.initialize([extract_to: :file])
+    |> XlsxFile.initialize(Keyword.merge([extract_to: :file], options))
     |> XlsxFile.stream(index)
   end
 

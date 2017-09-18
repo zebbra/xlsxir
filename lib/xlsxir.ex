@@ -1,7 +1,5 @@
 defmodule Xlsxir do
-  alias Xlsxir.{SaxParser, Unzip}
-
-  defstruct [styles: nil, shared_strings: nil, worksheets: [], max_rows: nil, timer: nil]
+  alias Xlsxir.{XlsxFile}
 
   use Application
 
@@ -33,10 +31,31 @@ defmodule Xlsxir do
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `timer` - boolean flag that tracks extraction process time and returns it when set to `true`. Default value is `false`.
 
+  ## Options
+  - `:max_rows` - the number of rows to fetch from within the worksheet
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
         iex> {:ok, tid} = Xlsxir.extract("./test/test_data/test.xlsx", 0)
+        iex> Enum.member?(:ets.all, tid)
+        true
+        iex> Xlsxir.close(tid)
+        :ok
+
+        iex> {:ok, tid} = Xlsxir.extract("./test/test_data/test.xlsx", 0, false, [extract_to: :file])
+        iex> Enum.member?(:ets.all, tid)
+        true
+        iex> Xlsxir.close(tid)
+        :ok
+
+        iex> {:ok, tid, _timer} = Xlsxir.extract("./test/test_data/test.xlsx", 0, true)
         iex> Enum.member?(:ets.all, tid)
         true
         iex> Xlsxir.close(tid)
@@ -56,53 +75,63 @@ defmodule Xlsxir do
         iex> Xlsxir.close(tid2)
         :ok
 
-  """
-  def extract(path, index, timer \\ false) do
-    excel = if timer do
-      {_, s, ms} = :erlang.timestamp
-      %__MODULE__{timer: [s, ms]}
-    else
-      %__MODULE__{}
-    end
+  ## Example (errors)
 
-    case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      ->
-        case extract_xml(file, index) do
-          {:ok, file_paths} ->
-            {excel, result} = do_extract(excel, file_paths, index)
-            if excel.styles, do: :ets.delete(excel.styles)
-            if excel.shared_strings, do: :ets.delete(excel.shared_strings)
-            result
-          {:error, reason} -> {:error, reason}
-        end
-      {:error, reason} -> {:error, reason}
-    end
+        iex> Xlsxir.extract("./test/test_data/test.invalidfile", 0)
+        {:error, "Invalid file type (expected xlsx)."}
+
+        iex> Xlsxir.extract("./test/test_data/test.xlsx", 100)
+        {:error, "Invalid worksheet index."}
+  """
+  def extract(path, index, timer \\ false, options \\ []) do
+    xlsx_file = XlsxFile.initialize(path, options)
+    result = XlsxFile.parse_to_ets(xlsx_file, index, timer)
+    XlsxFile.clean(xlsx_file)
+    result
   end
 
-  defp do_extract(%__MODULE__{timer: timer} = excel, file_paths, index) do
-    excel = Enum.reduce(file_paths, excel, fn {file, content}, acc ->
-      cond do
-        file == 'xl/sharedStrings.xml' && is_nil(excel.shared_strings) ->
-          {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(content, :string)
-          %{acc | shared_strings: tid}
-        file == 'xl/styles.xml' && is_nil(excel.styles) ->
-          {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(content, :style)
-          %{acc | styles: tid}
-        true -> acc
-      end
-    end)
 
-    {_, content} = Enum.find(file_paths, fn {path, _} ->
-      path == 'xl/worksheets/sheet#{index + 1}.xml'
-    end)
+  @doc """
+  Stream worksheet rows contained in the specified `.xlsx` file.
 
-    {:ok, %Xlsxir.ParseWorksheet{tid: tid}, _} = SaxParser.parse(content, :worksheet, excel)
+  Cells containing formulas in the worksheet are extracted as either a `string`, `integer` or `float` depending on the resulting value of the cell.
+  Cells containing an ISO 8601 date format are extracted and converted to Erlang `:calendar.date()` format (i.e. `{year, month, day}`).
 
-    if !is_nil(timer) do
-      {excel, {:ok, tid, stop_timer(excel.timer)}}
-    else
-      {excel, {:ok, tid}}
-    end
+  ## Parameters
+  - `path` - file path of a `.xlsx` file type in `string` format
+  - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
+
+  ## Options
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
+  ## Example
+  Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
+
+        iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(1)
+        [[1, 2]]
+        iex> Xlsxir.stream_list("./test/test_data/test.xlsx", 1) |> Enum.take(3)
+        [[1, 2], [3, 4]]
+  """
+  def stream_list(path, index, options \\ []) do
+    stream(path, index, options)
+    |> Stream.map(&row_data_to_list/1)
+  end
+
+  defp stream(path, index, options) do
+    path
+    |> XlsxFile.initialize(Keyword.merge([extract_to: :file], options))
+    |> XlsxFile.stream(index)
+  end
+
+  defp row_data_to_list(row_data) do
+    row_data # [["A1", 1], ["C1", 2]]
+    |> do_get_row() # [["A1", 1], ["B1", nil], ["C1", 2]]
+    |> Enum.map(fn [_ref, val] -> val end) # [1, nil, 2]
   end
 
   @doc """
@@ -114,6 +143,14 @@ defmodule Xlsxir do
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `rows` - the number of rows to fetch from within the specified worksheet
 
+  ## Options
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
+
   ## Example
   Peek at the first 10 rows of the 9th worksheet in an example file named `test.xlsx` located in `./test/test_data`:
 
@@ -123,26 +160,10 @@ defmodule Xlsxir do
         iex> Xlsxir.close(tid)
         :ok
   """
-  def peek(path, index, rows) do
-    excel = %__MODULE__{max_rows: rows}
-    case Unzip.validate_path_and_index(path, index) do
-      {:ok, file}      ->
-        case extract_xml(file, index) do
-          {:ok, file_paths} ->
-            {excel, result} = do_extract(excel, file_paths, index)
-            :ets.delete(excel.styles)
-            :ets.delete(excel.shared_strings)
-            result
-          {:error, reason}  -> {:error, reason}
-        end
-      {:error, reason} -> {:error, reason}
-    end
+  def peek(path, index, rows, options \\ []) do
+    extract(path, index, false, Keyword.merge(options, [max_rows: rows]))
   end
 
-  defp extract_xml(file, index) do
-    Unzip.xml_file_list(index)
-    |> Unzip.extract_xml_to_memory(file)
-  end
 
   @doc """
   Extracts worksheet data contained in the specified `.xlsx` file to an ETS process. Successful extraction
@@ -157,6 +178,15 @@ defmodule Xlsxir do
   - `path` - file path of a `.xlsx` file type in `string` format
   - `index` - index of worksheet from within the Excel workbook to be parsed (zero-based index)
   - `timer` - boolean flag that tracts extraction process time and returns it when set to `true`. Defalut value is `false`.
+
+  ## Options
+  - `:max_rows` - the number of rows to fetch from within the worksheets
+  - `:extract_to` - Specify how the `.xlsx` content (i.e. sharedStrings.xml,
+     style.xml and worksheets xml files) will be be extracted before being parsed.
+    `:memory` will extract files to memory, and `:file` to files in the file system
+  - `:extract_base_dir` - when extracting to file, files will be extracted
+     in a sub directory in the `:extract_base_dir` directory. Defaults to
+     `Application.get_env(:xlsxir, :extract_base_dir)` or "temp"
 
   ## Example
   Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
@@ -186,50 +216,25 @@ defmodule Xlsxir do
         true
         iex> Enum.map(results, fn {:ok, tid, _timer} -> Xlsxir.close(tid) end) |> Enum.all?(fn result -> result == :ok end)
         true
+
+  ## Example (errors)
+
+        iex> Xlsxir.multi_extract("./test/test_data/test.invalidfile", 0)
+        {:error, "Invalid file type (expected xlsx)."}
+
+        iex> Xlsxir.multi_extract("./test/test_data/test.xlsx", 100)
+        {:error, "Invalid worksheet index."}
   """
-  def multi_extract(path, index \\ nil, timer \\ nil) do
-    do_multi_extract(path, index, timer, %__MODULE__{}, true)
+  def multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+  def multi_extract(path, nil, timer, _excel, options) do
+    xlsx_file = XlsxFile.initialize(path, options)
+    results = XlsxFile.parse_all_to_ets(xlsx_file, timer)
+    XlsxFile.clean(xlsx_file)
+    results
   end
 
-  defp do_multi_extract(path, index, timer, excel, initial_parse) do
-    case is_nil(index) do
-      true ->
-        case Unzip.validate_path_all_indexes(path) do
-          {:ok, indexes} ->
-            {excel, result} = Enum.reduce(indexes, {excel, []}, fn i, {acc_excel, acc} ->
-              {new_excel, result} = do_multi_extract(path, i, timer, acc_excel, false)
-              {new_excel, acc ++ [result]}
-            end)
-            :ets.delete(excel.styles)
-            :ets.delete(excel.shared_strings)
-            result
-          {:error, reason} -> {:error, reason}
-        end
-      false ->
-        excel = if timer do
-          {_, s, ms} = :erlang.timestamp
-          %{excel | timer: [s, ms]}
-        else
-          excel
-        end
-
-        case Unzip.validate_path_and_index(path, index) do
-          {:ok, file}      -> extract_xml(file, index)
-                              |> case do
-                                {:ok, file_paths} ->
-                                  {excel, result} = do_extract(excel, file_paths, index)
-                                  if initial_parse do
-                                    :ets.delete(excel.styles)
-                                    :ets.delete(excel.shared_strings)
-                                    result
-                                  else
-                                    {excel, result}
-                                  end
-                                {:error, reason}  -> {:error, reason}
-                              end
-          {:error, reason} -> {:error, reason}
-        end
-    end
+  def multi_extract(path, index, timer, _excel, options) when is_integer(index) do
+    extract(path, index, timer, options)
   end
 
   @doc """
@@ -590,26 +595,5 @@ defmodule Xlsxir do
     else
       :ok
     end
-  end
-
-  defp stop_timer(timer) do
-    {_, s, ms} = :erlang.timestamp
-
-    seconds      = s  |> Kernel.-(timer |> Enum.at(0))
-    microseconds = ms |> Kernel.+(timer |> Enum.at(1))
-
-    [add_s, micro] = if microseconds > 1_000_000 do
-                       [1, microseconds - 1_000_000]
-                     else
-                       [0, microseconds]
-                     end
-
-    [h, m, s] = [
-                  seconds / 3600 |> Float.floor |> round,
-                  rem(seconds, 3600) / 60 |> Float.floor |> round,
-                  rem(seconds, 60)
-                ]
-
-    [h, m, s + add_s, micro]
   end
 end

@@ -4,4 +4,5 @@ defmodule DocTest do
   doctest Xlsxir.Unzip
   doctest Xlsxir.ConvertDate
   doctest Xlsxir.SaxParser
+  doctest Xlsxir.XlsxFile
 end

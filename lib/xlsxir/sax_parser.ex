@@ -4,13 +4,13 @@ defmodule Xlsxir.SaxParser do
   parsing algorithm for parsing large XML files in chunks, preventing the need to load the entire DOM into memory. Current chunk size is set to 10,000.
   """
 
-  alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, SaxError}
+  alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, StreamWorksheet, SaxError, XmlFile}
   require Logger
 
   @chunk 10000
 
   @doc """
-  Parses `xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` and `xl/sharedStrings.xml` using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data
+  Parses `XmlFile` (`xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` or `xl/sharedStrings.xml`) using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data
   parsed. The style and sharedstring XML files (if they exist) must be parsed first in order for the worksheet parser to sucessfully complete.
 
   ## Parameters
@@ -29,18 +29,18 @@ defmodule Xlsxir.SaxParser do
     The `.xlsx` file contents have been extracted to `./test/test_data/test`. For purposes of this example, we utilize the `get_at/1` function of each ETS process module to pull a sample of the parsed
     data. Keep in mind that the worksheet data is stored in the ETS process as a list of row lists, so the `Xlsxir..get_row/2` function will return a full row of values.
 
-          iex> {:ok, %Xlsxir.ParseStyle{tid: tid1}, _} = Xlsxir.SaxParser.parse(File.read!("./test/test_data/test/xl/styles.xml"), :style)
+          iex> {:ok, %Xlsxir.ParseStyle{tid: tid1}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/styles.xml")}, :style)
           iex> :ets.lookup(tid1, 0)
           [{0, nil}]
-          iex> {:ok, %Xlsxir.ParseString{tid: tid2}, _} = Xlsxir.SaxParser.parse(File.read!("./test/test_data/test/xl/sharedStrings.xml"), :string)
+          iex> {:ok, %Xlsxir.ParseString{tid: tid2}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/sharedStrings.xml")}, :string)
           iex> :ets.lookup(tid2, 0)
           [{0, "string one"}]
-          iex> {:ok, %Xlsxir.ParseWorksheet{tid: tid3}, _} = Xlsxir.SaxParser.parse(File.read!("./test/test_data/test/xl/worksheets/sheet1.xml"), :worksheet, %Xlsxir{shared_strings: tid2, styles: tid1})
+          iex> {:ok, %Xlsxir.ParseWorksheet{tid: tid3}, _} = Xlsxir.SaxParser.parse(%Xlsxir.XmlFile{content: File.read!("./test/test_data/test/xl/worksheets/sheet1.xml")}, :worksheet, %Xlsxir.XlsxFile{shared_strings: tid2, styles: tid1})
           iex> :ets.lookup(tid3, 1)
           [{1, [["A1", "string one"], ["B1", "string two"], ["C1", 10], ["D1", 20], ["E1", {2016, 1, 1}]]}]
   """
-  def parse(content, type, excel \\ nil) do
-    {:ok, file_pid} = File.open(content, [:binary, :ram])
+  def parse(%XmlFile{} = xml_file, type, excel \\ nil) do
+    {:ok, file_pid} = XmlFile.open(xml_file)
 
     index   = 0
     c_state = {file_pid, index, @chunk}
@@ -49,16 +49,17 @@ defmodule Xlsxir.SaxParser do
       :erlsom.parse_sax("",
         nil,
         case type do
-          :worksheet -> &(ParseWorksheet.sax_event_handler(&1, &2, excel))
-          :style     -> &(ParseStyle.sax_event_handler(&1, &2))
-          :string    -> &(ParseString.sax_event_handler(&1, &2))
-          _          -> raise "Invalid file type for sax_event_handler/2"
+          :worksheet        -> &(ParseWorksheet.sax_event_handler(&1, &2, excel))
+          :stream_worksheet -> &(StreamWorksheet.sax_event_handler(&1, &2, excel))
+          :style            -> &(ParseStyle.sax_event_handler(&1, &2))
+          :string           -> &(ParseString.sax_event_handler(&1, &2))
+          _                 -> raise "Invalid file type for sax_event_handler/2"
         end,
         [{:continuation_function, &continue_file/2, c_state}])
     rescue e in SaxError ->
       {:ok, e.state, []}
-      after
-        File.close(file_pid)
+    after
+      File.close(file_pid)
     end
   end
 
@@ -68,5 +69,4 @@ defmodule Xlsxir.SaxParser do
       :eof        -> {tail, {pid, offset, chunk}}
     end
   end
-
 end

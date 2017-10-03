@@ -114,9 +114,9 @@ defmodule Xlsxir.XlsxFile do
   @doc """
   Parse a worksheet of the XlsxFile as a stream
   """
-  def stream(%__MODULE__{} = xlsx_file, worksheet_index) do
+  def stream(xlsx_filepath, worksheet_index, options \\ []) do
     Stream.resource(
-      fn -> initialize_stream(xlsx_file, worksheet_index) end,
+      fn -> initialize(xlsx_filepath, options) |> initialize_stream(worksheet_index) end,
       &stream_next_row/1,
       &clean_stream/1
     )

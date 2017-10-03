@@ -197,12 +197,14 @@ defmodule Xlsxir.XlsxFile do
     |> Enum.concat(['xl/styles.xml', 'xl/sharedStrings.xml'])
   end
 
+  defp parse_styles_to_ets(%__MODULE__{styles_xml_file: nil} = xlsx_file), do: xlsx_file
   defp parse_styles_to_ets(%__MODULE__{} = xlsx_file) do
     {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(xlsx_file.styles_xml_file, :style)
     %{xlsx_file | styles: tid}
   end
   defp parse_styles_to_ets({:error, _} = error), do: error
 
+  defp parse_shared_strings_to_ets(%__MODULE__{shared_strings_xml_file: nil} = xlsx_file), do: xlsx_file
   defp parse_shared_strings_to_ets(%__MODULE__{} = xlsx_file) do
     {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(xlsx_file.shared_strings_xml_file, :string)
     %{xlsx_file | shared_strings: tid}

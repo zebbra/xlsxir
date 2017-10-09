@@ -124,8 +124,7 @@ defmodule Xlsxir do
 
   defp stream(path, index, options) do
     path
-    |> XlsxFile.initialize(Keyword.merge([extract_to: :file], options))
-    |> XlsxFile.stream(index)
+    |> XlsxFile.stream(index, Keyword.merge([extract_to: :file], options))
   end
 
   defp row_data_to_list(row_data) do

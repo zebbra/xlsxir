@@ -114,9 +114,9 @@ defmodule Xlsxir.XlsxFile do
   @doc """
   Parse a worksheet of the XlsxFile as a stream
   """
-  def stream(%__MODULE__{} = xlsx_file, worksheet_index) do
+  def stream(xlsx_filepath, worksheet_index, options \\ []) do
     Stream.resource(
-      fn -> initialize_stream(xlsx_file, worksheet_index) end,
+      fn -> initialize(xlsx_filepath, options) |> initialize_stream(worksheet_index) end,
       &stream_next_row/1,
       &clean_stream/1
     )
@@ -197,12 +197,14 @@ defmodule Xlsxir.XlsxFile do
     |> Enum.concat(['xl/styles.xml', 'xl/sharedStrings.xml'])
   end
 
+  defp parse_styles_to_ets(%__MODULE__{styles_xml_file: nil} = xlsx_file), do: xlsx_file
   defp parse_styles_to_ets(%__MODULE__{} = xlsx_file) do
     {:ok, %Xlsxir.ParseStyle{tid: tid}, _} = SaxParser.parse(xlsx_file.styles_xml_file, :style)
     %{xlsx_file | styles: tid}
   end
   defp parse_styles_to_ets({:error, _} = error), do: error
 
+  defp parse_shared_strings_to_ets(%__MODULE__{shared_strings_xml_file: nil} = xlsx_file), do: xlsx_file
   defp parse_shared_strings_to_ets(%__MODULE__{} = xlsx_file) do
     {:ok, %Xlsxir.ParseString{tid: tid}, _} = SaxParser.parse(xlsx_file.shared_strings_xml_file, :string)
     %{xlsx_file | shared_strings: tid}

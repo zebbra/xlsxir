@@ -102,12 +102,14 @@ defmodule Xlsxir.ParseWorksheet do
     end
   end
 
+  defp find_styles(nil, _index), do: nil
   defp find_styles(tid, index) do
     :ets.lookup(tid, index)
     |> List.first
     |> elem(1)
   end
 
+  defp find_string(nil, _index), do: nil
   defp find_string(tid, index) do
     :ets.lookup(tid, index)
     |> List.first

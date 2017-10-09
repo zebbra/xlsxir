@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.15.0">
-    <title>Xlsxir – Xlsxir v1.5.1</title>
-    <link rel="stylesheet" href="dist/app-5f4a88fed9.css" />
+    <meta name="generator" content="ExDoc v0.17.1">
+    <title>Xlsxir – Xlsxir v1.6.0</title>
+    <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
     
-    <script src="dist/sidebar_items-029b60730d.js"></script>
+    <script src="dist/sidebar_items-028c05a08e.js"></script>
+    
   </head>
   <body data-type="extras">
     <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
 
 <div class="main">
 <button class="sidebar-toggle">
-  <i class="icon-menu"></i>
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
 </button>
 <section class="sidebar">
 
@@ -26,16 +28,18 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.5.1
+        v1.6.0
       </h2>
     </div>
     
   </a>
 
-  <div class="sidebar-search">
-    <i class="icon-search"></i>
-    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
-  </div>
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="search" aria-label="Search" autocomplete="off" />
+  </form>
 
   <ul class="sidebar-listNav">
     <li><a id="extras-list" href="#full-list">Pages</a></li>
@@ -60,32 +64,35 @@
 
 
 <h1>Xlsxir</h1>
-<p>Xlsxir is an Elixir library that parses <code class="inline">.xlsx</code> files using Simple API for XML (SAX) parsing via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. </p>
-<p>Testing has been limited to various documents in Microsoft Excel and LibreOffice as well as any issues submitted through GitHub. Only English and Portuguese languages have been tested. A large worksheet containing 100 columns and 514K rows has successfully been parsed. Please submit any issues found and they will be addressed ASAP.   </p>
+<p>Xlsxir is an Elixir library that parses <code class="inline">.xlsx</code> files using Simple API for XML (SAX) parsing via the <a href="https://github.com/willemdj/erlsom">Erlsom</a> Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Please submit any issues found and they will be addressed ASAP.   </p>
 <h2 id="installation" class="section-heading">
-  <a href="#installation" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#installation" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Installation
 </h2>
 
 <p>You can add Xlsxir as a dependancy to your Elixir project via the Hex package manager by adding the following to your <code class="inline">mix.exs</code> file: </p>
 <pre><code class="elixir">def deps do
-  [ {:xlsxir, &quot;~&gt; 1.5.1&quot;} ]
+  [ {:xlsxir, &quot;~&gt; 1.6.0&quot;} ]
 end</code></pre>
 <p>Or, you can directly reference the GitHub repo:</p>
 <pre><code class="elixir">def deps do
-  [ {:xlsxir, github: &quot;kennellroxco/xlsxir&quot;} ]
+  [ {:xlsxir, github: &quot;jsonkennell/xlsxir&quot;} ]
+end</code></pre>
+<p>Then start an OTP application:</p>
+<pre><code class="elixir">defp application do
+  [applications: [:xlsxir]]
 end</code></pre>
 <h2 id="basic-usage" class="section-heading">
-  <a href="#basic-usage" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#basic-usage" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Basic Usage
 </h2>
 
-<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS process via the <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a>, <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> and <a href="Xlsxir.html#peek/3"><code class="inline">Xlsxir.peek/3</code></a> functions:</p>
-<pre><code class="elixir">Xlsxir.extract(path, index, timer \\ false)
-Xlsxir.multi_extract(path, index \\ nil, timer \\ false)
-Xlsxir.peek(path, index, rows)</code></pre>
-<p>The <code class="inline">peek/3</code> function returns only the given number of rows from the worksheet at a given index. The <code class="inline">multi_extract/3</code> function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default 
-(when <code class="inline">index == nil</code>), returning a list of tuple results. </p>
+<p><strong>Xlsxir.extract/3 is deprecated, please use Xlsxir.multi_extract/4 going forward.</strong></p>
+<p>Xlsxir parses a <code class="inline">.xlsx</code> file located at a given <code class="inline">path</code> and extracts the data to an ETS process via the <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> and <a href="Xlsxir.html#peek/3"><code class="inline">Xlsxir.peek/3</code></a> functions:</p>
+<pre><code class="elixir">Xlsxir.multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+Xlsxir.peek(path, index, rows, options \\ [])
+Xlsxir.stream_list(path, index, options \\ [])</code></pre>
+<p>The <code class="inline">peek/3</code> function returns only the given number of rows from the worksheet at a given index. The <code class="inline">multi_extract/3</code> function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default (when <code class="inline">index == nil</code>), returning a list of tuple results.</p>
 <p>Argument descriptions:</p>
 <ul>
 <li><code class="inline">path</code> the path of the file to be parsed in <code class="inline">string</code> format
@@ -94,7 +101,9 @@ Xlsxir.peek(path, index, rows)</code></pre>
 </li>
 <li><code class="inline">timer</code> is a boolean flag that controls an extraction timer that returns time elapsed when set to <code class="inline">true</code>. Defalut value is <code class="inline">false</code>.
 </li>
-<li><code class="inline">rows</code> is an integer representing the number of rows to be extracted from the given worksheet. 
+<li><code class="inline">rows</code> is an integer representing the number of rows to be extracted from the given worksheet.
+</li>
+<li><code class="inline">options</code> - see function documentation for option detail.
 </li>
 </ul>
 <p>Upon successful completion, the extraction process returns: </p>
@@ -144,19 +153,19 @@ Xlsxir.get_info(table_id, num_type)</code></pre>
 <p>When using <a href="Xlsxir.html#extract/3"><code class="inline">Xlsxir.extract/3</code></a>, be sure to <a href="https://hexdocs.pm/xlsxir/Xlsxir.html#close/0">close an open ETS process before trying to parse another worksheet</a> in the same session or process. If you try to open a new <code class="inline">:worksheet</code> ETS process when one already exists, you will get an error. If the parsing of multiple worksheets is desired, use <a href="Xlsxir.html#multi_extract/3"><code class="inline">Xlsxir.multi_extract/3</code></a> instead.</p>
 <p>Refer to <a href="https://hexdocs.pm/xlsxir/api-reference.html">API Reference</a> for more detailed examples. </p>
 <h2 id="considerations" class="section-heading">
-  <a href="#considerations" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#considerations" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Considerations
 </h2>
 
 <p>Cell references are formatted as a string (i.e. “A1”). Strings will be returned as type <code class="inline">string</code>, resulting values for functions from within the worksheet are returned as type <code class="inline">string</code>, <code class="inline">integer</code> or <code class="inline">float</code> depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type <code class="inline">integer</code> or <code class="inline">float</code>, date formatted values will be returned in Erlang <code class="inline">:calendar.date()</code> type format (i.e. <code class="inline">{year, month, day}</code>), and datetime values will be returned as an Elixir <code class="inline">naive datetime</code>. Xlsxir does not currently support dates prior to 1/1/1900.</p>
 <h2 id="contributing" class="section-heading">
-  <a href="#contributing" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#contributing" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Contributing
 </h2>
 
 <p>Contributions are encouraged. Feel free to fork the <a href="https://github.com/kennellroxco/xlsxir">repo</a>, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request. </p>
 <h2 id="bug-reporting" class="section-heading">
-  <a href="#bug-reporting" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#bug-reporting" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Bug Reporting
 </h2>
 
@@ -166,20 +175,21 @@ Xlsxir.get_info(table_id, num_type)</code></pre>
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.15.0),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.17.1),
           </span>
           <span class="line">
             designed by
             <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
             </span>
         </p>
-        <button class="night-mode-toggle" />
+        <button class="night-mode-toggle"><span class="sr-only">Switch theme</span></button>
       </footer>
     </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-22a6d4638c.js"></script>
+  <script src="dist/app-778c9ef903.js"></script>
+  
   </body>
 </html>
 

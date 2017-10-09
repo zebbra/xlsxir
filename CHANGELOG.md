@@ -1,9 +1,11 @@
 # Change Log
 
-## 1.6.0 (to be published on Hex)
-- Huge parsing performance improvement thanks to Alex Kovalevych's (@AlexKovalevych) contribution. 
+## 1.6.0
+- Huge parsing performance improvement thanks to Alex Kovalevych's (@AlexKovalevych) contribution.
+- Ability to choose between parsing in-memory or on the file system added as well as the ability to stream via the `Xlsxir.stream_list/2`. Thanks to Thibaut Decaudain (@Tricote) for contribution. 
 - Code improved to better handle complex multi-formatted strings. Thanks to Peter Sumskas (@brushbox) for contribution.
 - Bug fix to handle additional date format. Thanks to Sudhir Rao (@sudrao) for contribution.
+- Fixes for some `xlsx` variants and repeatable stream issues. Thanks to @rhetzler for contribution.
 - Various error message improvements. Thanks to Craig Lyons (@craiglyons) for contribution. 
 
 ## 1.5.2 (not published on Hex)

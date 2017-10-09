@@ -1,8 +1,6 @@
 # Xlsxir
 
-Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Xlsxir supports ISO 8601 date formats and large files. 
-
-Testing has been limited to various documents in Microsoft Excel and LibreOffice as well as any issues submitted through GitHub. Only English and Portuguese languages have been tested. A large worksheet containing 100 columns and 514K rows has successfully been parsed. Please submit any issues found and they will be addressed ASAP.   
+Xlsxir is an Elixir library that parses `.xlsx` files using Simple API for XML (SAX) parsing via the [Erlsom](https://github.com/willemdj/erlsom) Erlang library, extracts the data to an Erlang Term Storage (ETS) process and provides various functions for accessing the data. Please submit any issues found and they will be addressed ASAP.   
 
 ## Installation
 
@@ -10,7 +8,7 @@ You can add Xlsxir as a dependancy to your Elixir project via the Hex package ma
 
 ```elixir
 def deps do
-  [ {:xlsxir, "~> 1.5.1"} ]
+  [ {:xlsxir, "~> 1.6.0"} ]
 end
 ```
 
@@ -18,28 +16,38 @@ Or, you can directly reference the GitHub repo:
 
 ```elixir
 def deps do
-  [ {:xlsxir, github: "kennellroxco/xlsxir"} ]
+  [ {:xlsxir, github: "jsonkennell/xlsxir"} ]
+end
+```
+
+Then start an OTP application:
+
+```elixir
+defp application do
+  [applications: [:xlsxir]]
 end
 ```
 
 ## Basic Usage
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.extract/3`, `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
+**Xlsxir.extract/3 is deprecated, please use Xlsxir.multi_extract/4 going forward.**
+
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
 
 ```elixir
-Xlsxir.extract(path, index, timer \\ false)
-Xlsxir.multi_extract(path, index \\ nil, timer \\ false)
-Xlsxir.peek(path, index, rows)
+Xlsxir.multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+Xlsxir.peek(path, index, rows, options \\ [])
+Xlsxir.stream_list(path, index, options \\ [])
 ```
 
-The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default 
-(when `index == nil`), returning a list of tuple results. 
+The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default (when `index == nil`), returning a list of tuple results.
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
 - `index` is the position of the worksheet you wish to parse (zero-based index)
 - `timer` is a boolean flag that controls an extraction timer that returns time elapsed when set to `true`. Defalut value is `false`.
-- `rows` is an integer representing the number of rows to be extracted from the given worksheet. 
+- `rows` is an integer representing the number of rows to be extracted from the given worksheet.
+- `options` - see function documentation for option detail.
 
 Upon successful completion, the extraction process returns: 
 - for `extract/3`:

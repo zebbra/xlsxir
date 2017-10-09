@@ -19,6 +19,7 @@ defmodule Xlsxir do
   """
 
   @doc """
+  **Deprecated**
   Extracts worksheet data contained in the specified `.xlsx` file to an ETS process. Successful extraction
   returns `{:ok, tid}` with the timer argument set to false and returns a tuple of `{:ok, tid, time}` where time is a list containing time elapsed during the extraction process
   (i.e. `[hour, minute, second, microsecond]`) when the timer argument is set to true and tid - is the ETS table id

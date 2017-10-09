@@ -5,13 +5,13 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.17.1">
-    <title>Xlsxir.SaxError – Xlsxir v1.6.0</title>
+    <title>Xlsxir.StreamWorksheet – Xlsxir v1.6.0</title>
     <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
     
     <script src="dist/sidebar_items-028c05a08e.js"></script>
     
   </head>
-  <body data-type="exceptions">
+  <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
 
     <div class="main">
@@ -65,15 +65,22 @@
 
       <h1>
         <small class="visible-xs">Xlsxir v1.6.0</small>
-        Xlsxir.SaxError <small>exception</small>
+        Xlsxir.StreamWorksheet
         
-          <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/stream_worksheet.ex#L1" title="View Source" class="view-source" rel="help">
             <span class="icon-code" aria-hidden="true"></span>
             <span class="sr-only">View Source</span>
           </a>
         
       </h1>
 
+      
+        <section id="moduledoc">
+          <p>Holds the special SAX event instructions for parsing and streaming
+worksheet data rows via <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
+<p>Delegates other SAX event instructions to <a href="Xlsxir.ParseWorksheet.html"><code class="inline">Xlsxir.ParseWorksheet</code></a></p>
+
+        </section>
       
 
       
@@ -94,19 +101,10 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#exception/1">exception(msg)</a>
+    <a href="#sax_event_handler/3">sax_event_handler(sax_pattern, state, excel)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/Exception.html#c:exception/1"><code class="inline">Exception.exception/1</code></a></p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#message/1">message(exception)</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/elixir/Exception.html#c:message/1"><code class="inline">Exception.message/1</code></a></p>
+    <div class="summary-synopsis"><p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a></p>
 </div>
   
 </div>
@@ -130,63 +128,49 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="exception/1">
+          <div class="detail" id="sax_event_handler/3">
   
   
   <div class="detail-header">
-    <a href="#exception/1" class="detail-link" title="Link to this function">
+    <a href="#sax_event_handler/3" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <span class="signature">exception(msg)</span>
+    <span class="signature">sax_event_handler(sax_pattern, state, excel)</span>
     
-      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L2" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/stream_worksheet.ex#L31" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
     
     
     
-      <div class="specs">
-        
-          <pre>exception(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>) :: <a href="https://hexdocs.pm/elixir/Exception.html#t:t/0">Exception.t</a></pre>
-        
-          <pre>exception(<a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>) :: <a href="https://hexdocs.pm/elixir/Exception.html#t:t/0">Exception.t</a></pre>
-        
-      </div>
-    
   </div>
   <section class="docstring">
-    <p>Callback implementation for <a href="https://hexdocs.pm/elixir/Exception.html#c:exception/1"><code class="inline">Exception.exception/1</code></a>.</p>
+    <p>Sax event utilized by <a href="Xlsxir.SaxParser.html#parse/2"><code class="inline">Xlsxir.SaxParser.parse/2</code></a>.</p>
+<p>Takes a pattern and the current state of a struct and recursivly parses the
+worksheet XML file.</p>
+<p>Blocks the process when a row is fully parsed, with cell references
+and their assocated values, then wait for a message from a parent process
+to callback and send the row data.</p>
+<h2 id="sax_event_handler/3-parameters" class="section-heading">
+  <a href="#sax_event_handler/3-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Parameters
+</h2>
 
-  </section>
-</div>
-<div class="detail" id="message/1">
-  
-  
-  <div class="detail-header">
-    <a href="#message/1" class="detail-link" title="Link to this function">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <span class="signature">message(exception)</span>
-    
-      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/sax_error.ex#L2" class="view-source" rel="help" title="View Source">
-       <span class="icon-code" aria-hidden="true"></span>
-       <span class="sr-only">View Source</span>
-     </a>
-    
-    
-    
-      <div class="specs">
-        
-          <pre>message(<a href="https://hexdocs.pm/elixir/Exception.html#t:t/0">Exception.t</a>) :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a></pre>
-        
-      </div>
-    
-  </div>
-  <section class="docstring">
-    <p>Callback implementation for <a href="https://hexdocs.pm/elixir/Exception.html#c:message/1"><code class="inline">Exception.message/1</code></a>.</p>
+<ul>
+<li><code class="inline">sax_pattern</code> - the XML pattern of the event to match upon
+</li>
+<li><code class="inline">state</code> - the state of the <code class="inline">%Xlsxir.StreamWorksheet{}</code> struct which temporarily holds applicable data of the current row being parsed
+</li>
+</ul>
+<h2 id="sax_event_handler/3-example" class="section-heading">
+  <a href="#sax_event_handler/3-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h2>
+
+<p>Each row data sent consists of a list containing a cell reference string
+and the associated value (i.e. <code class="inline">[[&quot;A1&quot;, &quot;string one&quot;], ...]</code>).</p>
 
   </section>
 </div>

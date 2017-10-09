@@ -1,21 +1,23 @@
     <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.15.0">
-    <title>Xlsxir.Unzip – Xlsxir v1.5.1</title>
-    <link rel="stylesheet" href="dist/app-5f4a88fed9.css" />
+    <meta name="generator" content="ExDoc v0.17.1">
+    <title>Xlsxir.Unzip – Xlsxir v1.6.0</title>
+    <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
     
-    <script src="dist/sidebar_items-029b60730d.js"></script>
+    <script src="dist/sidebar_items-028c05a08e.js"></script>
+    
   </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
 
     <div class="main">
 <button class="sidebar-toggle">
-  <i class="icon-menu"></i>
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
 </button>
 <section class="sidebar">
 
@@ -26,16 +28,18 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.5.1
+        v1.6.0
       </h2>
     </div>
     
   </a>
 
-  <div class="sidebar-search">
-    <i class="icon-search"></i>
-    <input type="text" class="sidebar-searchInput" placeholder="search" autocomplete="off" />
-  </div>
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="search" aria-label="Search" autocomplete="off" />
+  </form>
 
   <ul class="sidebar-listNav">
     <li><a id="extras-list" href="#full-list">Pages</a></li>
@@ -60,19 +64,20 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.5.1</small>
+        <small class="visible-xs">Xlsxir v1.6.0</small>
         Xlsxir.Unzip
         
-        
-          <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L1" title="View Source" class="view-source" rel="help">
-            <i class="icon-code"></i>
+          <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/unzip.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
           </a>
         
       </h1>
 
       
         <section id="moduledoc">
-          <p>Provides validation of accepted file types for file path, extracts required <code class="inline">.xlsx</code> contents to <code class="inline">./temp</code> and ultimately deletes the <code class="inline">./temp</code> directory and its contents.</p>
+          <p>Provides validation of accepted file types for file path,
+extracts required <code class="inline">.xlsx</code> contents to memory or files</p>
 
         </section>
       
@@ -81,7 +86,8 @@
         <section id="summary" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#summary">
-              <i class="icon-link"></i>
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
             </a>
             Summary
           </h1>
@@ -94,19 +100,11 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#delete_dir/1">delete_dir(dir \\ &quot;./temp&quot;)</a>
+    <a href="#extract_xml/3">extract_xml(file_list, path, to)</a>
   </div>
   
-    <div class="summary-synopsis"><p>Deletes all files and directories contained in specified directory</p>
-</div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#extract_xml_to_file/2">extract_xml_to_file(file_list, path)</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>Extracts requested list of files from a <code class="inline">.zip</code> file to <code class="inline">./temp</code> and returns a list of the extracted file paths</p>
+    <div class="summary-synopsis"><p>Extracts requested list of files from a <code class="inline">.zip</code> file to memory or file system
+and returns a list of the extracted file paths</p>
 </div>
   
 </div>
@@ -128,15 +126,6 @@
 </div>
   
 </div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#xml_file_list/1">xml_file_list(index)</a>
-  </div>
-  
-    <div class="summary-synopsis"><p>List of files contained in the requested <code class="inline">.xlsx</code> file to be extracted</p>
-</div>
-  
-</div>
 
   </div>
 
@@ -152,72 +141,34 @@
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
-              <i class="icon-link"></i>
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
             </a>
             Functions
           </h1>
-          <div class="detail" id="delete_dir/1">
+          <div class="detail" id="extract_xml/3">
   
-    <span id="delete_dir/0" />
   
   <div class="detail-header">
-    <a href="#delete_dir/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
+    <a href="#extract_xml/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
     </a>
-    <span class="signature">delete_dir(dir \\ &quot;./temp&quot;)</span>
+    <span class="signature">extract_xml(file_list, path, to)</span>
     
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L174" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
+      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/unzip.ex#L143" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
      </a>
     
     
     
   </div>
   <section class="docstring">
-    <p>Deletes all files and directories contained in specified directory.</p>
-<h2 id="delete_dir/1-parameters" class="section-heading">
-  <a href="#delete_dir/1-parameters" class="hover-link"><i class="icon-link"></i></a>
-  Parameters
-</h2>
-
-<ul>
-<li><code class="inline">dir</code> - list of directories to delete (default set for standard Xlsxir functionality)
-</li>
-</ul>
-<h2 id="delete_dir/1-example" class="section-heading">
-  <a href="#delete_dir/1-example" class="hover-link"><i class="icon-link"></i></a>
-  Example
-</h2>
-
-<p>An example file named <code class="inline">test.zip</code> located in ‘./test_data/test’ containing a single file named <code class="inline">test.txt</code>:</p>
-<pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.zip&quot;
-iex&gt; file_list = [&#39;test.txt&#39;]
-iex&gt; Xlsxir.Unzip.extract_xml_to_file(file_list, path)
-{:ok, [&#39;temp/test.txt&#39;]}
-iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
-:ok</code></pre>
-
-  </section>
-</div>
-<div class="detail" id="extract_xml_to_file/2">
-  
-  <div class="detail-header">
-    <a href="#extract_xml_to_file/2" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">extract_xml_to_file(file_list, path)</span>
-    
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L146" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-    
-    
-  </div>
-  <section class="docstring">
-    <p>Extracts requested list of files from a <code class="inline">.zip</code> file to <code class="inline">./temp</code> and returns a list of the extracted file paths.</p>
-<h2 id="extract_xml_to_file/2-parameters" class="section-heading">
-  <a href="#extract_xml_to_file/2-parameters" class="hover-link"><i class="icon-link"></i></a>
+    <p>Extracts requested list of files from a <code class="inline">.zip</code> file to memory or file system
+and returns a list of the extracted file paths.</p>
+<h2 id="extract_xml/3-parameters" class="section-heading">
+  <a href="#extract_xml/3-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Parameters
 </h2>
 
@@ -226,34 +177,39 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 </li>
 <li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
 </li>
+<li><code class="inline">to</code> - <code class="inline">:memory</code> or <code class="inline">{:file, &quot;destination/path&quot;}</code> option
+</li>
 </ul>
-<h2 id="extract_xml_to_file/2-example" class="section-heading">
-  <a href="#extract_xml_to_file/2-example" class="hover-link"><i class="icon-link"></i></a>
+<h2 id="extract_xml/3-example" class="section-heading">
+  <a href="#extract_xml/3-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
 </h2>
 
 <p>An example file named <code class="inline">test.zip</code> located in ‘./test_data/test’ containing a single file named <code class="inline">test.txt</code>:</p>
 <pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.zip&quot;
 iex&gt; file_list = [&#39;test.txt&#39;]
-iex&gt; Xlsxir.Unzip.extract_xml_to_file(file_list, path)
-{:ok, [&#39;temp/test.txt&#39;]}
-iex&gt; File.ls(&quot;./temp&quot;)
-{:ok, [&quot;test.txt&quot;]}
-iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
+iex&gt; Xlsxir.Unzip.extract_xml(file_list, path, :memory)
+{:ok, [%Xlsxir.XmlFile{content: &quot;test_successful&quot;, name: &quot;test.txt&quot;, path: nil}]}
+iex&gt; Xlsxir.Unzip.extract_xml(file_list, path, {:file, &quot;temp/&quot;})
+{:ok, [%Xlsxir.XmlFile{content: nil, name: &quot;test.txt&quot;, path: &quot;temp/test.txt&quot;}]}
+iex&gt; with {:ok, _} &lt;- File.rm_rf(&quot;temp&quot;), do: :ok
 :ok</code></pre>
 
   </section>
 </div>
 <div class="detail" id="validate_path_all_indexes/1">
   
+  
   <div class="detail-header">
     <a href="#validate_path_all_indexes/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
     </a>
     <span class="signature">validate_path_all_indexes(path)</span>
     
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L55" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
+      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/unzip.ex#L69" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
      </a>
     
     
@@ -262,7 +218,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
   <section class="docstring">
     <p>Checks if given path is a valid file type, returning a list of available worksheets.</p>
 <h2 id="validate_path_all_indexes/1-parameters" class="section-heading">
-  <a href="#validate_path_all_indexes/1-parameters" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#validate_path_all_indexes/1-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Parameters
 </h2>
 
@@ -271,7 +227,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 </li>
 </ul>
 <h2 id="validate_path_all_indexes/1-example" class="section-heading">
-  <a href="#validate_path_all_indexes/1-example" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#validate_path_all_indexes/1-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
 </h2>
 
@@ -281,20 +237,27 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 
    iex&gt; path = &quot;./test/test_data/test.zip&quot;
    iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
-   {:ok, []}</code></pre>
+   {:ok, []}
+
+   iex&gt; path = &quot;./test/test_data/test.invalidfile&quot;
+   iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
+   {:error, &quot;Invalid file type (expected xlsx).&quot;}</code></pre>
 
   </section>
 </div>
 <div class="detail" id="validate_path_and_index/2">
   
+  
   <div class="detail-header">
     <a href="#validate_path_and_index/2" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
     </a>
     <span class="signature">validate_path_and_index(path, index)</span>
     
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L28" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
+      <a href="https://github.com/jsonkennell/xlsxir/blob/master/lib/xlsxir/unzip.ex#L38" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
      </a>
     
     
@@ -303,7 +266,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
   <section class="docstring">
     <p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple.</p>
 <h2 id="validate_path_and_index/2-parameters" class="section-heading">
-  <a href="#validate_path_and_index/2-parameters" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#validate_path_and_index/2-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Parameters
 </h2>
 
@@ -312,7 +275,7 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 </li>
 </ul>
 <h2 id="validate_path_and_index/2-example" class="section-heading">
-  <a href="#validate_path_and_index/2-example" class="hover-link"><i class="icon-link"></i></a>
+  <a href="#validate_path_and_index/2-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Example
 </h2>
 
@@ -326,43 +289,11 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
 
    iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
    iex&gt; Xlsxir.Unzip.validate_path_and_index(path, 100)
-   {:error, &quot;Invalid worksheet index.&quot;}</code></pre>
+   {:error, &quot;Invalid worksheet index.&quot;}
 
-  </section>
-</div>
-<div class="detail" id="xml_file_list/1">
-  
-  <div class="detail-header">
-    <a href="#xml_file_list/1" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">xml_file_list(index)</span>
-    
-      <a href="https://github.com/kennellroxco/xlsxir/blob/master/lib/xlsxir/unzip.ex#L118" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-    
-    
-  </div>
-  <section class="docstring">
-    <p>List of files contained in the requested <code class="inline">.xlsx</code> file to be extracted.</p>
-<h2 id="xml_file_list/1-parameters" class="section-heading">
-  <a href="#xml_file_list/1-parameters" class="hover-link"><i class="icon-link"></i></a>
-  Parameters
-</h2>
-
-<ul>
-<li><code class="inline">index</code> - index of the <code class="inline">.xlsx</code> worksheet to be parsed
-</li>
-</ul>
-<h2 id="xml_file_list/1-example" class="section-heading">
-  <a href="#xml_file_list/1-example" class="hover-link"><i class="icon-link"></i></a>
-  Example
-</h2>
-
-<pre><code class="iex elixir">iex&gt; Xlsxir.Unzip.xml_file_list(0)
-   [&#39;xl/styles.xml&#39;, &#39;xl/sharedStrings.xml&#39;, &#39;xl/worksheets/sheet1.xml&#39;]</code></pre>
+   iex&gt; path = &quot;./test/test_data/test.invalidfile&quot;
+   iex&gt; Xlsxir.Unzip.validate_path_and_index(path, 0)
+   {:error, &quot;Invalid file type (expected xlsx).&quot;}</code></pre>
 
   </section>
 </div>
@@ -375,20 +306,21 @@ iex&gt; Xlsxir.Unzip.delete_dir(&quot;./temp&quot;)
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.15.0),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.17.1),
           </span>
           <span class="line">
             designed by
             <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
             </span>
         </p>
-        <button class="night-mode-toggle" />
+        <button class="night-mode-toggle"><span class="sr-only">Switch theme</span></button>
       </footer>
     </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-22a6d4638c.js"></script>
+  <script src="dist/app-778c9ef903.js"></script>
+  
   </body>
 </html>
 

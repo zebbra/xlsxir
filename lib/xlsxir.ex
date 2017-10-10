@@ -399,12 +399,12 @@ defmodule Xlsxir do
   defp do_get_cell(cell_ref, table_id) do
     [[row_num]] = ~r/\d+/ |> Regex.scan(cell_ref)
     row_num     = row_num |> String.to_integer
-    case :ets.match(table_id, {row_num, :"$1"}) do
-      [[row]] -> row
-                  |> Enum.filter(fn [ref, _val] -> ref == cell_ref end)
-                  |> List.first
-                  |> Enum.at(1)
-      _       -> nil
+
+    with [[row]] <- :ets.match(table_id, {row_num, :"$1"}),
+         [^cell_ref, value] <- Enum.find(row, fn [ref, _val] -> ref == cell_ref end) do
+      value
+    else
+      _ -> nil
     end
   end
 

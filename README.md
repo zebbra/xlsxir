@@ -1,6 +1,6 @@
 # Xlsxir
 
-[![Build Status](https://travis-ci.org/jsonkennell/xlsxir.svg?branch=master)](https://travis-ci.org/jsonkennell/xlsxir)
+[![Build Status](https://travis-ci.org/jsonkenl/xlsxir.svg?branch=master)](https://travis-ci.org/jsonkenl/xlsxir)
 [![Hex.pm Version](http://img.shields.io/hexpm/v/xlsxir.svg)](https://hex.pm/packages/xlsxir)
 [![Hex docs](http://img.shields.io/badge/hex.pm-docs-blue.svg?style=flat)](https://hexdocs.pm/xlsxir)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/kennellroxco/xlsxir/master/LICENSE)

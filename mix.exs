@@ -4,9 +4,9 @@ defmodule Xlsxir.Mixfile do
   def project do
     [
      app: :xlsxir,
-     version: "1.6.0",
+     version: "1.6.1",
      name: "Xlsxir",
-     source_url: "https://github.com/jsonkennell/xlsxir",
+     source_url: "https://github.com/jsonkenl/xlsxir",
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -31,16 +31,16 @@ defmodule Xlsxir.Mixfile do
 
   defp description do
     """
-    Xlsx file parser
+    Xlsx file parser (Excel, LibreOffice, etc.)
     """
   end
 
   defp package do
     [
-      maintainers: ["Jason Kennell", "Bryan Weatherly"],
+      maintainers: ["Jason Kennell"],
       licenses: ["MIT License"],
       links: %{
-                "Github" => "https://github.com/kennellroxco/xlsxir",
+                "Github" => "https://github.com/jsonkenl/xlsxir",
                 "Change Log" => "https://hexdocs.pm/xlsxir/changelog.html"
                }
     ]

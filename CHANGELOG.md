@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.6.1
+- Fixed bug where `Xlsxir.get_cell/2` raised instead of returning `nil` on non-existing cell. Thanks to @ZombieHarvester for contribution.
+- Various documentation updates.
+
 ## 1.6.0
 - Huge parsing performance improvement thanks to Alex Kovalevych's (@AlexKovalevych) contribution.
 - Ability to choose between parsing in-memory or on the file system added as well as the ability to stream via the `Xlsxir.stream_list/2`. Thanks to Thibaut Decaudain (@Tricote) for contribution. 

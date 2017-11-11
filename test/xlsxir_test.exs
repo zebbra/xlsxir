@@ -75,4 +75,11 @@ defmodule XlsxirTest do
     assert 9 == Enum.count(res)
     assert [["string one", "string two", 10, 20, {2016, 1, 1}]] == get_list(tid)
   end
+
+  def error_cell_path(), do: "./test/test_data/error-date.xlsx"
+
+  test "error cells can be parsed properly1" do
+    {:ok, pid} = extract(error_cell_path(), 0)
+    close(pid)
+  end
 end

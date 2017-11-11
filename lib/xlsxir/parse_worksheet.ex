@@ -74,7 +74,7 @@ defmodule Xlsxir.ParseWorksheet do
     case list do
       [          _,   _, nil] -> nil                                                                 # Cell with no value attribute
       [          _,   _,  ""] -> nil                                                                 # Empty cell with assigned attribute
-      [        'e', nil,   e] -> List.to_string(e)                                                   # Type error
+      [        'e',   _,   e] -> List.to_string(e)                                                   # Type error
       [        's',   _,   i] -> find_string(strings_tid, List.to_integer(i))                        # Type string
       [        nil, nil,   n] -> convert_char_number(n)                                              # Type number
       [        'n', nil,   n] -> convert_char_number(n)

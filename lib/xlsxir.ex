@@ -443,15 +443,16 @@ defmodule Xlsxir do
   end
 
   defp do_get_row(row) do
-    row |> Enum.reduce({[], nil}, fn [ref, val], {values, previous} ->
-      line = Regex.run(~r/\d+$/, ref) |> List.first
-      empty_cells = cond do
-        is_nil(previous) && String.first(ref) != "A" -> fill_empty_cells("A#{line}", ref, line, [])
-        !is_nil(previous) && !is_next_col(ref, previous) -> fill_empty_cells(previous, ref, line, [])
-        true -> []
-      end
-      {values ++ empty_cells ++ [[ref, val]], ref}
-    end)
+    row 
+    |> Enum.reduce({[], nil}, fn [ref, val], {values, previous} ->
+          line = ~r/\d+$/ |> Regex.run(ref) |> List.first
+          empty_cells = cond do
+            is_nil(previous) && String.first(ref) != "A" -> fill_empty_cells("A#{line}", ref, line, [])
+            !is_nil(previous) && !is_next_col(ref, previous) -> fill_empty_cells(next_col(previous), ref, line, [])
+            true -> []
+          end
+          {values ++ empty_cells ++ [[ref, val]], ref}
+        end)
     |> elem(0)
   end
 
@@ -482,7 +483,7 @@ defmodule Xlsxir do
   defp fill_empty_cells(from, to, line, cells) do
     next_ref = next_col(from)
     if next_ref == to do
-      fill_empty_cells(to, to, line, cells)
+      fill_empty_cells(to, to, line, [[from, nil] | cells])
     else
       fill_empty_cells(next_ref, to, line, [[from, nil] | cells])
     end

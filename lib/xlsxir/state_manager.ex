@@ -1,4 +1,8 @@
 defmodule Xlsxir.StateManager do
+  @moduledoc """
+  GenServer to manage ETS table state/<C-y>
+  """
+
   use GenServer
 
   def start_link() do

@@ -23,14 +23,17 @@ defmodule Xlsxir.ConvertDate do
                |> is_float
                |> case do
                     false -> List.to_integer(serial)
-                    true  -> List.to_float(serial)
+                    true  -> serial
+                             |> List.to_float()
                              |> Float.floor
                              |> round
                   end
 
     # Convert to gregorian days and get date from that
-    f_serial - 2 +               # adjust two days for first and last day since base year
-    date_to_days({1900, 1, 1})   # Add days in base year 1900
+    gregorian = f_serial - 2 +               # adjust two days for first and last day since base year
+                date_to_days({1900, 1, 1})   # Add days in base year 1900
+
+    gregorian
     |> days_to_date
   end
 

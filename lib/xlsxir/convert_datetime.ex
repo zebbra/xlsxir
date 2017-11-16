@@ -42,7 +42,7 @@ defmodule Xlsxir.ConvertDateTime do
 
     {{1899, 12, 31}, {0, 0, 0}}
     |> :calendar.datetime_to_gregorian_seconds()
-    |> Kernel.+(whole_days * 86400 + hours * 3600 + minutes * 60 + seconds)
+    |> Kernel.+(whole_days * 86_400 + hours * 3600 + minutes * 60 + seconds)
     |> :calendar.gregorian_seconds_to_datetime()
     |> NaiveDateTime.from_erl!()
   end

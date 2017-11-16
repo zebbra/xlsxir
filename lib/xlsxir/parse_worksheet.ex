@@ -31,14 +31,14 @@ defmodule Xlsxir.ParseWorksheet do
   def sax_event_handler({:startElement,_,'c',_,xml_attr}, state, %{styles: styles_tid}) do
     a = Enum.map(xml_attr, fn(attr) ->
           case attr do
-            {:attribute,'r',_,_,ref}   -> {:r, ref  }
+            {:attribute,'r',_,_,ref}   -> {:r, ref}
             {:attribute,'s',_,_,style} -> {:s, find_styles(styles_tid, List.to_integer(style))}
-            {:attribute,'t',_,_,type}  -> {:t, type }
+            {:attribute,'t',_,_,type}  -> {:t, type}
             _                          -> raise "Unknown cell attribute"
           end
         end)
 
-    {cell_ref, num_style, data_type} = case Keyword.keys(a) |> Enum.sort do
+    {cell_ref, num_style, data_type} = case a |> Keyword.keys |> Enum.sort do
                                          [:r]         -> {a[:r],   nil,   nil}
                                          [:r, :s]     -> {a[:r], a[:s],   nil}
                                          [:r, :t]     -> {a[:r],   nil, a[:t]}
@@ -89,7 +89,7 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   defp convert_iso_date(value) do
-    List.to_string(value) |> Date.from_iso8601() |> elem(1) |> Date.to_erl()
+    value |> List.to_string |> Date.from_iso8601() |> elem(1) |> Date.to_erl()
   end
 
   defp convert_date_or_time(value) do
@@ -104,14 +104,16 @@ defmodule Xlsxir.ParseWorksheet do
 
   defp find_styles(nil, _index), do: nil
   defp find_styles(tid, index) do
-    :ets.lookup(tid, index)
+    tid
+    |> :ets.lookup(index)
     |> List.first
     |> elem(1)
   end
 
   defp find_string(nil, _index), do: nil
   defp find_string(tid, index) do
-    :ets.lookup(tid, index)
+    tid
+    |> :ets.lookup(index)
     |> List.first
     |> elem(1)
   end

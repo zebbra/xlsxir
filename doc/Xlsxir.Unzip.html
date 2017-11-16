@@ -4,11 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.17.1">
-    <title>Xlsxir.Unzip – Xlsxir v1.6.1</title>
-    <link rel="stylesheet" href="dist/app-c922dbe7ef.css" />
+    <meta name="generator" content="ExDoc v0.18.1">
+    <title>Xlsxir.Unzip – Xlsxir v1.6.2</title>
+    <link rel="stylesheet" href="dist/app-c11171effc.css" />
     
-    <script src="dist/sidebar_items-4813ea5825.js"></script>
+    <script src="dist/sidebar_items-94d4f6044a.js"></script>
+    
+    
+    
     
   </head>
   <body data-type="modules">
@@ -28,7 +31,7 @@
         Xlsxir
       </h1>
       <h2 class="sidebar-projectVersion">
-        v1.6.1
+        v1.6.2
       </h2>
     </div>
     
@@ -64,7 +67,7 @@
 
 
       <h1>
-        <small class="visible-xs">Xlsxir v1.6.1</small>
+        <small class="visible-xs">Xlsxir v1.6.2</small>
         Xlsxir.Unzip
         
           <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L1" title="View Source" class="view-source" rel="help">
@@ -156,7 +159,7 @@ and returns a list of the extracted file paths</p>
     </a>
     <span class="signature">extract_xml(file_list, path, to)</span>
     
-      <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L143" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L142" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
@@ -233,7 +236,7 @@ iex&gt; with {:ok, _} &lt;- File.rm_rf(&quot;temp&quot;), do: :ok
 
 <pre><code class="iex elixir">iex&gt; path = &quot;./test/test_data/test.xlsx&quot;
    iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
-   {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8]}
+   {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
 
    iex&gt; path = &quot;./test/test_data/test.zip&quot;
    iex&gt; Xlsxir.Unzip.validate_path_all_indexes(path)
@@ -306,7 +309,7 @@ iex&gt; with {:ok, _} &lt;- File.rm_rf(&quot;temp&quot;), do: :ok
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.17.1),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.18.1),
           </span>
           <span class="line">
             designed by
@@ -319,7 +322,10 @@ iex&gt; with {:ok, _} &lt;- File.rm_rf(&quot;temp&quot;), do: :ok
   </div>
 </section>
 </div>
-  <script src="dist/app-778c9ef903.js"></script>
+  <script src="dist/app-ad33bc0e7d.js"></script>
+  
+  
+  
   
   </body>
 </html>

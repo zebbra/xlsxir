@@ -89,8 +89,7 @@ defmodule Xlsxir.Unzip do
         end)
         |> Enum.sort
         {:ok, indexes}
-      {:error, _reason} ->
-	{:error, @filetype_error}
+      {:error, _reason} -> {:error, @filetype_error}
     end
   end
 

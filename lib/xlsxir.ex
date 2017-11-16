@@ -119,7 +119,8 @@ defmodule Xlsxir do
         [[1, 2], [3, 4]]
   """
   def stream_list(path, index, options \\ []) do
-    stream(path, index, options)
+    path
+    |> stream(index, options)
     |> Stream.map(&row_data_to_list/1)
   end
 
@@ -347,16 +348,18 @@ defmodule Xlsxir do
           :ok
   """
   def get_mda(tid) do
-    :ets.match(tid, {:"$1", :"$2"}) |> convert_to_indexed_map(%{})
+    tid |> :ets.match({:"$1", :"$2"}) |> convert_to_indexed_map(%{})
   end
 
   defp convert_to_indexed_map([], map), do: map
 
   defp convert_to_indexed_map([h|t], map) do
-    row_index = Enum.at(h, 0)
+    row_index = h
+                |> Enum.at(0)
                 |> Kernel.-(1)
 
-    add_row   = Enum.at(h,1)
+    add_row   = h
+                |> Enum.at(1)
                 |> do_get_row()
                 |> Enum.reduce({%{}, 0}, fn cell, {acc, index} ->
                   {Map.put(acc, index, Enum.at(cell, 1)), index + 1}
@@ -519,7 +522,8 @@ defmodule Xlsxir do
   def get_col(tid, col), do: do_get_col(col, tid)
 
   defp do_get_col(col, tid) do
-    :ets.match(tid, {:"$1", :"$2"})
+    tid
+    |> :ets.match({:"$1", :"$2"})
     |> Enum.sort
     |> Enum.map(fn [_num, row] ->
       row

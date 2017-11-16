@@ -116,7 +116,7 @@ defmodule Xlsxir.XlsxFile do
   """
   def stream(xlsx_filepath, worksheet_index, options \\ []) do
     Stream.resource(
-      fn -> initialize(xlsx_filepath, options) |> initialize_stream(worksheet_index) end,
+      fn -> xlsx_filepath |> initialize(options) |> initialize_stream(worksheet_index) end,
       &stream_next_row/1,
       &clean_stream/1
     )
@@ -233,8 +233,8 @@ defmodule Xlsxir.XlsxFile do
                      end
 
     [h, m, s] = [
-                  seconds / 3600 |> Float.floor |> round,
-                  rem(seconds, 3600) / 60 |> Float.floor |> round,
+                  seconds |> Kernel./(3600) |> Float.floor |> round,
+                  seconds |> rem(3600) |> Kernel./(60) |> Float.floor |> round,
                   rem(seconds, 60)
                 ]
 

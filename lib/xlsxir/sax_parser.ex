@@ -7,7 +7,7 @@ defmodule Xlsxir.SaxParser do
   alias Xlsxir.{ParseString, ParseStyle, ParseWorksheet, StreamWorksheet, SaxError, XmlFile}
   require Logger
 
-  @chunk 10000
+  @chunk 10_000
 
   @doc """
   Parses `XmlFile` (`xl/worksheets/sheet\#{n}.xml` at index `n`, `xl/styles.xml` or `xl/sharedStrings.xml`) using SAX parsing. An Erlang Term Storage (ETS) process is started to hold the state of data

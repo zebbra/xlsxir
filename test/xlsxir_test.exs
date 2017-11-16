@@ -72,7 +72,7 @@ defmodule XlsxirTest do
   test "multi_extract/4" do
     res = multi_extract(path())
     {:ok, tid} = hd(res)
-    assert 9 == Enum.count(res)
+    assert 10 == Enum.count(res)
     assert [["string one", "string two", 10, 20, {2016, 1, 1}]] == get_list(tid)
   end
 
@@ -82,4 +82,15 @@ defmodule XlsxirTest do
     {:ok, pid} = extract(error_cell_path(), 0)
     close(pid)
   end
+
+  test "empty cells are filled with nil" do
+    {:ok, pid} = multi_extract(path(), 9)
+    assert get_list(pid) == [
+                              [1,nil,1,nil,1,nil,nil,1],
+                              [nil,1,nil,nil,1,nil,1],
+                              [nil,nil,nil,nil,nil,1,nil,nil,nil,1],
+                              [1,1,nil,1]
+                            ]
+  end
+
 end

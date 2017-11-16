@@ -36,7 +36,7 @@ defmodule Xlsxir.Unzip do
          {:error, "Invalid file type (expected xlsx)."}
   """
   def validate_path_and_index(path, index) do
-    path = String.to_char_list(path)
+    path = String.to_charlist(path)
 
     case valid_extract_request?(path, index) do
       :ok              -> {:ok, path}
@@ -55,7 +55,7 @@ defmodule Xlsxir.Unzip do
 
          iex> path = "./test/test_data/test.xlsx"
          iex> Xlsxir.Unzip.validate_path_all_indexes(path)
-         {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8]}
+         {:ok, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
 
          iex> path = "./test/test_data/test.zip"
          iex> Xlsxir.Unzip.validate_path_all_indexes(path)
@@ -67,7 +67,7 @@ defmodule Xlsxir.Unzip do
   """
 
   def validate_path_all_indexes(path) do
-    path = String.to_char_list(path)
+    path = String.to_charlist(path)
     case :zip.list_dir(path) do
       {:ok, file_list}  ->
         indexes = Enum.filter_map(file_list,
@@ -142,7 +142,7 @@ defmodule Xlsxir.Unzip do
   """
   def extract_xml(file_list, path, to) do
     path
-    |> to_char_list
+    |> to_charlist
     |> extract_from_zip(file_list, to)
     |> case do
         {:error, reason}  -> {:error, reason}

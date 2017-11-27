@@ -228,10 +228,14 @@ defmodule Xlsxir do
   """
   def multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
   def multi_extract(path, nil, timer, _excel, options) do
-    xlsx_file = XlsxFile.initialize(path, options)
-    results = XlsxFile.parse_all_to_ets(xlsx_file, timer)
-    XlsxFile.clean(xlsx_file)
-    results
+    case XlsxFile.initialize(path, options) do
+      {:error, msg} -> 
+        {:error, msg}
+      xlsx_file -> 
+        results = XlsxFile.parse_all_to_ets(xlsx_file, timer)
+        XlsxFile.clean(xlsx_file)
+        results
+    end
   end
 
   def multi_extract(path, index, timer, _excel, options) when is_integer(index) do

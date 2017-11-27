@@ -93,4 +93,7 @@ defmodule XlsxirTest do
                             ]
   end
 
+  test "handles non-existent xlsx file gracefully" do
+    {:error, err} = multi_extract("this/file/does/not/exist.xlsx")
+  end
 end

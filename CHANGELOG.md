@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.6.3
+- Fixed bug where multi_extract did not return {:error, msg} for non existent file. Thanks to Peter Sumskas (@brushbox) for contribution.
+
 ## 1.6.2
 - Fixed bug where `Xlsxir.get_list/1` was not populating empty cells with `nil` propely.
 - Pattern matching on error cells was widened to include additional use cases. Thanks to Peter Sumskas (@brushbox) for contribution.

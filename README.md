@@ -96,11 +96,6 @@ Refer to [Xlsxir documentation](https://hexdocs.pm/xlsxir/index.html) for more d
 
 Cell references are formatted as a string (i.e. "A1"). Strings will be returned as type `string`, resulting values for functions from within the worksheet are returned as type `string`, `integer` or `float` depending on the type of the resulting value, data formatted as a number in the worksheet will be returned as type `integer` or `float`, date formatted values will be returned in Erlang `:calendar.date()` type format (i.e. `{year, month, day}`), and datetime values will be returned as an Elixir `naive datetime`. Xlsxir does not currently support dates prior to 1/1/1900.
 
-## Planned Development
-
-- Export functionality to .xlsx file type with formatting options
-- Implement Elixir 1.3 calendar datatypes support
-
 ## Contributing
 
 Contributions are encouraged. Feel free to fork the repo, add your code along with appropriate tests and documentation (ensuring all existing tests continue to pass) and submit a pull request.
@@ -113,7 +108,7 @@ Please report any bugs or request future enhancements via the [Issues](https://g
 
 I'd like to thank the following people who were a big help in the development of this library:
 
-- Paulo Almeida (@pma) was a big help with testing and has provided several great ideas for development.
+- Paulo Almeida (@pma) helped with testing and has provided several great ideas for development.
 - Benjamin Tan's (@benjamintanweihao) article on [SAX parsing with Elrsom](http://benjamintan.io/blog/2014/10/01/parsing-wikipedia-xml-dump-in-elixir-using-erlsom/) was invaluable.
 - Daniel Berkompas' (@danielberkompas) article [Multidimensional Arrays in Elixir](http://blog.danielberkompas.com/2016/04/23/multidimensional-arrays-in-elixir.html?utm_campaign=elixir_radar_48&utm_medium=email&utm_source=RD+Station) inspired `Xlsxir.get_mda/0`.
 - Alex Kovalevych's (@alexkovalevych) contributions greatly improved the parsing performance of Xlsxir. 

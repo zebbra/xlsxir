@@ -4,7 +4,7 @@ defmodule Xlsxir.ParseStyle do
   """
 
   # the following module attributes hold `numStyleId`s for standard number styles, grouping them between numbers and dates
-  @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,49,59,60,61,62,67,68,69,70]
+  @num  [0,1,2,3,4,9,10,11,12,13,37,38,39,40,44,48,49,56,59,60,61,62,67,68,69,70]
   @date [14,15,16,17,18,19,20,21,22,27,30,36,45,46,47,50,57]
 
   defstruct custom_style: %{}, cellxfs: false, index: 0, tid: nil, num_fmt_ids: []

@@ -539,7 +539,7 @@ defmodule Xlsxir do
   end
 
   @doc """
-  See `get_multi_info\2` documentation.
+  See `get_multi_info/2` documentation.
   """
   def get_info(table_id, num_type \\ :all) do
     get_multi_info(table_id, num_type)

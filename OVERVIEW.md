@@ -30,17 +30,17 @@ end
 
 ## Basic Usage
 
-**Xlsxir.extract/3 is deprecated, please use Xlsxir.multi_extract/4 going forward.**
+**Xlsxir.extract/3 is deprecated, please use Xlsxir.multi_extract/1-5 going forward.**
 
-Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.multi_extract/3` and `Xlsxir.peek/3` functions:
+Xlsxir parses a `.xlsx` file located at a given `path` and extracts the data to an ETS process via the `Xlsxir.multi_extract/1-5`, `Xlsxir.peek/3-4` and `Xlsxir.stream_list/2-3` functions:
 
 ```elixir
-Xlsxir.multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+Xlsxir.multi_extract(path, index \\ nil, timer \\ false, excel \\ nil, options \\ [])
 Xlsxir.peek(path, index, rows, options \\ [])
 Xlsxir.stream_list(path, index, options \\ [])
 ```
 
-The `peek/3` function returns only the given number of rows from the worksheet at a given index. The `multi_extract/3` function allows multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default (when `index == nil`), returning a list of tuple results.
+The `peek/3-4` functions return only the given number of rows from the worksheet at a given index. The `multi_extract/1-5` functions allow multiple worksheets to be parsed by creating a separate ETS process for each worksheet and returning a unique table identifier for each. This option will parse all worksheets by default (when `index == nil`), returning a list of tuple results.
 
 Argument descriptions:
 - `path` the path of the file to be parsed in `string` format
@@ -49,16 +49,13 @@ Argument descriptions:
 - `rows` is an integer representing the number of rows to be extracted from the given worksheet.
 - `options` - see function documentation for option detail.
 
-Upon successful completion, the extraction process returns: 
-- for `extract/3`:
-    * `:ok` with `timer` set to `false`
-    * `{:ok, time_elapsed}` with `timer` set to `true`
+Upon successful completion, the extraction process returns:
 - for `multi_extract/3`:
     * `[{:ok, table_1_id}, ...]` with `timer` set to `false`
     * `{:ok, table_id}` when given a specific worksheet `index`
     * `[{:ok, table_1_id, time_elapsed}, ...]` with `timer` set to `true`
     * `{:ok, table_id, time_elapsed}` when given a specific worksheet `index`
-- for `peek/3`: `:ok`			
+- for `peek/3`: `{:ok, table_id}`	
 
 Unsucessful parsing of a specific worksheet returns `{:error, reason}`.
 

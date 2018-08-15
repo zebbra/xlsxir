@@ -6,7 +6,7 @@ defmodule Xlsxir.ParseWorksheet do
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
 
-  defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: "", max_rows: nil, tid: nil
+  defstruct row: %{}, cell_ref: "", data_type: "", num_style: "", value: "", value_type: nil, max_rows: nil, tid: nil
 
   @doc """
   Sax event utilized by `Xlsxir.SaxParser.parse/2`. Takes a pattern and the current state of a struct and recursivly parses the
@@ -48,8 +48,20 @@ defmodule Xlsxir.ParseWorksheet do
     %{state | cell_ref: cell_ref, num_style: num_style, data_type: data_type}
   end
 
+  def sax_event_handler({:startElement,_,'f',_, _}, state, _) do
+    %{state | value_type: :formula}
+  end
+
+  def sax_event_handler({:startElement,_,'v',_, _}, state, _) do
+    %{state | value_type: :value}
+  end
+
   def sax_event_handler({:characters, value}, state, _) do
-    if state == nil, do: nil, else: %{state | value: value}
+    case state do
+      nil -> nil
+      %{value_type: :value} -> %{state | value: value}
+      _ -> state
+    end
   end
 
   def sax_event_handler({:endElement,_,'c',_}, %__MODULE__{row: row} = state, excel) do

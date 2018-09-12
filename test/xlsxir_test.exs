@@ -72,7 +72,7 @@ defmodule XlsxirTest do
   test "multi_extract/4" do
     res = multi_extract(path())
     {:ok, tid} = hd(res)
-    assert 10 == Enum.count(res)
+    assert 11 == Enum.count(res)
     assert [["string one", "string two", 10, 20, {2016, 1, 1}]] == get_list(tid)
   end
 
@@ -93,7 +93,17 @@ defmodule XlsxirTest do
                             ]
   end
 
+  test "empty reference cells are filled with nil" do
+    {:ok, pid} = multi_extract(path(), 10)
+    assert get_list(pid) == [
+                              [1,nil,1,nil,1,nil,nil,1,nil,nil],
+                              [nil,1,nil,nil,1,nil,1,nil,nil,nil],
+                              [nil,nil,nil,nil,nil,1,nil,nil,nil,1],
+                              [1,1,nil,1,nil,nil,nil,nil,nil,nil]
+                            ]
+  end
+
   test "handles non-existent xlsx file gracefully" do
-    {:error, err} = multi_extract("this/file/does/not/exist.xlsx")
+    {:error, _err} = multi_extract("this/file/does/not/exist.xlsx")
   end
 end

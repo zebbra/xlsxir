@@ -20,7 +20,7 @@ defmodule XlsxirTest do
 
   test "able to parse maximum number of rows" do
     {:ok, pid} = extract(path(), 3)
-    assert get_cell(pid, "A1048576") == 1048576
+    assert get_cell(pid, "A1048576") == 1_048_576
     close(pid)
   end
 
@@ -32,7 +32,11 @@ defmodule XlsxirTest do
 
   test "able to parse custom formats" do
     {:ok, pid} = extract(path(), 5)
-    assert get_list(pid) == [[-123.45, 67.89, {2015, 1, 1}, {2016, 12, 31}, {15, 12, 45}, ~N[2012-12-18 14:26:00]]]
+
+    assert get_list(pid) == [
+             [-123.45, 67.89, {2015, 1, 1}, {2016, 12, 31}, {15, 12, 45}, ~N[2012-12-18 14:26:00]]
+           ]
+
     close(pid)
   end
 
@@ -85,22 +89,24 @@ defmodule XlsxirTest do
 
   test "empty cells are filled with nil" do
     {:ok, pid} = multi_extract(path(), 9)
+
     assert get_list(pid) == [
-                              [1,nil,1,nil,1,nil,nil,1],
-                              [nil,1,nil,nil,1,nil,1],
-                              [nil,nil,nil,nil,nil,1,nil,nil,nil,1],
-                              [1,1,nil,1]
-                            ]
+             [1, nil, 1, nil, 1, nil, nil, 1],
+             [nil, 1, nil, nil, 1, nil, 1],
+             [nil, nil, nil, nil, nil, 1, nil, nil, nil, 1],
+             [1, 1, nil, 1]
+           ]
   end
 
   test "empty reference cells are filled with nil" do
     {:ok, pid} = multi_extract(path(), 10)
+
     assert get_list(pid) == [
-                              [1,nil,1,nil,1,nil,nil,1,nil,nil],
-                              [nil,1,nil,nil,1,nil,1,nil,nil,nil],
-                              [nil,nil,nil,nil,nil,1,nil,nil,nil,1],
-                              [1,1,nil,1,nil,nil,nil,nil,nil,nil]
-                            ]
+             [1, nil, 1, nil, 1, nil, nil, 1, nil, nil],
+             [nil, 1, nil, nil, 1, nil, 1, nil, nil, nil],
+             [nil, nil, nil, nil, nil, 1, nil, nil, nil, 1],
+             [1, 1, nil, 1, nil, nil, nil, nil, nil, nil]
+           ]
   end
 
   test "handles non-existent xlsx file gracefully" do

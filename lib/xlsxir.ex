@@ -7,7 +7,7 @@ defmodule Xlsxir do
     import Supervisor.Spec
 
     children = [
-      worker(Xlsxir.StateManager, []),
+      worker(Xlsxir.StateManager, [])
     ]
 
     opts = [strategy: :one_for_one, name: __MODULE__]
@@ -91,7 +91,6 @@ defmodule Xlsxir do
     result
   end
 
-
   @doc """
   Stream worksheet rows contained in the specified `.xlsx` file.
 
@@ -130,9 +129,12 @@ defmodule Xlsxir do
   end
 
   defp row_data_to_list(row_data) do
-    row_data # [["A1", 1], ["C1", 2]]
-    |> do_get_row() # [["A1", 1], ["B1", nil], ["C1", 2]]
-    |> Enum.map(fn [_ref, val] -> val end) # [1, nil, 2]
+    # [["A1", 1], ["C1", 2]]
+    row_data
+    # [["A1", 1], ["B1", nil], ["C1", 2]]
+    |> do_get_row()
+    # [1, nil, 2]
+    |> Enum.map(fn [_ref, val] -> val end)
   end
 
   @doc """
@@ -162,9 +164,8 @@ defmodule Xlsxir do
         :ok
   """
   def peek(path, index, rows, options \\ []) do
-    extract(path, index, false, Keyword.merge(options, [max_rows: rows]))
+    extract(path, index, false, Keyword.merge(options, max_rows: rows))
   end
-
 
   @doc """
   Extracts worksheet data contained in the specified `.xlsx` file to an ETS process. Successful extraction
@@ -227,11 +228,13 @@ defmodule Xlsxir do
         {:error, "Invalid worksheet index."}
   """
   def multi_extract(path, index \\ nil, timer \\ false, _excel \\ nil, options \\ [])
+
   def multi_extract(path, nil, timer, _excel, options) do
     case XlsxFile.initialize(path, options) do
-      {:error, msg} -> 
+      {:error, msg} ->
         {:error, msg}
-      xlsx_file -> 
+
+      xlsx_file ->
         results = XlsxFile.parse_all_to_ets(xlsx_file, timer)
         XlsxFile.clean(xlsx_file)
         results
@@ -274,7 +277,7 @@ defmodule Xlsxir do
   """
   def get_list(tid) do
     :ets.match(tid, {:"$1", :"$2"})
-    |> Enum.sort
+    |> Enum.sort()
     |> Enum.map(fn [_num, row] ->
       row
       |> do_get_row()
@@ -311,10 +314,11 @@ defmodule Xlsxir do
   def get_map(tid) do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.reduce(%{}, fn [_num, row], acc ->
-         row |> do_get_row()
-         |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
-         |> Enum.into(acc)
-       end)
+      row
+      |> do_get_row()
+      |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
+      |> Enum.into(acc)
+    end)
   end
 
   @doc """
@@ -357,18 +361,20 @@ defmodule Xlsxir do
 
   defp convert_to_indexed_map([], map), do: map
 
-  defp convert_to_indexed_map([h|t], map) do
-    row_index = h
-                |> Enum.at(0)
-                |> Kernel.-(1)
+  defp convert_to_indexed_map([h | t], map) do
+    row_index =
+      h
+      |> Enum.at(0)
+      |> Kernel.-(1)
 
-    add_row   = h
-                |> Enum.at(1)
-                |> do_get_row()
-                |> Enum.reduce({%{}, 0}, fn cell, {acc, index} ->
-                  {Map.put(acc, index, Enum.at(cell, 1)), index + 1}
-                end)
-                |> elem(0)
+    add_row =
+      h
+      |> Enum.at(1)
+      |> do_get_row()
+      |> Enum.reduce({%{}, 0}, fn cell, {acc, index} ->
+        {Map.put(acc, index, Enum.at(cell, 1)), index + 1}
+      end)
+      |> elem(0)
 
     updated_map = Map.put(map, row_index, add_row)
     convert_to_indexed_map(t, updated_map)
@@ -405,7 +411,7 @@ defmodule Xlsxir do
 
   defp do_get_cell(cell_ref, table_id) do
     [[row_num]] = ~r/\d+/ |> Regex.scan(cell_ref)
-    row_num     = row_num |> String.to_integer
+    row_num = row_num |> String.to_integer()
 
     with [[row]] <- :ets.match(table_id, {row_num, :"$1"}),
          [^cell_ref, value] <- Enum.find(row, fn [ref, _val] -> ref == cell_ref end) do
@@ -450,16 +456,24 @@ defmodule Xlsxir do
   end
 
   defp do_get_row(row) do
-    row 
+    row
     |> Enum.reduce({[], nil}, fn [ref, val], {values, previous} ->
-          line = ~r/\d+$/ |> Regex.run(ref) |> List.first
-          empty_cells = cond do
-            is_nil(previous) && String.first(ref) != "A" -> fill_empty_cells("A#{line}", ref, line, [])
-            !is_nil(previous) && !is_next_col(ref, previous) -> fill_empty_cells(next_col(previous), ref, line, [])
-            true -> []
-          end
-          {values ++ empty_cells ++ [[ref, val]], ref}
-        end)
+      line = ~r/\d+$/ |> Regex.run(ref) |> List.first()
+
+      empty_cells =
+        cond do
+          is_nil(previous) && String.first(ref) != "A" ->
+            fill_empty_cells("A#{line}", ref, line, [])
+
+          !is_nil(previous) && !is_next_col(ref, previous) ->
+            fill_empty_cells(next_col(previous), ref, line, [])
+
+          true ->
+            []
+        end
+
+      {values ++ empty_cells ++ [[ref, val]], ref}
+    end)
     |> elem(0)
   end
 
@@ -477,11 +491,14 @@ defmodule Xlsxir do
 
   defp next_col(ref) do
     [chars, line] = Regex.run(~r/^([A-Z]+)(\d+)/, ref, capture: :all_but_first)
-    chars = chars |> String.to_charlist
-    col_index = Enum.reduce(chars, 0, fn char, acc ->
-      acc = acc * 26
-      acc + char - 65 + 1
-    end)
+    chars = chars |> String.to_charlist()
+
+    col_index =
+      Enum.reduce(chars, 0, fn char, acc ->
+        acc = acc * 26
+        acc + char - 65 + 1
+      end)
+
     "#{column_from_index(col_index + 1, '')}#{line}"
   end
 
@@ -489,6 +506,7 @@ defmodule Xlsxir do
 
   defp fill_empty_cells(from, to, line, cells) do
     next_ref = next_col(from)
+
     if next_ref == to do
       fill_empty_cells(to, to, line, [[from, nil] | cells])
     else
@@ -528,14 +546,14 @@ defmodule Xlsxir do
   defp do_get_col(col, tid) do
     tid
     |> :ets.match({:"$1", :"$2"})
-    |> Enum.sort
+    |> Enum.sort()
     |> Enum.map(fn [_num, row] ->
       row
       |> do_get_row()
       |> Enum.filter(fn [ref, _val] -> Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end)
       |> Enum.map(fn [_ref, val] -> val end)
     end)
-    |> List.flatten
+    |> List.flatten()
   end
 
   @doc """
@@ -550,6 +568,7 @@ defmodule Xlsxir do
   - `:rows` - Returns number of rows contained in worksheet
   - `:cols` - Returns number of columns contained in worksheet
   - `:cells` - Returns number of cells contained in worksheet
+  - `:name` - Returns worksheet name
   - `:all` - Returns a keyword list containing all of the above
 
   ## Parameters
@@ -558,30 +577,51 @@ defmodule Xlsxir do
   """
   def get_multi_info(tid, num_type \\ :all) do
     case num_type do
-    :rows  -> row_num(tid)
-    :cols  -> col_num(tid)
-    :cells -> cell_num(tid)
-    _      -> [
-                rows:  row_num(tid),
-                cols:  col_num(tid),
-                cells: cell_num(tid)
-              ]
+      :rows ->
+        row_num(tid)
+
+      :cols ->
+        col_num(tid)
+
+      :cells ->
+        cell_num(tid)
+
+      :name ->
+        worksheet_name(tid)
+
+      _ ->
+        [
+          rows: row_num(tid),
+          cols: col_num(tid),
+          cells: cell_num(tid),
+          name: worksheet_name(tid)
+        ]
     end
   end
 
   defp row_num(tid) do
-    :ets.info(tid, :size)
+    # do not count :info key
+    :ets.info(tid, :size) - 1
   end
 
   defp col_num(tid) do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.map(fn [_num, row] -> Enum.count(row) end)
-    |> Enum.max
+    |> Enum.max()
   end
 
   defp cell_num(tid) do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.reduce(0, fn [_num, row], acc -> acc + Enum.count(row) end)
+  end
+
+  defp worksheet_name(tid) do
+    List.foldl(:ets.lookup(tid, :info), nil, fn value, _ ->
+      case value do
+        {:info, :worksheet_name, name} -> name
+        _ -> nil
+      end
+    end)
   end
 
   @doc """
@@ -599,7 +639,7 @@ defmodule Xlsxir do
       :ok
   """
   def close(tid) do
-    if Enum.member?(:ets.all, tid) do
+    if Enum.member?(:ets.all(), tid) do
       if :ets.delete(tid), do: :ok, else: :error
     else
       :ok

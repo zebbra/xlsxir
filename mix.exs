@@ -27,7 +27,7 @@ defmodule Xlsxir.Mixfile do
   defp deps do
     [
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:earmark, github: "pragdave/earmark", override: true, only: :dev},
+      #{:earmark, github: "pragdave/earmark", override: true, only: :dev},
       {:erlsom, "~> 1.4"}
     ]
   end

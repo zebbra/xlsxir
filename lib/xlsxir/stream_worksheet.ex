@@ -34,15 +34,16 @@ defmodule Xlsxir.StreamWorksheet do
     %ParseWorksheet{}
   end
 
-  def sax_event_handler({:endElement,_,'row',_}, state, _excel) do
+  def sax_event_handler({:endElement, _, 'row', _}, state, _excel) do
     unless Enum.empty?(state.row) do
-      value = state.row |> Enum.reverse
+      value = state.row |> Enum.reverse()
 
       # Wait for parent process to ask for the next row
       receive do
         {:get_next_row, from} -> send(from, {:next_row, value})
       end
     end
+
     state
   end
 
@@ -56,6 +57,6 @@ defmodule Xlsxir.StreamWorksheet do
 
   # Delegates other SAX events to Xlsxir.ParseWorksheet
   def sax_event_handler(sax_event, state, excel) do
-    ParseWorksheet.sax_event_handler(sax_event, state, excel)
+    ParseWorksheet.sax_event_handler(sax_event, state, excel, nil)
   end
 end

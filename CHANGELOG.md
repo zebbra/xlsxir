@@ -3,6 +3,8 @@
 ## 1.6.3
 - Fixed bug where multi_extract did not return {:error, msg} for non existent file. Thanks to Peter Sumskas (@brushbox) for contribution.
 - Fixed bug where formula was returned if calculated value was empty. Thanks to Ken Ip (@kenips) for contribution.
+- Sheet name added to `Xlsxir.get_info/1` and updated formatting. Thanks to Hongseok Yoon (@hongseokyoon) for contribution.
+- Updated docs.
 
 ## 1.6.2
 - Fixed bug where `Xlsxir.get_list/1` was not populating empty cells with `nil` propely.

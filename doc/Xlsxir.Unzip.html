@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.19.2">
+    <title>Xlsxir.Unzip — Xlsxir v1.6.3</title>
+    <link rel="stylesheet" href="dist/html-c1666276880c0f8e3769.css" />
+    <script src="dist/sidebar_items-af1b7937c1.js"></script>
+    
+  </head>
+  <body data-type="modules">
+    <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
+    <div class="main">
+<button class="sidebar-button sidebar-toggle">
+  <span class="icon-menu" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Sidebar</span>
+</button>
+<button class="sidebar-button night-mode-toggle">
+  <span class="icon-theme" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Theme</span>
+</button>
+<section class="sidebar">
+
+  <a href="overview.html" class="sidebar-projectLink">
+    <div class="sidebar-projectDetails">
+      <h1 class="sidebar-projectName">
+Xlsxir      </h1>
+      <h2 class="sidebar-projectVersion">
+        v1.6.3
+      </h2>
+    </div>
+  </a>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button">
+      <span class="icon-search" aria-hidden="true"></span>
+    </button>
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
+  </form>
+
+  <ul class="sidebar-listNav">
+    <li><a id="extras-list" href="#full-list">Pages</a></li>
+
+      <li><a id="modules-list" href="#full-list">Modules</a></li>
+
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+
+  </ul>
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+
+      <h1>
+        <small class="visible-xs">Xlsxir v1.6.3</small>
+Xlsxir.Unzip        
+          <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
+      </h1>
+
+
+        <section id="moduledoc">
+<p>Provides validation of accepted file types for file path,
+extracts required <code class="inline">.xlsx</code> contents to memory or files</p>
+        </section>
+
+        <section id="summary" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#summary">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+            Summary
+          </h1>
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#extract_xml/3">extract_xml(file_list, path, to)</a>
+  </div>
+    <div class="summary-synopsis"><p>Extracts requested list of files from a <code class="inline">.zip</code> file to memory or file system
+and returns a list of the extracted file paths</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#validate_path_all_indexes/1">validate_path_all_indexes(path)</a>
+  </div>
+    <div class="summary-synopsis"><p>Checks if given path is a valid file type, returning a list of available worksheets</p>
+</div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#validate_path_and_index/2">validate_path_and_index(path, index)</a>
+  </div>
+    <div class="summary-synopsis"><p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple</p>
+</div>
+</div>
+  </div>
+        </section>
+
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Functions          </h1>
+          <div class="functions-list">
+<section class="detail" id="extract_xml/3">
+    <div class="detail-header">
+    <a href="#extract_xml/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">extract_xml(file_list, path, to)</span>
+      <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L142" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+          </div>
+  <section class="docstring">
+<p>Extracts requested list of files from a <code class="inline">.zip</code> file to memory or file system
+and returns a list of the extracted file paths.</p>
+<h2 id="extract_xml/3-parameters" class="section-heading">
+  <a href="#extract_xml/3-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Parameters
+</h2>
+
+<ul>
+<li><code class="inline">file_list</code> - list containing file paths to be extracted in <code class="inline">char_list</code> format
+</li>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+<li><code class="inline">to</code> - <code class="inline">:memory</code> or <code class="inline">{:file, &quot;destination/path&quot;}</code> option
+</li>
+</ul>
+<h2 id="extract_xml/3-example" class="section-heading">
+  <a href="#extract_xml/3-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h2>
+
+<p>An example file named <code class="inline">test.zip</code> located in &#39;./test_data/test&#39; containing a single file named <code class="inline">test.txt</code>:</p>
+<pre><code class="nohighlight makeup elixir"><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.zip&quot;</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">file_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2022189243-1">[</span><span class="sc">&#39;test.txt&#39;</span><span class="p" data-group-id="2022189243-1">]</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">extract_xml</span><span class="p" data-group-id="2022189243-2">(</span><span class="n">file_list</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="ss">:memory</span><span class="p" data-group-id="2022189243-2">)</span><span class="w">
+</span><span class="p" data-group-id="2022189243-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2022189243-4">[</span><span class="p" data-group-id="2022189243-5">%</span><span class="nc" data-group-id="2022189243-5">Xlsxir.XmlFile</span><span class="p" data-group-id="2022189243-5">{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test_successful&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p" data-group-id="2022189243-5">}</span><span class="p" data-group-id="2022189243-4">]</span><span class="p" data-group-id="2022189243-3">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">extract_xml</span><span class="p" data-group-id="2022189243-6">(</span><span class="n">file_list</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2022189243-7">{</span><span class="ss">:file</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;temp/&quot;</span><span class="p" data-group-id="2022189243-7">}</span><span class="p" data-group-id="2022189243-6">)</span><span class="w">
+</span><span class="p" data-group-id="2022189243-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2022189243-9">[</span><span class="p" data-group-id="2022189243-10">%</span><span class="nc" data-group-id="2022189243-10">Xlsxir.XmlFile</span><span class="p" data-group-id="2022189243-10">{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="ss">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;temp/test.txt&quot;</span><span class="p" data-group-id="2022189243-10">}</span><span class="p" data-group-id="2022189243-9">]</span><span class="p" data-group-id="2022189243-8">}</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="k">with</span><span class="w"> </span><span class="p" data-group-id="2022189243-11">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="2022189243-11">}</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">rm_rf</span><span class="p" data-group-id="2022189243-12">(</span><span class="s">&quot;temp&quot;</span><span class="p" data-group-id="2022189243-12">)</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:ok</span><span class="w">
+</span><span class="ss">:ok</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="validate_path_all_indexes/1">
+    <div class="detail-header">
+    <a href="#validate_path_all_indexes/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">validate_path_all_indexes(path)</span>
+      <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L69" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+          </div>
+  <section class="docstring">
+<p>Checks if given path is a valid file type, returning a list of available worksheets.</p>
+<h2 id="validate_path_all_indexes/1-parameters" class="section-heading">
+  <a href="#validate_path_all_indexes/1-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Parameters
+</h2>
+
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+</ul>
+<h2 id="validate_path_all_indexes/1-example" class="section-heading">
+  <a href="#validate_path_all_indexes/1-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h2>
+
+<pre><code class="nohighlight makeup elixir"><span class="w">   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.xlsx&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_all_indexes</span><span class="p" data-group-id="0004993293-1">(</span><span class="n">path</span><span class="p" data-group-id="0004993293-1">)</span><span class="w">
+   </span><span class="p" data-group-id="0004993293-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0004993293-3">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="0004993293-3">]</span><span class="p" data-group-id="0004993293-2">}</span><span class="w">
+
+   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.zip&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_all_indexes</span><span class="p" data-group-id="0004993293-4">(</span><span class="n">path</span><span class="p" data-group-id="0004993293-4">)</span><span class="w">
+   </span><span class="p" data-group-id="0004993293-5">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0004993293-6">[</span><span class="p" data-group-id="0004993293-6">]</span><span class="p" data-group-id="0004993293-5">}</span><span class="w">
+
+   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.invalidfile&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_all_indexes</span><span class="p" data-group-id="0004993293-7">(</span><span class="n">path</span><span class="p" data-group-id="0004993293-7">)</span><span class="w">
+   </span><span class="p" data-group-id="0004993293-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid file type (expected xlsx).&quot;</span><span class="p" data-group-id="0004993293-8">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="validate_path_and_index/2">
+    <div class="detail-header">
+    <a href="#validate_path_and_index/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">validate_path_and_index(path, index)</span>
+      <a href="https://github.com/jsonkenl/xlsxir/blob/master/lib/xlsxir/unzip.ex#L38" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+          </div>
+  <section class="docstring">
+<p>Checks if given path is a valid file type and contains the requested worksheet, returning a tuple.</p>
+<h2 id="validate_path_and_index/2-parameters" class="section-heading">
+  <a href="#validate_path_and_index/2-parameters" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Parameters
+</h2>
+
+<ul>
+<li><code class="inline">path</code> - file path of a <code class="inline">.xlsx</code> file type in <code class="inline">string</code> format
+</li>
+</ul>
+<h2 id="validate_path_and_index/2-example" class="section-heading">
+  <a href="#validate_path_and_index/2-example" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Example
+</h2>
+
+<pre><code class="nohighlight makeup elixir"><span class="w">   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.xlsx&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_and_index</span><span class="p" data-group-id="7852796311-1">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7852796311-1">)</span><span class="w">
+   </span><span class="p" data-group-id="7852796311-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;./test/test_data/test.xlsx&#39;</span><span class="p" data-group-id="7852796311-2">}</span><span class="w">
+
+   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.validfilebutnotxlsx&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_and_index</span><span class="p" data-group-id="7852796311-3">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7852796311-3">)</span><span class="w">
+   </span><span class="p" data-group-id="7852796311-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;./test/test_data/test.validfilebutnotxlsx&#39;</span><span class="p" data-group-id="7852796311-4">}</span><span class="w">
+
+   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.xlsx&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_and_index</span><span class="p" data-group-id="7852796311-5">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="7852796311-5">)</span><span class="w">
+   </span><span class="p" data-group-id="7852796311-6">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid worksheet index.&quot;</span><span class="p" data-group-id="7852796311-6">}</span><span class="w">
+
+   </span><span class="gp unselectable">iex&gt; </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./test/test_data/test.invalidfile&quot;</span><span class="w">
+   </span><span class="gp unselectable">iex&gt; </span><span class="nc">Xlsxir.Unzip</span><span class="o">.</span><span class="n">validate_path_and_index</span><span class="p" data-group-id="7852796311-7">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="7852796311-7">)</span><span class="w">
+   </span><span class="p" data-group-id="7852796311-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid file type (expected xlsx).&quot;</span><span class="p" data-group-id="7852796311-8">}</span></code></pre>
+  </section>
+</section>
+          </div>
+        </section>
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.19.2),
+          </span>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+  <script src="dist/html-c1666276880c0f8e3769.js"></script>
+  
+  </body>
+</html>
+

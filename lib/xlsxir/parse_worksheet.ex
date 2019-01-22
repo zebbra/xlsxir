@@ -7,7 +7,7 @@ defmodule Xlsxir.ParseWorksheet do
   Holds the SAX event instructions for parsing worksheet data via `Xlsxir.SaxParser.parse/2`
   """
 
-  defstruct row: %{},
+  defstruct row: [],
             cell_ref: "",
             data_type: "",
             num_style: "",
@@ -104,10 +104,11 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler({:endElement, _, 'c', _}, %__MODULE__{row: row} = state, excel, _) do
     cell_value = format_cell_value(excel, [state.data_type, state.num_style, state.value])
+    new_cell = [to_string(state.cell_ref), cell_value]
 
     %{
       state
-      | row: Enum.into(row, [[to_string(state.cell_ref), cell_value]]),
+      | row: [new_cell | row],
         cell_ref: "",
         data_type: "",
         num_style: "",

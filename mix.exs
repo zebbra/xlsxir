@@ -4,7 +4,7 @@ defmodule Xlsxir.Mixfile do
   def project do
     [
      app: :xlsxir,
-     version: "1.6.3",
+     version: "1.6.4",
      name: "Xlsxir",
      source_url: "https://github.com/jsonkenl/xlsxir",
      elixir: "~> 1.4",

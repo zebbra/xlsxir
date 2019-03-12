@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.6.4
+- Cleaned up several warnings due to Elixir versioning deprecations. Thanks to @michaelst and @getong for contributions. 
+
 ## 1.6.3
 - Fixed bug where multi_extract did not return {:error, msg} for non existent file. Thanks to Peter Sumskas (@brushbox) for contribution.
 - Fixed bug where formula was returned if calculated value was empty. Thanks to Ken Ip (@kenips) for contribution.

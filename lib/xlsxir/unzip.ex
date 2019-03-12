@@ -70,16 +70,16 @@ defmodule Xlsxir.Unzip do
     path = String.to_charlist(path)
     case :zip.list_dir(path) do
       {:ok, file_list}  ->
-        indexes = Enum.filter_map(file_list,
-        fn file ->
+        indexes = file_list
+        |> Enum.filter(fn (file) ->
           case file do
             {:zip_file, filename, _, _, _, _} ->
               filename |> to_string |> String.starts_with?("xl/worksheets/sheet")
             _ ->
               nil
           end
-        end,
-        fn {:zip_file, filename, _, _, _, _} ->
+        end)
+        |> Enum.map(fn ({:zip_file, filename, _, _, _, _}) ->
           index = filename
           |> to_string
           |> String.replace_prefix("xl/worksheets/sheet", "")

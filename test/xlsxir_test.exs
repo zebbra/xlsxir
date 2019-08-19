@@ -5,6 +5,7 @@ defmodule XlsxirTest do
 
   def path(), do: "./test/test_data/test.xlsx"
   def rb_path(), do: "./test/test_data/red_black.xlsx"
+  def missing_styles_path(), do: "./test/test_data/missing_styles.xlsx"
 
   test "second worksheet is parsed with index argument of 1" do
     {:ok, pid} = extract(path(), 1)
@@ -111,5 +112,17 @@ defmodule XlsxirTest do
 
   test "handles non-existent xlsx file gracefully" do
     {:error, _err} = multi_extract("this/file/does/not/exist.xlsx")
+  end
+
+  test "parses successfully even with columns that have no styles defined" do
+    {:ok, pid} = extract(missing_styles_path(), 0)
+
+    expected_rows = [
+      ["Tag", "Type", "Status", "Commissioned"],
+      ["abc123", "InProgress", "Complete", ~N[2019-06-21 02:39:11]]
+    ]
+
+    assert get_list(pid) == expected_rows
+    close(pid)
   end
 end

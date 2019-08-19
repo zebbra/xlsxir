@@ -184,7 +184,13 @@ defmodule Xlsxir.ParseWorksheet do
     tid
     |> :ets.lookup(index)
     |> List.first()
-    |> elem(1)
+    |> case do
+      nil ->
+        nil
+
+      {_, i} ->
+        i
+    end
   end
 
   defp find_string(nil, _index), do: nil

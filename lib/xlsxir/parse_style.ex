@@ -66,15 +66,20 @@ defmodule Xlsxir.ParseStyle do
         %__MODULE__{num_fmt_ids: num_fmt_ids} = state
       ) do
     if state.cellxfs do
-      [{_, _, _, _, id}] =
-        Enum.filter(xml_attr, fn attr ->
-          case attr do
-            {:attribute, 'numFmtId', _, _, _} -> true
-            _ -> false
-          end
-        end)
+      xml_attr
+      |> Enum.filter(fn attr ->
+        case attr do
+          {:attribute, 'numFmtId', _, _, _} -> true
+          _ -> false
+        end
+      end)
+      |> case do
+        [{_, _, _, _, id}] ->
+          %{state | num_fmt_ids: num_fmt_ids ++ [id]}
 
-      %{state | num_fmt_ids: num_fmt_ids ++ [id]}
+        _ ->
+          %{state | num_fmt_ids: num_fmt_ids ++ ['0']}
+      end
     else
       state
     end

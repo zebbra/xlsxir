@@ -125,4 +125,17 @@ defmodule XlsxirTest do
     assert get_list(pid) == expected_rows
     close(pid)
   end
+
+  test "parses cells with cell metadata successfully" do
+    {:ok, pid} = multi_extract("./test/test_data/cell-metadata.xlsx", 0)
+    assert get_list(pid) == [["hello"]]
+  end
+
+  # fixture obtained from https://github.com/OfficeDev/Open-XML-SDK test files
+  test "parses cells with value metadata successfully" do
+    {:ok, pid} = multi_extract("./test/test_data/value-metadata.xlsx", 0)
+
+    assert [row1 | _] = get_list(pid)
+    assert row1 == ["Filter rows", "Category", "Color", "Sales Amount"]
+  end
 end

@@ -65,23 +65,16 @@ defmodule Xlsxir.ParseWorksheet do
 
   def sax_event_handler({:startElement, _, 'c', _, xml_attr}, state, %{styles: styles_tid}, _) do
     a =
-      Enum.map(xml_attr, fn attr ->
+      Enum.reduce(xml_attr, %{}, fn attr, acc ->
         case attr do
-          {:attribute, 'r', _, _, ref} -> {:r, ref}
-          {:attribute, 's', _, _, style} -> {:s, find_styles(styles_tid, List.to_integer(style))}
-          {:attribute, 't', _, _, type} -> {:t, type}
-          _ -> raise "Unknown cell attribute"
+          {:attribute, 's', _, _, style} ->
+            Map.put(acc, "s", find_styles(styles_tid, List.to_integer(style)))
+          {:attribute, key, _, _, ref} ->
+            Map.put(acc, to_string(key), ref)
         end
       end)
 
-    {cell_ref, num_style, data_type} =
-      case a |> Keyword.keys() |> Enum.sort() do
-        [:r] -> {a[:r], nil, nil}
-        [:r, :s] -> {a[:r], a[:s], nil}
-        [:r, :t] -> {a[:r], nil, a[:t]}
-        [:r, :s, :t] -> {a[:r], a[:s], a[:t]}
-        _ -> raise "Invalid attributes: #{a}"
-      end
+    {cell_ref, num_style, data_type} = {a["r"], a["s"], a["t"]}
 
     %{state | cell_ref: cell_ref, num_style: num_style, data_type: data_type}
   end

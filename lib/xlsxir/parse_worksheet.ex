@@ -37,10 +37,10 @@ defmodule Xlsxir.ParseWorksheet do
     tid = GenServer.call(Xlsxir.StateManager, :new_table)
 
     "sheet" <> remained = xml_name
-    {rid, _} = Integer.parse(remained)
+    {sheet_id, _} = Integer.parse(remained)
 
     worksheet_name =
-      List.foldl(:ets.lookup(workbook_tid, rid), nil, fn value, _ ->
+      List.foldl(:ets.lookup(workbook_tid, sheet_id), nil, fn value, _ ->
         case value do
           {_, worksheet_name} -> worksheet_name
           _ -> nil

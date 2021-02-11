@@ -23,6 +23,7 @@ defmodule Xlsxir.ParseStyle do
     48,
     49,
     56,
+    58,
     59,
     60,
     61,

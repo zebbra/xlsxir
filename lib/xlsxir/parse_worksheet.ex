@@ -118,7 +118,7 @@ defmodule Xlsxir.ParseWorksheet do
     unless Enum.empty?(state.row) do
       [[row]] = ~r/\d+/ |> Regex.scan(state.row |> List.first() |> List.first())
       row = row |> String.to_integer()
-      value = state.row |> Enum.reverse()
+      value = state.row |> Enum.reverse() |> fill_nil()
 
       :ets.insert(tid, {row, value})
       if !is_nil(max_rows) and row == max_rows, do: raise(SaxError, state: state)
@@ -128,6 +128,64 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   def sax_event_handler(_, state, _, _), do: state
+
+  defp fill_nil(rows) do
+    Enum.reduce(rows, {[], nil}, fn [ref, val], {values, previous} ->
+      line = ~r/\d+$/ |> Regex.run(ref) |> List.first()
+
+      empty_cells =
+        cond do
+          is_nil(previous) && String.first(ref) != "A" ->
+            fill_empty_cells("A#{line}", ref, line, [])
+
+          !is_nil(previous) && !is_next_col(ref, previous) ->
+            fill_empty_cells(next_col(previous), ref, line, [])
+
+          true ->
+            []
+        end
+
+      {values ++ empty_cells ++ [[ref, val]], ref}
+    end)
+    |> elem(0)
+  end
+
+  defp column_from_index(index, column) when index > 0 do
+    modulo = rem(index - 1, 26)
+    column = [65 + modulo | column]
+    column_from_index(div(index - modulo, 26), column)
+  end
+
+  defp column_from_index(_, column), do: to_string(column)
+
+  defp is_next_col(current, previous) do
+    current == next_col(previous)
+  end
+
+  defp next_col(ref) do
+    [chars, line] = Regex.run(~r/^([A-Z]+)(\d+)/, ref, capture: :all_but_first)
+    chars = chars |> String.to_charlist()
+
+    col_index =
+      Enum.reduce(chars, 0, fn char, acc ->
+        acc = acc * 26
+        acc + char - 65 + 1
+      end)
+
+    "#{column_from_index(col_index + 1, '')}#{line}"
+  end
+
+  defp fill_empty_cells(from, from, _line, cells), do: Enum.reverse(cells)
+
+  defp fill_empty_cells(from, to, line, cells) do
+    next_ref = next_col(from)
+
+    if next_ref == to do
+      fill_empty_cells(to, to, line, [[from, nil] | cells])
+    else
+      fill_empty_cells(next_ref, to, line, [[from, nil] | cells])
+    end
+  end
 
   defp format_cell_value(%{shared_strings: strings_tid}, list) do
     case list do

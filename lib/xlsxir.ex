@@ -129,12 +129,9 @@ defmodule Xlsxir do
   end
 
   defp row_data_to_list(row_data) do
-    # [["A1", 1], ["C1", 2]]
-    row_data
-    # [["A1", 1], ["B1", nil], ["C1", 2]]
-    |> do_get_row()
-    # [1, nil, 2]
-    |> Enum.map(fn [_ref, val] -> val end)
+    # from: [["A1", 1], ["B1", nil], ["C1", 2]]
+    # to: [1, nil, 2]
+    Enum.map(row_data, fn [_ref, val] -> val end)
   end
 
   @doc """
@@ -279,9 +276,7 @@ defmodule Xlsxir do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.sort()
     |> Enum.map(fn [_num, row] ->
-      row
-      |> do_get_row()
-      |> Enum.map(fn [_ref, val] -> val end)
+      Enum.map(row, fn [_ref, val] -> val end)
     end)
   end
 
@@ -315,7 +310,6 @@ defmodule Xlsxir do
     :ets.match(tid, {:"$1", :"$2"})
     |> Enum.reduce(%{}, fn [_num, row], acc ->
       row
-      |> do_get_row()
       |> Enum.reduce(%{}, fn [ref, val], acc2 -> Map.put(acc2, ref, val) end)
       |> Enum.into(acc)
     end)
@@ -370,7 +364,6 @@ defmodule Xlsxir do
     add_row =
       h
       |> Enum.at(1)
-      |> do_get_row()
       |> Enum.reduce({%{}, 0}, fn cell, {acc, index} ->
         {Map.put(acc, index, Enum.at(cell, 1)), index + 1}
       end)
@@ -450,67 +443,8 @@ defmodule Xlsxir do
   """
   def get_row(tid, row) do
     case :ets.match(tid, {row, :"$1"}) do
-      [[row]] -> row |> do_get_row() |> Enum.map(fn [_ref, val] -> val end)
+      [[row]] -> row |> Enum.map(fn [_ref, val] -> val end)
       [] -> []
-    end
-  end
-
-  defp do_get_row(row) do
-    row
-    |> Enum.reduce({[], nil}, fn [ref, val], {values, previous} ->
-      line = ~r/\d+$/ |> Regex.run(ref) |> List.first()
-
-      empty_cells =
-        cond do
-          is_nil(previous) && String.first(ref) != "A" ->
-            fill_empty_cells("A#{line}", ref, line, [])
-
-          !is_nil(previous) && !is_next_col(ref, previous) ->
-            fill_empty_cells(next_col(previous), ref, line, [])
-
-          true ->
-            []
-        end
-
-      {values ++ empty_cells ++ [[ref, val]], ref}
-    end)
-    |> elem(0)
-  end
-
-  defp column_from_index(index, column) when index > 0 do
-    modulo = rem(index - 1, 26)
-    column = [65 + modulo | column]
-    column_from_index(div(index - modulo, 26), column)
-  end
-
-  defp column_from_index(_, column), do: to_string(column)
-
-  defp is_next_col(current, previous) do
-    current == next_col(previous)
-  end
-
-  defp next_col(ref) do
-    [chars, line] = Regex.run(~r/^([A-Z]+)(\d+)/, ref, capture: :all_but_first)
-    chars = chars |> String.to_charlist()
-
-    col_index =
-      Enum.reduce(chars, 0, fn char, acc ->
-        acc = acc * 26
-        acc + char - 65 + 1
-      end)
-
-    "#{column_from_index(col_index + 1, '')}#{line}"
-  end
-
-  defp fill_empty_cells(from, from, _line, cells), do: Enum.reverse(cells)
-
-  defp fill_empty_cells(from, to, line, cells) do
-    next_ref = next_col(from)
-
-    if next_ref == to do
-      fill_empty_cells(to, to, line, [[from, nil] | cells])
-    else
-      fill_empty_cells(next_ref, to, line, [[from, nil] | cells])
     end
   end
 
@@ -549,7 +483,6 @@ defmodule Xlsxir do
     |> Enum.sort()
     |> Enum.map(fn [_num, row] ->
       row
-      |> do_get_row()
       |> Enum.filter(fn [ref, _val] -> Regex.scan(~r/[A-Z]+/i, ref) == [[col]] end)
       |> Enum.map(fn [_ref, val] -> val end)
     end)

@@ -557,6 +557,10 @@ defmodule Xlsxir do
     end)
   end
 
+  def set_empty_cells_by_columns(tid) do
+    Xlsxir.XlsxFile.set_empty_cells(tid)
+  end
+
   @doc """
   Deletes ETS process `tid` and returns `:ok` if successful.
 

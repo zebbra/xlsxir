@@ -150,19 +150,19 @@ defmodule Xlsxir.ParseWorksheet do
     |> elem(0)
   end
 
-  defp column_from_index(index, column) when index > 0 do
+  def column_from_index(index, column) when index > 0 do
     modulo = rem(index - 1, 26)
     column = [65 + modulo | column]
     column_from_index(div(index - modulo, 26), column)
   end
 
-  defp column_from_index(_, column), do: to_string(column)
+  def column_from_index(_, column), do: to_string(column)
 
   defp is_next_col(current, previous) do
     current == next_col(previous)
   end
 
-  defp next_col(ref) do
+  def next_col(ref) do
     [chars, line] = Regex.run(~r/^([A-Z]+)(\d+)/, ref, capture: :all_but_first)
     chars = chars |> String.to_charlist()
 
@@ -175,9 +175,9 @@ defmodule Xlsxir.ParseWorksheet do
     "#{column_from_index(col_index + 1, '')}#{line}"
   end
 
-  defp fill_empty_cells(from, from, _line, cells), do: Enum.reverse(cells)
+  def fill_empty_cells(from, from, _line, cells), do: Enum.reverse(cells)
 
-  defp fill_empty_cells(from, to, line, cells) do
+  def fill_empty_cells(from, to, line, cells) do
     next_ref = next_col(from)
 
     if next_ref == to do

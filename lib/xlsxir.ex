@@ -557,8 +557,22 @@ defmodule Xlsxir do
     end)
   end
 
-  def set_empty_cells_by_columns(tid) do
-    Xlsxir.XlsxFile.set_empty_cells(tid)
+  @doc """
+  Fill every row with `nil` cells at the end.
+  Cells quantity determined by the max length of all rows.
+
+  ## Example
+  Extract first worksheet in an example file named `test.xlsx` located in `./test/test_data`:
+      iex> {:ok, tid} = Xlsxir.extract("./test/test_data/test.xlsx", 10)
+      iex> Xlsxir.set_empty_cells_to_fill_rows(tid)
+      {:ok, tid}
+      iex> Xlsxir.get_row(tid, 1)
+      [1, nil, 1, nil, 1, nil, nil, 1, nil, nil]
+      iex> Xlsxir.get_col(tid, "J")
+      [nil, nil, 1, nil]
+  """
+  def set_empty_cells_to_fill_rows(tid) do
+    Xlsxir.XlsxFile.set_empty_cells_to_fill_rows(tid)
   end
 
   @doc """

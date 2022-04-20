@@ -95,43 +95,45 @@ defmodule Xlsxir.XlsxFile do
     {:ok, tid}
   end
 
-  def set_empty_cells(tid) do
-    max_len = get_max_length(tid)
+  @doc """
+  Fill every row with `nil` cells at the end.
+  Cells quantity determined by the max length of all rows.
+  """
+  def set_empty_cells_to_fill_rows(tid) do
+    max_len =
+      :ets.match(tid, {:"$1", :"$2"})
+      |> Enum.map(fn [_num, row] -> Enum.count(row) end)
+      |> Enum.max()
+
     end_column = Xlsxir.ParseWorksheet.column_from_index(max_len + 1, "")
 
     first_key = :ets.first(tid)
     fill_empty_cells_at_end(tid, end_column, first_key)
   end
 
-  def fill_empty_cells_at_end(tid, _, :"$end_of_table"), do: {:ok, tid}
+  defp fill_empty_cells_at_end(tid, _, :"$end_of_table"), do: {:ok, tid}
 
-  def fill_empty_cells_at_end(tid, end_column, key) when is_integer(key) do
-    build_and_replace(tid, key)
-    nex_key = :ets.next(tid, key)
-    fill_empty_cells_at_end(tid, end_column, nex_key)
+  defp fill_empty_cells_at_end(tid, end_column, index) when is_integer(index) do
+    build_and_replace(tid, end_column, index)
+    nex_index= :ets.next(tid, index)
+    fill_empty_cells_at_end(tid, end_column, nex_index)
   end
 
-  def fill_empty_cells_at_end(tid, end_column, key) do
-    nex_key = :ets.next(tid, key)
-    fill_empty_cells_at_end(tid, end_column, nex_key)
+  defp fill_empty_cells_at_end(tid, end_column, index) do
+    nex_index = :ets.next(tid, index)
+    fill_empty_cells_at_end(tid, end_column, nex_index)
   end
 
-  defp build_and_replace(tid, index) do
+  defp build_and_replace(tid, end_column, index) do
     [{index, cells}] = :ets.lookup(tid, index)
     [last_ref, _] = List.last(cells)
     from = Xlsxir.ParseWorksheet.next_col(last_ref)
-    to = end_col <> Integer.to_string(index)
+    to = end_column <> Integer.to_string(index)
 
     empty_cells = Xlsxir.ParseWorksheet.fill_empty_cells(from, to, index, [])
     new_cells = cells ++ empty_cells
 
     true = :ets.insert(tid, {index,  new_cells})
-  end
-  
-  defp get_max_length(tid) do
-    :ets.match(tid, {:"$1", :"$2"})
-    |> Enum.map(fn [_num, row] -> Enum.count(row) end)
-    |> Enum.max()
   end
 
   @doc """

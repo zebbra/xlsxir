@@ -69,6 +69,7 @@ defmodule Xlsxir.ParseWorksheet do
         case attr do
           {:attribute, 's', _, _, style} ->
             Map.put(acc, "s", find_styles(styles_tid, List.to_integer(style)))
+
           {:attribute, key, _, _, ref} ->
             Map.put(acc, to_string(key), ref)
         end
@@ -90,6 +91,9 @@ defmodule Xlsxir.ParseWorksheet do
   def sax_event_handler({:endElement, _, el, _, _}, state, _, _) when el in ['f', 'v', 't'] do
     %{state | value_type: nil}
   end
+
+  def sax_event_handler({:startElement, _, 'is', _, _}, state, _, _),
+    do: %{state | value_type: :value}
 
   def sax_event_handler({:characters, value}, state, _, _) do
     case state do

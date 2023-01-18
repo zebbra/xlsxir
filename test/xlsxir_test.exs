@@ -147,4 +147,14 @@ defmodule XlsxirTest do
              [123, "baz"]
            ]
   end
+
+  test "parses inline strings" do
+    {:ok, pid} = multi_extract("test/test_data/noShared.xlsx", 0)
+    on_exit(fn -> close(pid) end)
+    map = get_map(pid)
+
+    assert map["A1"] == "Generated Doc"
+    assert map["B2"] == "pre 2008"
+    assert map["B3"] == "https://msdn.microsoft.com/en-us/library/office/gg278314.aspx"
+  end
 end

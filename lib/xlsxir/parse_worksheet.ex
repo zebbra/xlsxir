@@ -158,7 +158,18 @@ defmodule Xlsxir.ParseWorksheet do
   end
 
   defp convert_iso_date(value) do
-    value |> List.to_string() |> Date.from_iso8601() |> elem(1) |> Date.to_erl()
+    str = value |> List.to_string()
+
+    with {:ok, date} <- str |> Date.from_iso8601() do
+      date |> Date.to_erl()
+    else
+      {:error, _} ->
+        with {:ok, datetime} <- str |> NaiveDateTime.from_iso8601() do
+          datetime
+        else
+          {:error, _} -> str
+        end
+    end
   end
 
   defp convert_date_or_time(value) do

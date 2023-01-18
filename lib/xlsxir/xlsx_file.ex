@@ -96,6 +96,47 @@ defmodule Xlsxir.XlsxFile do
   end
 
   @doc """
+  Fill every row with `nil` cells at the end.
+  Cells quantity determined by the max length of all rows.
+  """
+  def set_empty_cells_to_fill_rows(tid) do
+    max_len =
+      :ets.match(tid, {:"$1", :"$2"})
+      |> Enum.map(fn [_num, row] -> Enum.count(row) end)
+      |> Enum.max()
+
+    end_column = Xlsxir.ParseWorksheet.column_from_index(max_len + 1, "")
+
+    first_key = :ets.first(tid)
+    fill_empty_cells_at_end(tid, end_column, first_key)
+  end
+
+  defp fill_empty_cells_at_end(tid, _, :"$end_of_table"), do: {:ok, tid}
+
+  defp fill_empty_cells_at_end(tid, end_column, index) when is_integer(index) do
+    build_and_replace(tid, end_column, index)
+    nex_index= :ets.next(tid, index)
+    fill_empty_cells_at_end(tid, end_column, nex_index)
+  end
+
+  defp fill_empty_cells_at_end(tid, end_column, index) do
+    nex_index = :ets.next(tid, index)
+    fill_empty_cells_at_end(tid, end_column, nex_index)
+  end
+
+  defp build_and_replace(tid, end_column, index) do
+    [{index, cells}] = :ets.lookup(tid, index)
+    [last_ref, _] = List.last(cells)
+    from = Xlsxir.ParseWorksheet.next_col(last_ref)
+    to = end_column <> Integer.to_string(index)
+
+    empty_cells = Xlsxir.ParseWorksheet.fill_empty_cells(from, to, index, [])
+    new_cells = cells ++ empty_cells
+
+    true = :ets.insert(tid, {index,  new_cells})
+  end
+
+  @doc """
   Parse all worksheets of the XlsxFile and store their content in ETS tables.
   returns `[{:ok, worksheet_1_table_id}, ..., {:ok, worksheet_n_table_id}]` when `timer` is `false`
   and `[{:ok, worksheet_1_table_id, time1}, ..., {:ok, worksheet_n_table_id, timen}]` when `timer` is `true`

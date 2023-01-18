@@ -4,10 +4,9 @@ defmodule Xlsxir do
   use Application
 
   def start(_type, _args) do
-    import Supervisor.Spec
 
     children = [
-      worker(Xlsxir.StateManager, [])
+      %{id: Xlsxir.StateManager, start: {Xlsxir.StateManager, :start_link, []}, type: :worker}
     ]
 
     opts = [strategy: :one_for_one, name: __MODULE__]

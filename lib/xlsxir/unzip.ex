@@ -1,5 +1,4 @@
 defmodule Xlsxir.Unzip do
-
   alias Xlsxir.XmlFile
 
   @moduledoc """
@@ -36,10 +35,8 @@ defmodule Xlsxir.Unzip do
          {:error, "Invalid file type (expected xlsx)."}
   """
   def validate_path_and_index(path, index) do
-    path = String.to_charlist(path)
-
     case valid_extract_request?(path, index) do
-      :ok              -> {:ok, path}
+      :ok -> {:ok, path}
       {:error, reason} -> {:error, reason}
     end
   end
@@ -67,53 +64,49 @@ defmodule Xlsxir.Unzip do
   """
 
   def validate_path_all_indexes(path) do
-    path = String.to_charlist(path)
-    case :zip.list_dir(path) do
-      {:ok, file_list}  ->
-        indexes = file_list
-        |> Enum.filter(fn (file) ->
-          case file do
-            {:zip_file, filename, _, _, _, _} ->
-              filename |> to_string |> String.starts_with?("xl/worksheets/sheet")
-            _ ->
-              nil
-          end
-        end)
-        |> Enum.map(fn ({:zip_file, filename, _, _, _, _}) ->
-          index = filename
-          |> to_string
-          |> String.replace_prefix("xl/worksheets/sheet", "")
-          |> String.replace_suffix(".xml", "")
-          |> String.to_integer
-          index - 1
-        end)
-        |> Enum.sort
+    case list_worksheet_files(path) do
+      {:ok, file_list} ->
+        indexes = file_list |> Enum.with_index() |> Enum.map(fn {_, index} -> index end)
         {:ok, indexes}
-      {:error, _reason} -> {:error, @filetype_error}
+
+      {:error, _reason} ->
+        {:error, @filetype_error}
     end
   end
+
+  def list_worksheet_files(path) do
+    path = String.to_charlist(path)
+
+    case :zip.list_dir(path) do
+      {:ok, files} ->
+        {:ok,
+         files
+         |> Enum.filter(&worksheet_file?/1)
+         |> Enum.map(fn {:zip_file, path, _, _, _, _} -> path end)}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp worksheet_file?({:zip_file, filename, _, _, _, _}) do
+    filename
+    |> to_string()
+    |> String.match?(~r/xl\/worksheets\/[Ss]heet\d+\.xml/)
+  end
+
+  defp worksheet_file?(_other), do: false
 
   defp valid_extract_request?(path, index) do
-    case :zip.list_dir(path) do
-      {:ok, file_list}  -> search_file_list(file_list, index)
-      {:error, _reason} -> {:error, @filetype_error}
-    end
-  end
+    case validate_path_all_indexes(path) do
+      {:ok, indexes} ->
+        case Enum.member?(indexes, index) do
+          true -> :ok
+          false -> {:error, @worksheet_index_error}
+        end
 
-  defp search_file_list(file_list, index) do
-    sheet   = 'xl/worksheets/sheet#{index + 1}.xml'
-    results = file_list
-              |> Enum.map(fn file ->
-                   case file do
-                     {:zip_file, ^sheet, _, _, _, _} -> :ok
-                     _                               -> nil
-                   end
-                 end)
-
-    if Enum.member?(results, :ok) do
-      :ok
-    else
-      {:error, @worksheet_index_error}
+      {:error, _reason} ->
+        {:error, @filetype_error}
     end
   end
 
@@ -144,14 +137,17 @@ defmodule Xlsxir.Unzip do
     |> to_charlist
     |> extract_from_zip(file_list, to)
     |> case do
-        {:error, reason}  -> {:error, reason}
-        {:ok, []}         -> {:error, @xml_not_found_error}
-        {:ok, files_list} -> {:ok, build_xml_files(files_list)}
-       end
+      {:error, reason} -> {:error, reason}
+      {:ok, []} -> {:error, @xml_not_found_error}
+      {:ok, files_list} -> {:ok, build_xml_files(files_list)}
+    end
   end
 
-  defp extract_from_zip(path, file_list, :memory), do: :zip.extract(path, [{:file_list, file_list}, :memory])
-  defp extract_from_zip(path, file_list, {:file, dest_path}), do: :zip.extract(path, [{:file_list, file_list}, {:cwd, dest_path}])
+  defp extract_from_zip(path, file_list, :memory),
+    do: :zip.extract(path, [{:file_list, file_list}, :memory])
+
+  defp extract_from_zip(path, file_list, {:file, dest_path}),
+    do: :zip.extract(path, [{:file_list, file_list}, {:cwd, dest_path}])
 
   defp build_xml_files(files_list) do
     files_list
@@ -165,6 +161,6 @@ defmodule Xlsxir.Unzip do
 
   # When extracting to temp file
   defp build_xml_file(file_path) do
-    %XmlFile{name:  Path.basename(file_path), path: to_string(file_path)}
+    %XmlFile{name: Path.basename(file_path), path: to_string(file_path)}
   end
 end

@@ -36,7 +36,7 @@ defmodule Xlsxir.ParseWorksheet do
       ) do
     tid = GenServer.call(Xlsxir.StateManager, :new_table)
 
-    "sheet" <> remained = xml_name
+    [_sheet, remained, _suffix] = String.split(xml_name, ~r{\d+}, include_captures: true)
     {sheet_id, _} = Integer.parse(remained)
 
     worksheet_name =

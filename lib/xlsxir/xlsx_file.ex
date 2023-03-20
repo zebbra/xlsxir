@@ -115,7 +115,7 @@ defmodule Xlsxir.XlsxFile do
 
   defp fill_empty_cells_at_end(tid, end_column, index) when is_integer(index) do
     build_and_replace(tid, end_column, index)
-    nex_index= :ets.next(tid, index)
+    nex_index = :ets.next(tid, index)
     fill_empty_cells_at_end(tid, end_column, nex_index)
   end
 
@@ -133,7 +133,7 @@ defmodule Xlsxir.XlsxFile do
     empty_cells = Xlsxir.ParseWorksheet.fill_empty_cells(from, to, index, [])
     new_cells = cells ++ empty_cells
 
-    true = :ets.insert(tid, {index,  new_cells})
+    true = :ets.insert(tid, {index, new_cells})
   end
 
   @doc """
@@ -228,15 +228,14 @@ defmodule Xlsxir.XlsxFile do
   end
 
   defp extract_all_xml_files(%__MODULE__{} = xlsx_file, xlsx_filepath) do
-    with {:ok, worksheet_indexes} <- Unzip.validate_path_all_indexes(xlsx_filepath),
-         xml_paths_list <- zip_paths_list(worksheet_indexes),
+    with {:ok, xml_paths_list} <- zip_paths_list(xlsx_filepath),
          {:ok, xml_files} <-
            Unzip.extract_xml(xml_paths_list, xlsx_filepath, unzip_options(xlsx_file)) do
       %{
         xlsx_file
         | worksheet_xml_files:
             xml_files
-            |> Enum.filter(fn %XmlFile{name: name} -> String.starts_with?(name, "sheet") end),
+            |> Enum.filter(fn %XmlFile{name: name} -> String.match?(name, ~r"[Ss]heet\d+.xml") end),
           shared_strings_xml_file:
             xml_files |> Enum.find(fn %XmlFile{name: name} -> name == "sharedStrings.xml" end),
           styles_xml_file:
@@ -254,10 +253,18 @@ defmodule Xlsxir.XlsxFile do
     end
   end
 
-  defp zip_paths_list(worksheet_indexes) do
-    worksheet_indexes
-    |> Enum.map(fn worksheet_index -> 'xl/worksheets/sheet#{worksheet_index + 1}.xml' end)
-    |> Enum.concat(['xl/styles.xml', 'xl/sharedStrings.xml', 'xl/workbook.xml'])
+  defp zip_paths_list(xlsx_file) do
+    case Unzip.list_worksheet_files(xlsx_file) do
+      {:ok, xml_paths_list} ->
+        xml_paths_list =
+          xml_paths_list
+          |> Enum.concat(['xl/styles.xml', 'xl/sharedStrings.xml', 'xl/workbook.xml'])
+
+        {:ok, xml_paths_list}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   defp parse_styles_to_ets(%__MODULE__{styles_xml_file: nil} = xlsx_file), do: xlsx_file
@@ -294,10 +301,7 @@ defmodule Xlsxir.XlsxFile do
   defp parse_shared_strings_to_ets({:error, _} = error), do: error
 
   defp get_worksheet(%__MODULE__{} = xlsx_file, index) do
-    xml_file =
-      Enum.find(xlsx_file.worksheet_xml_files, fn xml_file ->
-        xml_file.name == "sheet#{index + 1}.xml"
-      end)
+    xml_file = Enum.at(xlsx_file.worksheet_xml_files, index)
 
     case xml_file do
       nil -> {:error, "Invalid worksheet index."}
